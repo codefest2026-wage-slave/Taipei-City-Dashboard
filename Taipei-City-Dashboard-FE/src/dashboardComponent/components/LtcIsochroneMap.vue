@@ -3,10 +3,10 @@
 <!-- 使用 Mapbox Isochrone API 計算步行可達範圍，疊加長照機構點位 -->
 
 <script setup>
-import { ref, onMounted, onUnmounted, inject } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import mapboxGl from "mapbox-gl";
 
-const props = defineProps(["chart_config", "series"]);
+defineProps(["chart_config", "series"]);
 
 // ── State ──────────────────────────────────────────────────
 const address = ref("");
@@ -16,7 +16,6 @@ const result = ref(null);
 const mapContainer = ref(null);
 
 let map = null;
-let geocoderResult = null;
 
 // ── Mapbox token ───────────────────────────────────────────
 const MAPBOXTOKEN = import.meta.env.VITE_MAPBOXTOKEN;
