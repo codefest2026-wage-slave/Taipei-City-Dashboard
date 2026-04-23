@@ -1,0 +1,55 @@
+name: Deploy to Azure VM
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "Taipei-City-Dashboard-BE/**"
+      - "Taipei-City-Dashboard-FE/**"
+      - "docker/**"
+      - ".github/workflows/deploy-vm.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vm-main
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    timeout-minutes: 15
+
+    steps:
+      - name: Pull latest code
+        working-directory: /home/azureuser/workspace/Taipei-City-Dashboard
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+          echo "Deployed commit: $(git rev-parse --short HEAD) - $(git log -1 --pretty=%s)"
+
+      - name: Pull updated images
+        working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
+        run: docker compose pull
+
+      - name: Restart services
+        working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
+        run: docker compose restart
+
+      - name: Health check
+        working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
+        run: |
+          sleep 10
+          docker compose ps
+          docker compose ps | grep "dashboard-be" | grep -q "Up" || { echo "dashboard-be not running!"; exit 1; }
+          docker compose ps | grep "dashboard-fe" | grep -q "Up" || { echo "dashboard-fe not running!"; exit 1; }
+          docker compose ps | grep "nginx" | grep -q "Up" || { echo "nginx not running!"; exit 1; }
+          echo "All services healthy"
+
+      - name: Show logs on failure
+        if: failure()
+        working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
+        run: |
+          echo "=== dashboard-be logs ==="
+          docker compose logs --tail=50 dashboard-be
+          echo "=== dashboard-fe logs ==="
+          docker compose logs --tail=30 dashboard-fe
