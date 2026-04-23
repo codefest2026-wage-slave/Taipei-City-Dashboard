@@ -155,3 +155,262 @@ SELECT pg_catalog.setval('public.groups_id_seq', (SELECT COALESCE(MAX(id), 4) FR
 
 --
 -- PostgreSQL database dump complete
+-- =============================================================
+-- 韌性防災主題：雙北淹水預警暨避難資源即時儀表板
+-- Branch: feat/disaster-prevention
+-- Tables: rainfall_flood_simulation_etl_ntpe, urbn_air_raid_shelter_ntpe
+--         rainfall_realtime_tpe (new pipeline)
+-- =============================================================
+
+-- ── 1. Components ────────────────────────────────────────────
+
+INSERT INTO public.components (id, index, name) VALUES
+    (401, 'flood_risk_map',          '淹水潛勢分級地圖'),
+    (402, 'rainfall_realtime_chart', '即時雨量監測'),
+    (403, 'shelter_map',             '避難場所地圖'),
+    (404, 'disaster_risk_kpi',       '防災資源 KPI')
+ON CONFLICT (index) DO NOTHING;
+
+-- ── 2. Component Maps ─────────────────────────────────────────
+
+-- 淹水潛勢多邊形圖層 (MultiPolygon fill)
+INSERT INTO public.component_maps (id, index, title, type, source, size, icon, paint, property) VALUES
+(201, 'flood_risk_map', '淹水潛勢分級（新北市）', 'fill',
+    'rainfall_flood_simulation_etl_ntpe', 'medium', 'flood',
+    '{
+        "fill-color": [
+            "match", ["get", "gridcode"],
+            1, "#FCBF49",
+            2, "#F77F00",
+            3, "#D62828",
+            4, "#9B2226",
+            5, "#6A0572",
+            "#CCCCCC"
+        ],
+        "fill-opacity": 0.6
+    }'::json,
+    '[{"key":"gridcode","name":"淹水深度等級"},{"key":"category","name":"潛勢類別"},{"key":"type","name":"類型"}]'::json)
+ON CONFLICT (id) DO NOTHING;
+
+-- 避難所疊加圖層（疊在淹水圖上）
+INSERT INTO public.component_maps (id, index, title, type, source, size, icon, paint, property) VALUES
+(202, 'flood_risk_map', '避難場所（疊加）', 'circle',
+    'urbn_air_raid_shelter_ntpe', 'small', 'shelter',
+    '{
+        "circle-radius": 5,
+        "circle-color": "#00E676",
+        "circle-opacity": 1.0,
+        "circle-stroke-width": 2,
+        "circle-stroke-color": "#FFFFFF"
+    }'::json,
+    '[{"key":"address","name":"地址"},{"key":"person_capacity","name":"容量（人）"},{"key":"town","name":"行政區"}]'::json)
+ON CONFLICT (id) DO NOTHING;
+
+-- 雨量站點位圖層
+INSERT INTO public.component_maps (id, index, title, type, source, size, icon, paint, property) VALUES
+(203, 'rainfall_realtime_chart', '雨量站分布', 'circle',
+    'rainfall_realtime_tpe', 'small', 'rain',
+    '{
+        "circle-radius": [
+            "interpolate", ["linear"], ["get", "rainfall_today"],
+            0, 4, 50, 8, 100, 14, 200, 20
+        ],
+        "circle-color": [
+            "interpolate", ["linear"], ["get", "rainfall_today"],
+            0, "#B3E5FC",
+            50, "#0288D1",
+            100, "#01579B",
+            200, "#6A0572"
+        ],
+        "circle-opacity": 0.85
+    }'::json,
+    '[{"key":"station_name","name":"站名"},{"key":"rainfall_10min","name":"10分鐘雨量(mm)"},{"key":"rainfall_today","name":"今日累積(mm)"},{"key":"district","name":"行政區"}]'::json)
+ON CONFLICT (id) DO NOTHING;
+
+-- 避難場所點位圖層
+INSERT INTO public.component_maps (id, index, title, type, source, size, icon, paint, property) VALUES
+(204, 'shelter_map', '避難場所位置', 'circle',
+    'urbn_air_raid_shelter_ntpe', 'small', 'shelter',
+    '{
+        "circle-radius": 6,
+        "circle-color": [
+            "step", ["get", "person_capacity"],
+            "#2EC4B6", 100, "#3A86FF", 300, "#8338EC"
+        ],
+        "circle-opacity": 0.9,
+        "circle-stroke-width": 1,
+        "circle-stroke-color": "#FFFFFF"
+    }'::json,
+    '[{"key":"address","name":"地址"},{"key":"person_capacity","name":"容量（人）"},{"key":"town","name":"行政區"}]'::json)
+ON CONFLICT (id) DO NOTHING;
+
+-- ── 3. Query Charts ───────────────────────────────────────────
+
+-- flood_risk_map
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart,
+    map_config_ids,
+    time_from, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case,
+    links, contributors, created_at, updated_at
+) VALUES (
+    'flood_risk_map', 'metrotaipei', 'two_d',
+    'SELECT
+        CASE gridcode
+            WHEN 1 THEN ''0~30cm''
+            WHEN 2 THEN ''30~50cm''
+            WHEN 3 THEN ''50~100cm''
+            WHEN 4 THEN ''1~2m''
+            WHEN 5 THEN ''2m以上''
+        END AS x_axis,
+        COUNT(*) AS data
+     FROM rainfall_flood_simulation_etl_ntpe
+     GROUP BY gridcode
+     ORDER BY gridcode',
+    ARRAY[201, 202],
+    'static', 7, 'day',
+    '經濟部水利署 [2026] — 淹水潛勢圖（新北市），依政府資料開放授權條款 v1.0 釋出',
+    '新北市淹水潛勢分級面積統計',
+    '依水利署標準淹水潛勢圖，將新北市淹水風險依深度分為五個等級，呈現各等級的分布面積比例。',
+    '供民眾了解所在行政區的整體淹水潛在風險，支援颱風前疏散決策。',
+    ARRAY['https://fhy.wra.gov.tw/'],
+    ARRAY['codefest2026-wage-slave'],
+    NOW(), NOW()
+) ON CONFLICT (index) DO UPDATE SET updated_at = NOW();
+
+-- rainfall_realtime_chart
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart,
+    map_config_ids,
+    time_from, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case,
+    links, contributors, created_at, updated_at
+) VALUES (
+    'rainfall_realtime_chart', 'taipei', 'two_d',
+    'SELECT
+        station_name AS x_axis,
+        rainfall_today AS data
+     FROM rainfall_realtime_tpe
+     WHERE data_time = (SELECT MAX(data_time) FROM rainfall_realtime_tpe)
+     ORDER BY rainfall_today DESC
+     LIMIT 20',
+    ARRAY[203],
+    'current', 10, 'min',
+    '臺北市政府資料開放平台 [2026] — 雨量站即時資料，依政府資料開放授權條款 v1.0 釋出',
+    '臺北市雨量站今日累積雨量',
+    '顯示臺北市各雨量站今日累積降雨量，即時更新（每 10 分鐘），可快速識別豪雨集中區域。',
+    '颱風豪雨期間監控降雨分布，配合淹水潛勢圖評估即時風險。',
+    ARRAY['https://data.taipei/'],
+    ARRAY['codefest2026-wage-slave'],
+    NOW(), NOW()
+) ON CONFLICT (index) DO UPDATE SET updated_at = NOW();
+
+-- shelter_map
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart,
+    map_config_ids,
+    time_from, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case,
+    links, contributors, created_at, updated_at
+) VALUES (
+    'shelter_map', 'metrotaipei', 'two_d',
+    'SELECT
+        town AS x_axis,
+        SUM(person_capacity::int) AS data
+     FROM urbn_air_raid_shelter_ntpe
+     GROUP BY town
+     ORDER BY data DESC
+     LIMIT 20',
+    ARRAY[204],
+    'static', 1, 'month',
+    '新北市政府資料開放平台 [2026] — 防空疏散避難設施，依政府資料開放授權條款 v1.0 釋出',
+    '新北市各行政區避難容量統計',
+    '統計新北市各行政區防空暨防災避難場所的總容量，作為災時疏散容量評估指標。',
+    '颱風或重大災害時，評估各行政區避難場所是否足以容納需疏散人口。',
+    ARRAY['https://data.ntpc.gov.tw/'],
+    ARRAY['codefest2026-wage-slave'],
+    NOW(), NOW()
+) ON CONFLICT (index) DO UPDATE SET updated_at = NOW();
+
+-- disaster_risk_kpi
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart,
+    map_config_ids,
+    time_from, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case,
+    links, contributors, created_at, updated_at
+) VALUES (
+    'disaster_risk_kpi', 'metrotaipei', 'three_d',
+    'SELECT
+        ''避難場所總數''    AS x_axis,
+        ''metrotaipei''    AS y_axis,
+        COUNT(*)           AS data
+     FROM urbn_air_raid_shelter_ntpe
+     UNION ALL
+     SELECT
+        ''避難總容量（人）'',
+        ''metrotaipei'',
+        COALESCE(SUM(person_capacity::int), 0)
+     FROM urbn_air_raid_shelter_ntpe
+     UNION ALL
+     SELECT
+        ''高風險淹水區塊'',
+        ''metrotaipei'',
+        COUNT(*)
+     FROM rainfall_flood_simulation_etl_ntpe
+     WHERE gridcode >= 3',
+    NULL,
+    'static', 1, 'day',
+    '新北市政府資料開放平台 [2026] / 經濟部水利署 [2026]，依政府資料開放授權條款 v1.0 釋出',
+    '雙北防災資源關鍵指標',
+    '整合避難場所數量、容量及高風險淹水區塊數，提供防災資源的快速概覽。',
+    '颱風前評估整體防災準備程度，識別需要強化的面向。',
+    ARRAY['https://data.ntpc.gov.tw/', 'https://fhy.wra.gov.tw/'],
+    ARRAY['codefest2026-wage-slave'],
+    NOW(), NOW()
+) ON CONFLICT (index) DO UPDATE SET updated_at = NOW();
+
+-- ── 4. Component Charts ───────────────────────────────────────
+
+INSERT INTO public.component_charts (index, color, types, unit) VALUES
+    ('flood_risk_map',
+     ARRAY['#FCBF49','#F77F00','#D62828','#9B2226','#6A0572'],
+     ARRAY['BarChart','MapLegend'],
+     '格')
+ON CONFLICT (index) DO NOTHING;
+
+INSERT INTO public.component_charts (index, color, types, unit) VALUES
+    ('rainfall_realtime_chart',
+     ARRAY['#2196F3','#03A9F4','#00BCD4'],
+     ARRAY['BarChart','LineChart'],
+     'mm')
+ON CONFLICT (index) DO NOTHING;
+
+INSERT INTO public.component_charts (index, color, types, unit) VALUES
+    ('shelter_map',
+     ARRAY['#2EC4B6','#3A86FF','#8338EC'],
+     ARRAY['BarChart','MapLegend'],
+     '人')
+ON CONFLICT (index) DO NOTHING;
+
+INSERT INTO public.component_charts (index, color, types, unit) VALUES
+    ('disaster_risk_kpi',
+     ARRAY['#2EC4B6','#F77F00','#D62828'],
+     ARRAY['MetroArea'],
+     '')
+ON CONFLICT (index) DO NOTHING;
+
+-- ── 5. Dashboard ──────────────────────────────────────────────
+
+INSERT INTO public.dashboards (id, index, name, components, icon, updated_at, created_at) VALUES
+    (501, 'disaster_prevention_metrotaipei', '雙北韌性防災',
+     ARRAY[404, 401, 402, 403], 'flood', NOW(), NOW())
+ON CONFLICT (index) DO NOTHING;
+
+-- Refresh sequences to accommodate explicit IDs
+SELECT pg_catalog.setval('public.dashboards_id_seq',    GREATEST((SELECT COALESCE(MAX(id),0) FROM public.dashboards),    501), true);
+SELECT pg_catalog.setval('public.component_maps_id_seq', GREATEST((SELECT COALESCE(MAX(id),0) FROM public.component_maps), 204), true);
+
+-- =============================================================
+-- End of 韌性防災 components
+-- =============================================================
