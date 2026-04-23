@@ -15945,3 +15945,44 @@ SELECT
 FROM pop p
 LEFT JOIN ltc l ON p.district = l.district
 ORDER BY desert_score DESC;
+
+-- =============================================================
+-- [codefest2026] 照護沙漠指標 View — 臺北市
+-- 整合 city_age_distribution_taipei 與 long_term_tpe
+-- Note: long_term_tpe uses 'property' (not service_item) and 'zone'
+-- =============================================================
+CREATE OR REPLACE VIEW public.ltc_desert_index_tpe AS
+WITH
+pop AS (
+    SELECT
+        "區域別"                                        AS district,
+        '臺北市'                                        AS city,
+        (percent24 + percent26 + percent28)             AS total_pop,
+        percent28                                       AS elderly_pop
+    FROM public.city_age_distribution_taipei
+    WHERE "年份" = (SELECT MAX("年份") FROM public.city_age_distribution_taipei)
+      AND "區域別" NOT IN ('總計', '臺北市')
+      AND "統計類型" = '計'
+),
+ltc AS (
+    SELECT zone AS district, COUNT(*) AS ltc_count
+    FROM public.long_term_tpe
+    WHERE city = '臺北市'
+    GROUP BY zone
+)
+SELECT
+    p.district,
+    p.city,
+    p.total_pop,
+    p.elderly_pop,
+    ROUND(p.elderly_pop * 100.0 / NULLIF(p.total_pop, 0), 1)                           AS aging_ratio,
+    COALESCE(l.ltc_count, 0)                                                            AS ltc_count,
+    ROUND(COALESCE(l.ltc_count, 0) * 10000.0 / NULLIF(p.total_pop, 0), 2)             AS ltc_density_per_10k,
+    ROUND(
+        (p.elderly_pop * 100.0 / NULLIF(p.total_pop, 0))
+        / (COALESCE(l.ltc_count, 0) * 10000.0 / NULLIF(p.total_pop, 0) + 0.1),
+        2
+    )                                                                                   AS desert_score
+FROM pop p
+LEFT JOIN ltc l ON p.district = l.district
+ORDER BY desert_score DESC;

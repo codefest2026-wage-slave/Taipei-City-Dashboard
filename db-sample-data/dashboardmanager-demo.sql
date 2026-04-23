@@ -155,11 +155,16 @@ SELECT pg_catalog.setval('public.groups_id_seq', (SELECT COALESCE(MAX(id), 4) FR
 
 --
 -- PostgreSQL database dump complete
+
 -- =============================================================
--- [codefest2026] 雙北高齡照護資源 - 新增組件
+-- [codefest2026] 雙北高齡照護資源 — 長照資源分析儀表板
+-- Branch: develop  (Fixed: city switching compliance)
+-- Tables (metrotaipei):  long_term_nwtpe, city_age_distribution_newtaipei
+-- Tables (taipei):       long_term_tpe,   city_age_distribution_taipei
+-- Views:  ltc_desert_index (metrotaipei), ltc_desert_index_tpe (taipei)
 -- =============================================================
 
--- components
+-- ── 1. Components ─────────────────────────────────────────────
 INSERT INTO public.components (index, name)
 VALUES
     ('ltc_desert_map',        '照護沙漠熱力圖'),
@@ -167,53 +172,7 @@ VALUES
     ('aging_population_dist', '高齡人口分布')
 ON CONFLICT (index) DO NOTHING;
 
--- query_charts
-INSERT INTO public.query_charts (
-    index, history_config, map_config_ids, map_filter,
-    time_from, time_to, update_freq, update_freq_unit,
-    source, short_desc, long_desc, use_case,
-    links, contributors, created_at, updated_at,
-    query_type, query_chart, query_history, city
-) VALUES
-(
-    'ltc_desert_map', NULL, '{}', '{}', 'static', NULL, 1, 'day',
-    '臺北市政府資料開放平台 [2026] / 新北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
-    '雙北各行政區照護沙漠指數',
-    '整合各行政區老化比例與長照機構密度，計算「照護沙漠指數」。指數越高代表高齡人口多但長照資源相對不足。',
-    '識別需優先增設長照資源的行政區，支援長照政策資源配置決策。',
-    ARRAY['https://data.ntpc.gov.tw/', 'https://data.taipei/'],
-    ARRAY['codefest2026-wage-slave'],
-    NOW(), NOW(), 'two_d',
-    'SELECT district AS x_axis, desert_score AS data FROM public.ltc_desert_index ORDER BY desert_score DESC LIMIT 30',
-    NULL, 'metrotaipei'
-),
-(
-    'ltc_resource_density', NULL, '{}', '{}', 'static', NULL, 1, 'day',
-    '新北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
-    '雙北長照機構服務項目分布',
-    '依行政區與服務項目統計長照機構數量，呈現服務類型的地區差異。',
-    '評估各行政區長照服務類型是否均衡，識別特定服務類型的供給缺口。',
-    ARRAY['https://data.ntpc.gov.tw/'],
-    ARRAY['codefest2026-wage-slave'],
-    NOW(), NOW(), 'three_d',
-    'SELECT zone AS y_axis, service_item AS x_axis, COUNT(*) AS data FROM public.long_term_nwtpe GROUP BY zone, service_item ORDER BY zone, service_item',
-    NULL, 'metrotaipei'
-),
-(
-    'aging_population_dist', NULL, '{}', '{}', 'static', NULL, 1, 'month',
-    '臺北市政府資料開放平台 [2026] / 新北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
-    '雙北各行政區高齡化比例',
-    '呈現雙北各行政區 65 歲以上人口佔總人口比例，反映各地區高齡化程度差異。',
-    '作為長照資源配置的需求端指標，搭配長照機構密度共同分析。',
-    ARRAY['https://data.taipei/', 'https://data.ntpc.gov.tw/'],
-    ARRAY['codefest2026-wage-slave'],
-    NOW(), NOW(), 'two_d',
-    'SELECT district AS x_axis, ROUND(aging_ratio, 1) AS data FROM public.ltc_desert_index ORDER BY aging_ratio DESC',
-    NULL, 'metrotaipei'
-)
-ON CONFLICT (index) DO UPDATE SET updated_at = NOW();
-
--- component_charts
+-- ── 2. Component Charts ───────────────────────────────────────
 INSERT INTO public.component_charts (index, color, types, unit)
 VALUES
     ('ltc_desert_map',        ARRAY['#D62828','#F77F00','#FCBF49','#EAE2B7','#2EC4B6'], ARRAY['BarChart'],              '分'),
@@ -221,16 +180,138 @@ VALUES
     ('aging_population_dist', ARRAY['#E63946','#457B9D'],                               ARRAY['BarChart'],              '%')
 ON CONFLICT (index) DO NOTHING;
 
--- component_maps (ltc_desert_map 行政區著色)
-INSERT INTO public.component_maps (index, title, type, source, size, icon, paint, property)
+-- ── 3. Component Maps ─────────────────────────────────────────
+-- 照護沙漠指數著色 — 新北市  (metrotaipei)
+INSERT INTO public.component_maps (id, index, title, type, source, size, icon, paint, property)
 VALUES (
-    'ltc_desert_map', '照護沙漠指數（行政區）', 'fill', 'ltc_desert_index', 'small', 'elderly',
+    301, 'ltc_desert_map', '照護沙漠指數（新北市）', 'fill',
+    'ltc_desert_index', 'small', 'elderly',
     '{"fill-color":["interpolate",["linear"],["get","desert_score"],0,"#EAE2B7",50,"#F77F00",100,"#D62828"],"fill-opacity":0.7}'::json,
-    NULL
+    '[{"key":"district","name":"行政區"},{"key":"aging_ratio","name":"老化比率(%)"},{"key":"ltc_count","name":"長照機構數"},{"key":"desert_score","name":"沙漠指數"}]'::json
 )
-ON CONFLICT (index) DO NOTHING;
+ON CONFLICT (id) DO NOTHING;
 
--- 建立「雙北高齡照護資源」儀表板
+-- 照護沙漠指數著色 — 臺北市  (taipei)
+INSERT INTO public.component_maps (id, index, title, type, source, size, icon, paint, property)
+VALUES (
+    302, 'ltc_desert_map', '照護沙漠指數（臺北市）', 'fill',
+    'ltc_desert_index_tpe', 'small', 'elderly',
+    '{"fill-color":["interpolate",["linear"],["get","desert_score"],0,"#EAE2B7",50,"#F77F00",100,"#D62828"],"fill-opacity":0.7}'::json,
+    '[{"key":"district","name":"行政區"},{"key":"aging_ratio","name":"老化比率(%)"},{"key":"ltc_count","name":"長照機構數"},{"key":"desert_score","name":"沙漠指數"}]'::json
+)
+ON CONFLICT (id) DO NOTHING;
+
+-- ── 4. Query Charts (metrotaipei) ─────────────────────────────
+
+-- ltc_desert_map / metrotaipei
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart, map_config_ids,
+    history_config, map_filter, time_from, time_to, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at)
+SELECT
+    'ltc_desert_map', 'metrotaipei', 'two_d',
+    'SELECT district AS x_axis, desert_score AS data FROM public.ltc_desert_index ORDER BY desert_score DESC LIMIT 30',
+    ARRAY[301],
+    NULL, '{}', 'static', NULL, 1, 'day',
+    '臺北市政府資料開放平台 [2026] / 新北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
+    '新北市各行政區照護沙漠指數',
+    '整合各行政區老化比例與長照機構密度，計算「照護沙漠指數」。指數越高代表高齡人口多但長照資源相對不足。',
+    '識別需優先增設長照資源的行政區，支援長照政策資源配置決策。',
+    ARRAY['https://data.ntpc.gov.tw/', 'https://data.taipei/'],
+    ARRAY['codefest2026-wage-slave'], NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM public.query_charts WHERE index='ltc_desert_map' AND city='metrotaipei');
+
+-- ltc_desert_map / taipei
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart, map_config_ids,
+    history_config, map_filter, time_from, time_to, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at)
+SELECT
+    'ltc_desert_map', 'taipei', 'two_d',
+    'SELECT district AS x_axis, desert_score AS data FROM public.ltc_desert_index_tpe ORDER BY desert_score DESC LIMIT 30',
+    ARRAY[302],
+    NULL, '{}', 'static', NULL, 1, 'day',
+    '臺北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
+    '臺北市各行政區照護沙漠指數',
+    '整合各行政區老化比例與長照機構密度，計算「照護沙漠指數」。指數越高代表高齡人口多但長照資源相對不足。',
+    '識別需優先增設長照資源的行政區，支援長照政策資源配置決策。',
+    ARRAY['https://data.taipei/'],
+    ARRAY['codefest2026-wage-slave'], NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM public.query_charts WHERE index='ltc_desert_map' AND city='taipei');
+
+-- ltc_resource_density / metrotaipei
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart, map_config_ids,
+    history_config, map_filter, time_from, time_to, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at)
+SELECT
+    'ltc_resource_density', 'metrotaipei', 'three_d',
+    'SELECT zone AS y_axis, service_item AS x_axis, COUNT(*) AS data FROM public.long_term_nwtpe GROUP BY zone, service_item ORDER BY zone, service_item',
+    ARRAY[]::int[],
+    NULL, '{}', 'static', NULL, 1, 'day',
+    '新北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
+    '新北市長照機構服務項目分布',
+    '依行政區與服務項目統計長照機構數量，呈現服務類型的地區差異。',
+    '評估各行政區長照服務類型是否均衡，識別特定服務類型的供給缺口。',
+    ARRAY['https://data.ntpc.gov.tw/'],
+    ARRAY['codefest2026-wage-slave'], NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM public.query_charts WHERE index='ltc_resource_density' AND city='metrotaipei');
+
+-- ltc_resource_density / taipei  (uses property instead of service_item)
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart, map_config_ids,
+    history_config, map_filter, time_from, time_to, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at)
+SELECT
+    'ltc_resource_density', 'taipei', 'three_d',
+    'SELECT zone AS y_axis, property AS x_axis, COUNT(*) AS data FROM public.long_term_tpe GROUP BY zone, property ORDER BY zone, property',
+    ARRAY[]::int[],
+    NULL, '{}', 'static', NULL, 1, 'day',
+    '臺北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
+    '臺北市長照機構服務類型分布',
+    '依行政區與機構類型統計長照機構數量，呈現服務類型的地區差異。',
+    '評估臺北市各行政區長照服務類型是否均衡，識別特定服務類型的供給缺口。',
+    ARRAY['https://data.taipei/'],
+    ARRAY['codefest2026-wage-slave'], NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM public.query_charts WHERE index='ltc_resource_density' AND city='taipei');
+
+-- aging_population_dist / metrotaipei
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart, map_config_ids,
+    history_config, map_filter, time_from, time_to, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at)
+SELECT
+    'aging_population_dist', 'metrotaipei', 'two_d',
+    'SELECT district AS x_axis, ROUND(aging_ratio, 1) AS data FROM public.ltc_desert_index ORDER BY aging_ratio DESC',
+    ARRAY[]::int[],
+    NULL, '{}', 'static', NULL, 1, 'month',
+    '新北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
+    '新北市各行政區高齡化比例',
+    '呈現新北市各行政區 65 歲以上人口佔總人口比例，反映各地區高齡化程度差異。',
+    '作為長照資源配置的需求端指標，搭配長照機構密度共同分析。',
+    ARRAY['https://data.ntpc.gov.tw/'],
+    ARRAY['codefest2026-wage-slave'], NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM public.query_charts WHERE index='aging_population_dist' AND city='metrotaipei');
+
+-- aging_population_dist / taipei
+INSERT INTO public.query_charts (
+    index, city, query_type, query_chart, map_config_ids,
+    history_config, map_filter, time_from, time_to, update_freq, update_freq_unit,
+    source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at)
+SELECT
+    'aging_population_dist', 'taipei', 'two_d',
+    'SELECT district AS x_axis, ROUND(aging_ratio, 1) AS data FROM public.ltc_desert_index_tpe ORDER BY aging_ratio DESC',
+    ARRAY[]::int[],
+    NULL, '{}', 'static', NULL, 1, 'month',
+    '臺北市政府資料開放平台 [2026] 依政府資料開放授權條款 v1.0 釋出',
+    '臺北市各行政區高齡化比例',
+    '呈現臺北市各行政區 65 歲以上人口佔總人口比例，反映各地區高齡化程度差異。',
+    '作為長照資源配置的需求端指標，搭配長照機構密度共同分析。',
+    ARRAY['https://data.taipei/'],
+    ARRAY['codefest2026-wage-slave'], NOW(), NOW()
+WHERE NOT EXISTS (SELECT 1 FROM public.query_charts WHERE index='aging_population_dist' AND city='taipei');
+
+-- ── 5. Dashboard ──────────────────────────────────────────────
 DO $$
 DECLARE
     v_desert_id    integer;
@@ -243,11 +324,11 @@ BEGIN
 
     INSERT INTO public.dashboards (index, name, components, icon, updated_at, created_at)
     VALUES (
-        'aging_care_metrotaipei', '雙北高齡照護資源',
-        ARRAY[218, 214, v_desert_id, v_density_id, v_aging_id, 215],
+        'aging_care', '雙北高齡照護資源',
+        ARRAY[v_desert_id, v_density_id, v_aging_id],
         'elderly', NOW(), NOW()
     )
     ON CONFLICT (index) DO UPDATE
-        SET components = ARRAY[218, 214, v_desert_id, v_density_id, v_aging_id, 215],
+        SET components = ARRAY[v_desert_id, v_density_id, v_aging_id],
             updated_at = NOW();
 END $$;
