@@ -14,53 +14,21 @@ import (
 // These are the SQL strings inserted into dashboardmanager-demo.sql.
 // Keeping them here allows format validation without a live database.
 
-const sqlFloodRiskMap = `SELECT
-        CASE gridcode
-            WHEN 1 THEN '0~30cm'
-            WHEN 2 THEN '30~50cm'
-            WHEN 3 THEN '50~100cm'
-            WHEN 4 THEN '1~2m'
-            WHEN 5 THEN '2m以上'
-        END AS x_axis,
-        COUNT(*) AS data
-     FROM rainfall_flood_simulation_etl_ntpe
-     GROUP BY gridcode
-     ORDER BY gridcode`
+// metrotaipei variants (New Taipei data tables)
+const sqlFloodRiskMap = `SELECT CASE gridcode WHEN 1 THEN '0~30cm' WHEN 2 THEN '30~50cm' WHEN 3 THEN '50~100cm' WHEN 4 THEN '1~2m' WHEN 5 THEN '2m以上' END AS x_axis, COUNT(*)::int AS data FROM rainfall_flood_simulation_etl_ntpe GROUP BY gridcode ORDER BY gridcode`
 
-const sqlRainfallRealtimeChart = `SELECT
-        station_name AS x_axis,
-        rainfall_today AS data
-     FROM rainfall_realtime_tpe
-     WHERE data_time = (SELECT MAX(data_time) FROM rainfall_realtime_tpe)
-     ORDER BY rainfall_today DESC
-     LIMIT 20`
+const sqlRainfallRealtimeChart = `SELECT district AS x_axis, ROUND(AVG(rainfall_today)::numeric,1)::float AS data FROM rainfall_realtime_tpe GROUP BY district ORDER BY data DESC LIMIT 12`
 
-const sqlShelterMap = `SELECT
-        town AS x_axis,
-        SUM(person_capacity::int) AS data
-     FROM urbn_air_raid_shelter_ntpe
-     GROUP BY town
-     ORDER BY data DESC
-     LIMIT 20`
+const sqlShelterMap = `SELECT town AS x_axis, SUM(person_capacity::int) AS data FROM urbn_air_raid_shelter_ntpe GROUP BY town ORDER BY data DESC LIMIT 15`
 
-const sqlDisasterRiskKpi = `SELECT
-        '避難場所總數'    AS x_axis,
-        'metrotaipei'    AS y_axis,
-        COUNT(*)           AS data
-     FROM urbn_air_raid_shelter_ntpe
-     UNION ALL
-     SELECT
-        '避難總容量（人）',
-        'metrotaipei',
-        COALESCE(SUM(person_capacity::int), 0)
-     FROM urbn_air_raid_shelter_ntpe
-     UNION ALL
-     SELECT
-        '高風險淹水區塊',
-        'metrotaipei',
-        COUNT(*)
-     FROM rainfall_flood_simulation_etl_ntpe
-     WHERE gridcode >= 3`
+const sqlDisasterRiskKpi = `SELECT '高風險面積(km²)' AS x_axis, ROUND(SUM(ST_Area(wkb_geometry::geography)/1e6)::numeric,2)::float AS data FROM rainfall_flood_simulation_etl_ntpe WHERE gridcode >= 3 UNION ALL SELECT '避難場所數' AS x_axis, COUNT(*)::float AS data FROM urbn_air_raid_shelter_ntpe UNION ALL SELECT '總避難容量(人)' AS x_axis, SUM(person_capacity::int)::float AS data FROM urbn_air_raid_shelter_ntpe ORDER BY x_axis`
+
+// taipei variants (Taipei City data tables)
+const sqlFloodRiskMapTpe = `SELECT CASE gridcode WHEN 1 THEN '0~30cm' WHEN 2 THEN '30~50cm' WHEN 3 THEN '50~100cm' WHEN 4 THEN '1~2m' WHEN 5 THEN '2m以上' END AS x_axis, COUNT(*)::int AS data FROM rainfall_flood_simulation_etl_tpe GROUP BY gridcode ORDER BY gridcode`
+
+const sqlShelterMapTpe = `SELECT town AS x_axis, SUM(person_capacity::int) AS data FROM urbn_air_raid_shelter GROUP BY town ORDER BY data DESC LIMIT 15`
+
+const sqlDisasterRiskKpiTpe = `SELECT '高風險面積(km²)' AS x_axis, ROUND(SUM(ST_Area(wkb_geometry::geography)/1e6)::numeric,2)::float AS data FROM rainfall_flood_simulation_etl_tpe WHERE gridcode >= 3 UNION ALL SELECT '避難場所數' AS x_axis, COUNT(*)::float AS data FROM urbn_air_raid_shelter UNION ALL SELECT '總避難容量(人)' AS x_axis, SUM(person_capacity::int)::float AS data FROM urbn_air_raid_shelter ORDER BY x_axis`
 
 // AI tool query for flood risk
 const sqlAIFloodRisk = `
@@ -258,9 +226,13 @@ func TestFloodRiskLevelLogic(t *testing.T) {
 
 func TestQueryChartSQL_TwoD_HasRequiredColumns(t *testing.T) {
 	twoDQueries := map[string]string{
-		"flood_risk_map":          sqlFloodRiskMap,
-		"rainfall_realtime_chart": sqlRainfallRealtimeChart,
-		"shelter_map":             sqlShelterMap,
+		"flood_risk_map (ntpe)":          sqlFloodRiskMap,
+		"flood_risk_map (tpe)":           sqlFloodRiskMapTpe,
+		"rainfall_realtime_chart":        sqlRainfallRealtimeChart,
+		"shelter_map (ntpe)":             sqlShelterMap,
+		"shelter_map (tpe)":              sqlShelterMapTpe,
+		"disaster_risk_kpi (ntpe)":       sqlDisasterRiskKpi,
+		"disaster_risk_kpi (tpe)":        sqlDisasterRiskKpiTpe,
 	}
 	for name, sql := range twoDQueries {
 		lower := strings.ToLower(sql)
@@ -274,26 +246,31 @@ func TestQueryChartSQL_TwoD_HasRequiredColumns(t *testing.T) {
 }
 
 func TestQueryChartSQL_ThreeD_HasRequiredColumns(t *testing.T) {
-	lower := strings.ToLower(sqlDisasterRiskKpi)
-	for _, col := range []string{"x_axis", "y_axis", "data"} {
-		if !strings.Contains(lower, col) {
-			t.Errorf("disaster_risk_kpi three_d query missing %q column alias", col)
+	// disaster_risk_kpi is now two_d; verify it does NOT accidentally include y_axis
+	// (would cause BE to attempt three_d parsing and fail)
+	for _, sql := range []string{sqlDisasterRiskKpi, sqlDisasterRiskKpiTpe} {
+		lower := strings.ToLower(sql)
+		if strings.Contains(lower, "y_axis") {
+			t.Error("disaster_risk_kpi is two_d but SQL contains 'y_axis' — update query_type to three_d or remove y_axis")
 		}
 	}
 }
 
 func TestQueryChartSQL_CorrectTableNames(t *testing.T) {
-	// All queries must use the _ntpe-suffixed table names.
 	checks := []struct {
 		name      string
 		sql       string
 		wantTable string
 	}{
-		{"flood_risk_map",     sqlFloodRiskMap,       "rainfall_flood_simulation_etl_ntpe"},
-		{"shelter_map",        sqlShelterMap,          "urbn_air_raid_shelter_ntpe"},
-		{"disaster_risk_kpi",  sqlDisasterRiskKpi,     "urbn_air_raid_shelter_ntpe"},
-		{"disaster_risk_kpi2", sqlDisasterRiskKpi,     "rainfall_flood_simulation_etl_ntpe"},
-		{"rainfall_chart",     sqlRainfallRealtimeChart, "rainfall_realtime_tpe"},
+		{"flood_risk_map (ntpe)",    sqlFloodRiskMap,          "rainfall_flood_simulation_etl_ntpe"},
+		{"flood_risk_map (tpe)",     sqlFloodRiskMapTpe,        "rainfall_flood_simulation_etl_tpe"},
+		{"shelter_map (ntpe)",       sqlShelterMap,             "urbn_air_raid_shelter_ntpe"},
+		{"shelter_map (tpe)",        sqlShelterMapTpe,          "urbn_air_raid_shelter"},
+		{"disaster_kpi (ntpe)",      sqlDisasterRiskKpi,        "urbn_air_raid_shelter_ntpe"},
+		{"disaster_kpi (ntpe2)",     sqlDisasterRiskKpi,        "rainfall_flood_simulation_etl_ntpe"},
+		{"disaster_kpi (tpe)",       sqlDisasterRiskKpiTpe,     "urbn_air_raid_shelter"},
+		{"disaster_kpi (tpe2)",      sqlDisasterRiskKpiTpe,     "rainfall_flood_simulation_etl_tpe"},
+		{"rainfall_chart",           sqlRainfallRealtimeChart,  "rainfall_realtime_tpe"},
 	}
 	for _, tc := range checks {
 		if !strings.Contains(tc.sql, tc.wantTable) {
@@ -303,15 +280,16 @@ func TestQueryChartSQL_CorrectTableNames(t *testing.T) {
 }
 
 func TestQueryChartSQL_NoWrongTableNames(t *testing.T) {
-	// Guard against accidentally using un-suffixed table names.
+	// Guard against accidentally omitting city suffix for ntpe tables.
+	// Note: "urbn_air_raid_shelter" (no suffix) IS valid for Taipei City — only check
+	// "rainfall_flood_simulation_etl " (missing _ntpe/_tpe) is wrong.
 	wrongTables := []string{
-		"rainfall_flood_simulation_etl ",  // missing _ntpe
-		"urbn_air_raid_shelter ",           // missing _ntpe
+		"rainfall_flood_simulation_etl ",  // missing city suffix
 	}
-	allSQL := sqlFloodRiskMap + sqlShelterMap + sqlDisasterRiskKpi
+	allSQL := sqlFloodRiskMap + sqlFloodRiskMapTpe + sqlDisasterRiskKpi + sqlDisasterRiskKpiTpe
 	for _, bad := range wrongTables {
 		if strings.Contains(allSQL, bad) {
-			t.Errorf("SQL contains wrong table name (missing _ntpe): %q", strings.TrimSpace(bad))
+			t.Errorf("SQL contains wrong table name (missing city suffix): %q", strings.TrimSpace(bad))
 		}
 	}
 }
@@ -367,13 +345,43 @@ func TestDashboardManagerSQLFile(t *testing.T) {
 		"rainfall_realtime_chart",
 		"shelter_map",
 		"disaster_risk_kpi",
-		"disaster_prevention_metrotaipei",
+		"disaster_prevention",
 		"rainfall_flood_simulation_etl_ntpe",
+		"rainfall_flood_simulation_etl_tpe",
 		"urbn_air_raid_shelter_ntpe",
+		"urbn_air_raid_shelter",
 	}
 	for _, token := range required {
 		if !strings.Contains(content, token) {
 			t.Errorf("dashboardmanager-demo.sql missing expected token: %q", token)
+		}
+	}
+}
+
+// TestCitySwitchingCompliance verifies every component has BOTH taipei and metrotaipei entries.
+func TestCitySwitchingCompliance(t *testing.T) {
+	_, filename, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Skip("cannot determine test file path")
+	}
+	repoRoot := filepath.Join(filepath.Dir(filename), "../../../../..")
+	sqlPath := filepath.Join(repoRoot, "db-sample-data", "dashboardmanager-demo.sql")
+
+	data, err := os.ReadFile(sqlPath)
+	if err != nil {
+		t.Skipf("dashboardmanager-demo.sql not found: %v", err)
+	}
+	content := string(data)
+
+	components := []string{"flood_risk_map", "rainfall_realtime_chart", "shelter_map", "disaster_risk_kpi"}
+	cities := []string{"metrotaipei", "taipei"}
+
+	for _, comp := range components {
+		for _, city := range cities {
+			token := "'" + comp + "','" + city + "'"
+			if !strings.Contains(content, token) {
+				t.Errorf("city switching compliance: missing query_charts entry for component=%q city=%q", comp, city)
+			}
 		}
 	}
 }
