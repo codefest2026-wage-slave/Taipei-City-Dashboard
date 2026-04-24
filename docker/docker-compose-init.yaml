@@ -5,6 +5,7 @@ services:
     container_name: dashboard-fe-init
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
+      - fe-node-modules:/opt/Taipei-City-Dashboard-FE/node_modules
     working_dir: /opt/Taipei-City-Dashboard-FE
     environment:
       DOCKER_COMPOSE: "true"
@@ -55,3 +56,6 @@ networks:
   default:
     name: br_dashboard
     external: true
+
+volumes:
+  fe-node-modules:
