@@ -1,0 +1,35 @@
+{
+    "dag_infos": {
+        "dag_id": "D_garbage_route",
+        "start_date": "2026-04-18",
+        "schedule_interval": "30 5 * * *",
+        "catchup": false,
+        "tags": ["garbage_truck_route", "垃圾車", "雙北"],
+        "description": "Taipei + New Taipei Garbage Truck Routes",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "garbage_truck_route_ntpc",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "雙北垃圾車收運路線",
+        "airflow_update_freq": "05:30 every day",
+        "source": "https://data.ntpc.gov.tw/datasets/d7330ae1-5869-4ee7-8821-03b1d7d13822",
+        "source_type": "data.ntpc JSON API",
+        "source_dept": "新北市環保局",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "雙北垃圾車收運路線及GPS停靠點位",
+        "sensitivity": "public"
+    }
+}

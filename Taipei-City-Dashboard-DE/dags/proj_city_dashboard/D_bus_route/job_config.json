@@ -1,0 +1,35 @@
+{
+    "dag_infos": {
+        "dag_id": "D_bus_route",
+        "start_date": "2026-04-18",
+        "schedule_interval": "0 4 * * *",
+        "catchup": false,
+        "tags": ["bus_route_map", "公車路線", "雙北"],
+        "description": "Taipei + New Taipei Bus Route Shapes",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "bus_route_map_tpe",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "雙北公車路線軌跡",
+        "airflow_update_freq": "04:00 every day",
+        "source": "https://tcgbusfs.blob.core.windows.net/blobbus/TstBusShape.json",
+        "source_type": "tcgbusfs JSON/GZ",
+        "source_dept": "臺北市聯合陸路公車處",
+        "gis_format": "LineString",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市與新北市公車路線軌跡（WKT LINESTRING）",
+        "sensitivity": "public"
+    }
+}
