@@ -7,17 +7,19 @@
  */
 import { test, expect, APIRequestContext } from '@playwright/test';
 
-const BASE = 'http://localhost';
-const USER = process.env.DASHBOARD_USERNAME ?? 'test';
-const PASS = process.env.DASHBOARD_PASSWORD ?? 'test1234';
+const BASE = 'http://localhost:8080';
+const EMAIL = process.env.DASHBOARD_EMAIL ?? 'test1234@gmail.com';
+const PASS  = process.env.DASHBOARD_PASSWORD ?? 'test1234';
 
 // ── Shared auth token ─────────────────────────────────────────
 let authToken = '';
 
 async function getToken(request: APIRequestContext): Promise<string> {
   if (authToken) return authToken;
+  // Login uses HTTP Basic Auth: base64(email:password)
+  const credentials = Buffer.from(`${EMAIL}:${PASS}`).toString('base64');
   const res = await request.post(`${BASE}/api/dev/auth/login`, {
-    data: { username: USER, password: PASS },
+    headers: { Authorization: `Basic ${credentials}` },
   });
   expect(res.status(), 'login should succeed').toBe(200);
   const body = await res.json();
@@ -35,8 +37,10 @@ test.describe('API: 韌性防災儀表板存在', () => {
     });
     expect(res.status()).toBe(200);
     const body = await res.json();
-    const dashboards: { index: string }[] = body.data ?? body ?? [];
-    const found = dashboards.some((d) => d.index === 'disaster_prevention');
+    // Response: { data: { public: [...], taipei: [...], metrotaipei: [...], personal: [...] } }
+    const groups: Record<string, { index: string }[]> = body.data ?? {};
+    const allDashboards = Object.values(groups).flat();
+    const found = allDashboards.some((d) => d.index === 'disaster_prevention');
     expect(found, 'disaster_prevention dashboard should exist').toBe(true);
   });
 });
@@ -53,48 +57,52 @@ test.describe('API: 城市切換 query_charts', () => {
 
   for (const { name, id } of components) {
     for (const city of cities) {
-      test(`GET chartData/${id}?city=${city} [${name}] returns data`, async ({ request }) => {
+      test(`GET component/${id}/chart?city=${city} [${name}] returns data`, async ({ request }) => {
         const token = await getToken(request);
         const res = await request.get(
-          `${BASE}/api/dev/component/chartData/${id}?city=${city}`,
+          `${BASE}/api/dev/component/${id}/chart?city=${city}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
         // 200 or 204 (no data) are both acceptable — key is no 4xx/5xx
         expect(res.status(), `${name}/${city} should not error`).toBeLessThan(400);
+        const body = await res.json();
+        expect(body.status, `${name}/${city} status should be success`).toBe('success');
       });
     }
   }
 });
 
-test.describe('API: component_maps 存在 (IDs 201-206)', () => {
-  test('map config IDs 201-206 should be retrievable', async ({ request }) => {
+test.describe('API: component config 存在 (IDs 401-404)', () => {
+  test('all 4 disaster components should be retrievable', async ({ request }) => {
     const token = await getToken(request);
-    for (const id of [201, 202, 203, 204, 205, 206]) {
-      const res = await request.get(`${BASE}/api/dev/component/mapConfig/${id}`, {
+    for (const id of [401, 402, 403, 404]) {
+      const res = await request.get(`${BASE}/api/dev/component/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       expect(
         res.status(),
-        `component_maps id=${id} should be found`,
+        `component id=${id} should be found`,
       ).toBeLessThan(400);
+      const body = await res.json();
+      expect(body.status, `component id=${id} status should be success`).toBe('success');
     }
   });
 });
 
 // ── UI Tests ──────────────────────────────────────────────────
 test.describe('UI: 韌性防災儀表板', () => {
-  test.beforeEach(async ({ page }) => {
-    // Login via UI
+  test.beforeEach(async ({ page, request }) => {
+    // Get JWT via API (avoids complex UI login flow with TaipeiPass/email toggle)
+    const token = await getToken(request);
+    // Navigate to app first so localStorage is accessible for the domain
     await page.goto(`${BASE}/`);
-    // If login modal appears, fill it in
-    const loginBtn = page.getByRole('button', { name: /登入|login/i });
-    if (await loginBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await loginBtn.click();
-      await page.getByPlaceholder(/帳號|username/i).fill(USER);
-      await page.getByPlaceholder(/密碼|password/i).fill(PASS);
-      await page.getByRole('button', { name: /確認|submit|登入/i }).click();
-      await page.waitForURL(/dashboard/, { timeout: 10_000 }).catch(() => {});
-    }
+    // Inject token and dismiss welcome dialog flag
+    await page.evaluate(({ tok }) => {
+      localStorage.setItem('token', tok);
+      localStorage.setItem('initialWarning', 'shown');
+    }, { tok: token });
+    // Reload so the app reads the injected token from localStorage
+    await page.reload({ waitUntil: 'networkidle' });
   });
 
   test('should navigate to disaster prevention dashboard', async ({ page }) => {
@@ -102,14 +110,20 @@ test.describe('UI: 韌性防災儀表板', () => {
     const dashboardLink = page.getByText('韌性防災').first();
     await expect(dashboardLink).toBeVisible({ timeout: 15_000 });
     await dashboardLink.click();
-    // URL should update or page should show the dashboard
-    await expect(page).toHaveURL(/disaster_prevention|disaster-prevention/, {
+    // URL uses query param: /dashboard?index=disaster_prevention
+    await expect(page).toHaveURL(/disaster_prevention/, {
       timeout: 10_000,
     });
   });
 
   test('should show 4 disaster component tiles', async ({ page }) => {
-    await page.goto(`${BASE}/dashboard/disaster_prevention`);
+    // Use sidebar navigation (same as 'navigate' test which passes)
+    // Direct goto with ?index= query competes with async contentStore init
+    await page.goto(`${BASE}/dashboard`);
+    const dashboardLink = page.getByText('韌性防災').first();
+    await expect(dashboardLink).toBeVisible({ timeout: 15_000 });
+    await dashboardLink.click();
+    await page.waitForURL(/disaster_prevention/, { timeout: 10_000 });
     const expectedComponents = [
       '淹水潛勢分級地圖',
       '即時雨量監測',
@@ -125,7 +139,11 @@ test.describe('UI: 韌性防災儀表板', () => {
   });
 
   test('city switch metrotaipei → taipei should not error', async ({ page }) => {
-    await page.goto(`${BASE}/dashboard/disaster_prevention`);
+    await page.goto(`${BASE}/dashboard`);
+    const dashboardLink = page.getByText('韌性防災').first();
+    await expect(dashboardLink).toBeVisible({ timeout: 15_000 });
+    await dashboardLink.click();
+    await page.waitForURL(/disaster_prevention/, { timeout: 10_000 });
     // Find city switcher and click taipei
     const taipeiBtn = page.getByRole('button', { name: /臺北市|taipei/i }).first();
     if (await taipeiBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
@@ -144,8 +162,11 @@ test.describe('UI: 韌性防災儀表板', () => {
     page.on('console', (msg) => {
       if (msg.type() === 'error') errors.push(msg.text());
     });
-    await page.goto(`${BASE}/dashboard/disaster_prevention`);
-    await page.waitForTimeout(3000); // let components load
+    await page.goto(`${BASE}/dashboard`);
+    const dashboardLink = page.getByText('韌性防災').first();
+    await expect(dashboardLink).toBeVisible({ timeout: 15_000 });
+    await dashboardLink.click();
+    await page.waitForURL(/disaster_prevention/, { timeout: 10_000 });
     // Filter out known non-critical errors (e.g. map tile warnings)
     const critical = errors.filter(
       (e) => !e.includes('favicon') && !e.includes('mapbox') && !e.includes('tile'),

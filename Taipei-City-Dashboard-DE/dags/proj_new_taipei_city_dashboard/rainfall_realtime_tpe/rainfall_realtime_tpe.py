@@ -7,24 +7,25 @@ def _transfer(**kwargs):
     """
     ETL pipeline for Taipei City real-time rainfall station data.
 
-    Data source: Taipei City Open Data Platform (data.taipei)
-    Dataset: 臺北市雨量站即時資料
-    RID: a664fdca-62be-48f6-9b4e-5b2e7dd13a91
+    Data source: 臺北市水利處雨量站即時資料
+    Dataset page: https://data.taipei/dataset/detail?id=6f03a0b8-7b98-4eea-8bb9-ba6bfcdc2b8b
+    Actual API:  https://wic.gov.taipei/OpenData/API/Rain/Get
+    loginId/dataKey from resource rid: 6695350f-faac-4f0d-a53d-95d223bf43e5
     Update frequency: 10 minutes
 
-    Expected JSON schema:
-    [
-        {
-            "StationID": "1",
-            "StationName": "文山",
-            "District": "文山區",
-            "Longitude": "121.5547",
-            "Latitude": "25.0008",
-            "Now": "0.0",      -- 10-min rainfall (mm)
-            "Today": "12.5"    -- cumulative daily rainfall (mm)
-        },
-        ...
-    ]
+    Actual JSON schema (verified 2026-04-24):
+    {
+        "count": 42,
+        "data": [
+            {
+                "stationNo": "001",
+                "stationName": "湖田國小",
+                "recTime": "202604242216",   -- YYYYMMDDHHmm
+                "rain": 15.0                 -- daily cumulative rainfall (mm)
+            },
+            ...
+        ]
+    }
     """
     import pandas as pd
     import requests
@@ -44,52 +45,55 @@ def _transfer(**kwargs):
     history_table = dag_infos.get("ready_data_history_table")
 
     # --- Extract ---
-    # Primary: data.taipei open data API
-    RID = "a664fdca-62be-48f6-9b4e-5b2e7dd13a91"
-    URL = f"https://data.taipei/api/v1/dataset/{RID}/resource/{RID}/download?limit=1000&offset=0"
+    # 臺北市水利處雨量站即時資料（wic.gov.taipei）
+    # dataset page: https://data.taipei/dataset/detail?id=6f03a0b8-7b98-4eea-8bb9-ba6bfcdc2b8b
+    URL = "https://wic.gov.taipei/OpenData/API/Rain/Get?stationNo=&loginId=open_rain&dataKey=85452C1D"
     resp = requests.get(URL, timeout=30)
     resp.raise_for_status()
     payload = resp.json()
 
-    # data.taipei wraps response in {"result": {"results": [...]}}
-    if isinstance(payload, dict) and "result" in payload:
-        raw = payload["result"].get("results", payload["result"])
-    elif isinstance(payload, list):
-        raw = payload
-    else:
-        raw = payload
+    # Response: {"count": N, "data": [{"stationNo", "stationName", "recTime", "rain"}, ...]}
+    raw = payload.get("data", [])
+    if not raw:
+        raise ValueError(f"API returned empty data. Full response keys: {list(payload.keys())}")
 
     df = pd.DataFrame(raw)
 
     # --- Transform ---
     col_map = {
-        "StationID":   "station_id",
-        "StationName": "station_name",
-        "District":    "district",
-        "Longitude":   "lng",
-        "Latitude":    "lat",
-        "Now":         "rainfall_10min",
-        "Today":       "rainfall_today",
+        "stationNo":   "station_id",
+        "stationName": "station_name",
+        "rain":        "rainfall_today",  # daily cumulative (mm)
+        "recTime":     "rec_time",
     }
     df = df.rename(columns={k: v for k, v in col_map.items() if k in df.columns})
 
-    required = ["station_id", "station_name", "lng", "lat"]
-    for col in required:
-        if col not in df.columns:
-            raise ValueError(f"Column '{col}' not found in API response. "
-                             f"Available columns: {list(df.columns)}")
-
-    df["lng"] = pd.to_numeric(df["lng"], errors="coerce")
-    df["lat"] = pd.to_numeric(df["lat"], errors="coerce")
-    df["rainfall_10min"] = pd.to_numeric(df.get("rainfall_10min", 0), errors="coerce").fillna(0)
+    # 雨量站無經緯度欄位，需用站碼對應靜態座標表（或暫填 None 留給 geocoding）
+    # 此處先設為 None，待有座標資料時補充
+    df["lng"] = None
+    df["lat"] = None
+    df["district"] = None
+    df["rainfall_10min"] = 0.0  # 此 API 不提供 10min 值，填 0
     df["rainfall_today"] = pd.to_numeric(df.get("rainfall_today", 0), errors="coerce").fillna(0)
-    if "district" not in df.columns:
-        df["district"] = None
 
-    df = df.dropna(subset=["lng", "lat"])
+    df = df.dropna(subset=["station_id"])
     df["data_time"] = get_tpe_now_time_str(is_with_tz=True)
 
-    gdata = add_point_wkbgeometry_column_to_df(df, df["lng"], df["lat"], from_crs=4326)
+    # wkb_geometry 僅在有座標時建立；若為 None 則 geometry 為空
+    df_with_coord = df.dropna(subset=["lng", "lat"])
+    df_no_coord = df[df["lng"].isna() | df["lat"].isna()].copy()
+
+    if not df_with_coord.empty:
+        gdata = add_point_wkbgeometry_column_to_df(
+            df_with_coord, df_with_coord["lng"], df_with_coord["lat"], from_crs=4326
+        )
+    else:
+        # 無座標時，建立空 geometry column
+        import geopandas as gpd
+        from shapely.geometry import Point
+        df["wkb_geometry"] = None
+        gdata = gpd.GeoDataFrame(df, geometry="wkb_geometry", crs=4326)
+
     ready_data = gdata[[
         "station_id", "station_name", "district",
         "rainfall_10min", "rainfall_today",
