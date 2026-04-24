@@ -1,0 +1,35 @@
+{
+    "dag_infos": {
+        "dag_id": "D_ev_scooter_tpe",
+        "start_date": "2026-04-18",
+        "schedule_interval": "0 6 * * *",
+        "catchup": false,
+        "tags": ["ev_scooter_charging", "電動機車", "充電站", "臺北"],
+        "description": "Taipei City EV Scooter Charging Stations",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "ev_scooter_charging_tpe",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "臺北市電動機車充電站",
+        "airflow_update_freq": "06:00 every day",
+        "source": "https://data.taipei/dataset/detail?id=759db528-77b5-4aa3-b6fa-2b857890214e",
+        "source_type": "data.taipei JSON",
+        "source_dept": "臺北市政府",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "臺北市電動機車充電站位置資料",
+        "sensitivity": "public"
+    }
+}

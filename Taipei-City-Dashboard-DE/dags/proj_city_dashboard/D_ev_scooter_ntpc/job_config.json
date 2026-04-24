@@ -1,0 +1,35 @@
+{
+    "dag_infos": {
+        "dag_id": "D_ev_scooter_ntpc",
+        "start_date": "2026-04-18",
+        "schedule_interval": "0 6 * * *",
+        "catchup": false,
+        "tags": ["ev_scooter_charging", "電動機車", "充電站", "新北"],
+        "description": "New Taipei City EV Scooter Charging Stations",
+        "default_args": {
+            "owner": "airflow",
+            "email": ["DEFAULT_EMAIL_LIST"],
+            "email_on_retry": false,
+            "email_on_failure": true,
+            "retries": 1,
+            "retry_delay": 60
+        },
+        "ready_data_db": "postgres_default",
+        "ready_data_default_table": "ev_scooter_charging_ntpc",
+        "raw_data_db": "postgres_default",
+        "raw_data_table": "",
+        "load_behavior": "replace"
+    },
+    "data_infos": {
+        "name_cn": "新北市電動機車充電站",
+        "airflow_update_freq": "06:00 every day",
+        "source": "https://data.ntpc.gov.tw/datasets/1bb694e3-17c7-4ef0-ac75-52990c40edcd",
+        "source_type": "data.ntpc JSON API",
+        "source_dept": "新北市政府",
+        "gis_format": "Point",
+        "output_coordinate": "EPSG:4326",
+        "is_geometry": 1,
+        "dataset_description": "新北市電動機車充電站位置資料",
+        "sensitivity": "public"
+    }
+}
