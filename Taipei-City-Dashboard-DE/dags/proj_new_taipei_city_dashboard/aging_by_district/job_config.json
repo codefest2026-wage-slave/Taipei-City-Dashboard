@@ -1,0 +1,40 @@
+{
+  "dag_infos": {
+    "dag_id": "aging_by_district",
+    "start_date": "2026-04-24",
+    "schedule_interval": "0 12 1 * *",
+    "catchup": false,
+    "tags": [
+      "aging_by_district",
+      "data.ntpc.gov.tw",
+      "新北市",
+      "行政區老化指數"
+    ],
+    "description": "New Taipei City aging statistics broken down by district (29 districts). Same source RID as dependency_ratio_and_aging_index but retains district-level rows instead of city total only. Used by ltc_desert_index view.",
+    "default_args": {
+      "owner": "airflow",
+      "email": [
+        "DEFAULT_EMAIL_LIST"
+      ],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "aging_by_district_ntpe",
+    "ready_data_history_table": "aging_by_district_ntpe_history",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "新北市行政區老化統計",
+    "airflow_update_freq": "每月 1 日",
+    "source": "https://data.ntpc.gov.tw/datasets/8308ab58-62d1-424e-8314-24b65b7ab492",
+    "source_type": "data.ntpc.gov.tw",
+    "source_dept": "新北市政府主計處",
+    "gis_format": "none",
+    "description": "新北市 29 個行政區的老化指數、扶養比、65歲以上人口數等統計資料（年別）。由 ltc_desert_index View 使用，計算照護沙漠指數。"
+  }
+}
