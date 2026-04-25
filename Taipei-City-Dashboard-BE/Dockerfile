@@ -2,13 +2,17 @@
 FROM python:3.12-slim AS model_export
 ARG HF_TOKEN   # 若你有 Hugging Face 私有模型或想提高速率，可傳 token（可留空）
 ENV HF_HOME=/root/.cache/huggingface
-WORKDIR /w
 
-# 安裝匯出所需套件
-RUN pip install --no-cache-dir \
-      "transformers>=4.44" \
-      "optimum[onnxruntime]>=1.20.0" \
-      onnxruntime
+WORKDIR /root
+RUN --mount=type=cache,sharing=locked,mode=0777,target=/root/.cache/uv,id=uv \ 
+	--mount=from=ghcr.io/astral-sh/uv:0.11.7,source=/uv,target=/usr/bin/uv \
+	--mount=type=bind,target=requirements.txt,src=requirements.txt \
+	uv venv -p 3.12 && \
+	uv pip install -r requirements.txt
+ENV PATH="/root/.venv/bin:$PATH" \
+    UV_PYTHON=/root/.venv/bin/python
+
+WORKDIR /w
 
 # 匯出：feature-extraction
 # 產出到 /out/onnx-e5

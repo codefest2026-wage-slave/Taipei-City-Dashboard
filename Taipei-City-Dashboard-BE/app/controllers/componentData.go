@@ -28,12 +28,12 @@ func GetComponentChartData(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if query.City == ""{
+	if query.City == "" {
 		query.City = "taipei"
 	}
 
@@ -48,7 +48,7 @@ func GetComponentChartData(c *gin.Context) {
 		return
 	}
 
-	timeFrom, timeTo, err:= util.GetTime(c)
+	timeFrom, timeTo, err := util.GetTime(c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -109,19 +109,19 @@ func GetComponentHistoryData(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if query.City == ""{
+	if query.City == "" {
 		query.City = "taipei"
 	}
 
 	timeFrom, timeTo, err := util.GetTime(c)
-		if err != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
-			return
+		return
 	}
 	// 2. Get the history data query from the database
 	queryHistory, err := models.GetComponentHistoryDataQuery(id, query.City, timeFrom, timeTo)

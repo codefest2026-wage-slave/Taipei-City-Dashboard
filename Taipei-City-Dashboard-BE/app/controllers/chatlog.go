@@ -12,8 +12,8 @@ import (
 
 func CreateChatLog(c *gin.Context) {
 	var chatLog models.ChatLog
-	
-	accountID, exists  := c.Get("accountID")
+
+	accountID, exists := c.Get("accountID")
 
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "Unauthorized"})
@@ -35,8 +35,8 @@ func CreateChatLog(c *gin.Context) {
 
 func GetALLChatLog(c *gin.Context) {
 	var chatLogList []models.ChatLog
-	
-	accountID, exists  := c.Get("accountID")
+
+	accountID, exists := c.Get("accountID")
 
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "Unauthorized"})
@@ -46,17 +46,17 @@ func GetALLChatLog(c *gin.Context) {
 	chatLogList, _ = models.GetALLChatLogSession(accountID.(int))
 
 	type ChatLogSummary struct {
-		Session   string    `json:"session"`		
+		Session   string    `json:"session"`
 		CreatedAt time.Time `json:"created_at"`
 	}
 
-    var summaries []ChatLogSummary
-    for _, log := range chatLogList {
-        summaries = append(summaries, ChatLogSummary{
-            Session:   log.Session,
-            CreatedAt: log.CreatedAt,
-        })
-    }
+	var summaries []ChatLogSummary
+	for _, log := range chatLogList {
+		summaries = append(summaries, ChatLogSummary{
+			Session:   log.Session,
+			CreatedAt: log.CreatedAt,
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": summaries})
 }
@@ -66,13 +66,13 @@ func GetChatLogDetailBySession(c *gin.Context) {
 	var chatLogList []models.ChatLog
 	session := c.Param("session")
 	session = html.EscapeString(session)
-	accountID, exists  := c.Get("accountID")
+	accountID, exists := c.Get("accountID")
 
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"status": "error", "message": "Unauthorized"})
 		return
 	}
 
-	chatLogList, _ = models.GetChatLogDetailBySession(session,accountID.(int))
+	chatLogList, _ = models.GetChatLogDetailBySession(session, accountID.(int))
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": chatLogList})
 }

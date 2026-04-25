@@ -38,10 +38,10 @@ type DashboardGroup struct {
 // }
 
 type allDashboards struct {
-	Public   []Dashboard `json:"public"`
-	Taipei   []Dashboard `json:"taipei"`
-	MetroTaipei   []Dashboard `json:"metrotaipei"`
-	Personal []Dashboard `json:"personal"`
+	Public      []Dashboard `json:"public"`
+	Taipei      []Dashboard `json:"taipei"`
+	MetroTaipei []Dashboard `json:"metrotaipei"`
+	Personal    []Dashboard `json:"personal"`
 }
 
 func GetAllDashboards(accountID int) (dashboards allDashboards, err error) {
@@ -78,7 +78,6 @@ func GetAllDashboards(accountID int) (dashboards allDashboards, err error) {
 		return dashboards, err
 	}
 
-	
 	// Get all the Personal dashboards
 	// err = DBManager.
 	// 	Joins("JOIN dashboard_groups ON dashboards.id = dashboard_groups.dashboard_id AND dashboard_groups.group_id IN (?)", personalGroups).
@@ -86,26 +85,24 @@ func GetAllDashboards(accountID int) (dashboards allDashboards, err error) {
 	// 	Find(&dashboards.Personal).
 	// 	Error
 
-
 	// Get all the Personal dashboards
-	if accountID > 0{
+	if accountID > 0 {
 		subQuery := DBManager.Table("groups").
-		Select("id").
-		Joins("JOIN auth_user_group_roles as ag ON groups.id = ag.group_id").
-		Where("is_personal = true").
-		Where("auth_user_id = ?", accountID)
+			Select("id").
+			Joins("JOIN auth_user_group_roles as ag ON groups.id = ag.group_id").
+			Where("is_personal = true").
+			Where("auth_user_id = ?", accountID)
 
 		err = DBManager.Debug().
 			Joins("JOIN dashboard_groups as dg ON dashboards.id = dg.dashboard_id AND dg.group_id IN (?)", subQuery).
 			Find(&dashboards.Personal).
 			Error
 	} else {
-		dashboards.Personal =[]Dashboard{}
+		dashboards.Personal = []Dashboard{}
 	}
-	
+
 	return dashboards, err
 }
-
 
 func GetAllPublicGroupsID() (ids []int, err error) {
 	// Assume is_personal = false means public group
@@ -170,9 +167,9 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 	query := tempDB.
 		Where(componentIdsSlice).
 		Order(fmt.Sprintf("ARRAY_POSITION(ARRAY[%s], components.id)", componentIdsString))
-		if (city != ""){
-			query = query.Where("query_charts.city = ?", city)
-		}
+	if city != "" {
+		query = query.Where("query_charts.city = ?", city)
+	}
 	err = query.Find(&components).Error
 
 	// Add ComponentMap City field for front-end display purpose
@@ -189,17 +186,16 @@ func GetDashboardByIndex(index string, groups []int, city string) (components []
 		Property *json.RawMessage `json:"property" gorm:"column:property;type:json"`
 	}
 
-
-	for k,v := range components{
+	for k, v := range components {
 		var maps []ComponentMap
 		filteredMaps := make([]ComponentMap, 0)
 		if err := json.Unmarshal(v.MapConfig, &maps); err != nil {
 			return components, err
 		}
 
-		for kk,vv := range maps{
+		for kk, vv := range maps {
 			maps[kk].City = v.City
-			if vv.ID != 0{
+			if vv.ID != 0 {
 				filteredMaps = append(filteredMaps, maps[kk])
 			}
 		}

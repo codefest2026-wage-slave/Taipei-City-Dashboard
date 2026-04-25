@@ -20,7 +20,7 @@ func GetIncident(c *gin.Context) {
 	// Get query parameters
 	var query incidentQuery
 	c.ShouldBindQuery(&query)
-	
+
 	incidents, totalIncidents, resultNum, err := models.GetAllIncident(query.PageSize, query.PageNum, query.FilterByStatus, query.Sort, query.Order)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
@@ -39,7 +39,7 @@ func CreateIncident(c *gin.Context) {
 	// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read request body"})
 	// 		return
 	// }
-	
+
 	// Convert buffer to string
 	// requestBody := buf.String()
 	// fmt.Println(requestBody)

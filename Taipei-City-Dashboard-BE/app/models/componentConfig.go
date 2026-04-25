@@ -17,14 +17,14 @@ import (
 
 // Component is the model for the components table.
 type Component struct {
-	ID             int64           `json:"id" gorm:"column:id;autoincrement;primaryKey"`
-	Index          string          `json:"index" gorm:"column:index;type:varchar;unique;not null"     `
-	Name           string          `json:"name" gorm:"column:name;type:varchar;not null"`
+	ID    int64  `json:"id" gorm:"column:id;autoincrement;primaryKey"`
+	Index string `json:"index" gorm:"column:index;type:varchar;unique;not null"     `
+	Name  string `json:"name" gorm:"column:name;type:varchar;not null"`
 }
 
 // QueryCharts is the model for the query_charts table.
 type QueryCharts struct {
-	Index string                   `json:"index"      gorm:"column:index;type:varchar"`
+	Index          string          `json:"index"      gorm:"column:index;type:varchar"`
 	HistoryConfig  json.RawMessage `json:"history_config" gorm:"column:history_config;type:json"`
 	MapConfigIDs   pq.Int64Array   `json:"-" gorm:"column:map_config_ids;type:integer[]"`
 	MapFilter      json.RawMessage `json:"map_filter" gorm:"column:map_filter;type:json"`
@@ -43,10 +43,10 @@ type QueryCharts struct {
 	QueryType      string          `json:"query_type" gorm:"column:query_type;type:varchar"`
 	QueryChart     string          `json:"-" gorm:"column:query_chart;type:text"`
 	QueryHistory   string          `json:"-" gorm:"column:query_history;type:text"`
-	City		   string          `json:"city" gorm:"column:city;type:text"`
+	City           string          `json:"city" gorm:"column:city;type:text"`
 }
 
-type CityComponent struct{
+type CityComponent struct {
 	ID             int64           `json:"id"`
 	Index          string          `json:"index"`
 	Name           string          `json:"name"`
@@ -70,15 +70,15 @@ type CityComponent struct{
 	QueryType      string          `json:"query_type"`
 	QueryChart     string          `json:"-"`
 	QueryHistory   string          `json:"-"`
-	City		   string          `json:"city"`
+	City           string          `json:"city"`
 }
 
-type CityComponentScore struct{
-	ID             int64           `json:"id"`
-	Index          string          `json:"index"`
-	Name           string          `json:"name"`
-	City		   string          `json:"city"`
-	Score 		   float64         `json:"score"`
+type CityComponentScore struct {
+	ID    int64   `json:"id"`
+	Index string  `json:"index"`
+	Name  string  `json:"name"`
+	City  string  `json:"city"`
+	Score float64 `json:"score"`
 }
 
 // ComponentMap is the model for the component_maps table.
@@ -105,12 +105,12 @@ type ComponentChart struct {
 // QuertChartAndConponentForQdrant defines the structure for query_charts&component data fetched for Qdrant.
 // It's a subset of fields from query_charts and components.
 type QuertChartAndConponentForQdrant struct {
-    ID       int64  `gorm:"column:id"`
-    Index    string `gorm:"column:index"`
-    Name     string `gorm:"column:name"`
-    City     string `gorm:"column:city"`
-    LongDesc string `gorm:"column:long_desc"`
-    UseCase  string `gorm:"column:use_case"`
+	ID       int64  `gorm:"column:id"`
+	Index    string `gorm:"column:index"`
+	Name     string `gorm:"column:name"`
+	City     string `gorm:"column:city"`
+	LongDesc string `gorm:"column:long_desc"`
+	UseCase  string `gorm:"column:use_case"`
 }
 
 /* ----- Handlers ----- */
@@ -118,40 +118,40 @@ type QuertChartAndConponentForQdrant struct {
 // GetPublicComponentsForQdrant fetches all query_charts and components that are part of a public (non-personal) dashboard.
 // This data is used to rebuild the Qdrant vector index.
 func GetPublicComponentsForQdrant() (results []QuertChartAndConponentForQdrant, err error) {
-    // subQueryGroups := SELECT DISTINCT id FROM "groups" g WHERE is_personal IS FALSE
-    subQueryGroups := DBManager.Table("groups").Select("id").Where("is_personal IS FALSE")
+	// subQueryGroups := SELECT DISTINCT id FROM "groups" g WHERE is_personal IS FALSE
+	subQueryGroups := DBManager.Table("groups").Select("id").Where("is_personal IS FALSE")
 
-    // subQueryDashboards := SELECT DISTINCT dashboard_id FROM dashboard_groups dg WHERE group_id IN (subQueryGroups)
-    subQueryDashboards := DBManager.Table("dashboard_groups").Select("dashboard_id").Where("group_id IN (?)", subQueryGroups)
+	// subQueryDashboards := SELECT DISTINCT dashboard_id FROM dashboard_groups dg WHERE group_id IN (subQueryGroups)
+	subQueryDashboards := DBManager.Table("dashboard_groups").Select("dashboard_id").Where("group_id IN (?)", subQueryGroups)
 
-    // subQueryComponents := SELECT DISTINCT unnest(components) FROM dashboards d WHERE id IN (subQueryDashboards)
-    subQueryComponents := DBManager.Table("dashboards").Select("DISTINCT unnest(components)").Where("id IN (?)", subQueryDashboards)
+	// subQueryComponents := SELECT DISTINCT unnest(components) FROM dashboards d WHERE id IN (subQueryDashboards)
+	subQueryComponents := DBManager.Table("dashboards").Select("DISTINCT unnest(components)").Where("id IN (?)", subQueryDashboards)
 
-    // Final Query
-    err = DBManager.Table("query_charts as qc").
-        Select("c.id, qc.index, c.name, qc.city, qc.long_desc, qc.use_case").
-        Joins("INNER JOIN components c ON qc.index = c.index").
-        Where("c.id IN (?)", subQueryComponents).
-        Scan(&results).Error
+	// Final Query
+	err = DBManager.Table("query_charts as qc").
+		Select("c.id, qc.index, c.name, qc.city, qc.long_desc, qc.use_case").
+		Joins("INNER JOIN components c ON qc.index = c.index").
+		Where("c.id IN (?)", subQueryComponents).
+		Scan(&results).Error
 
-    if err != nil {
-        return nil, err
-    }
+	if err != nil {
+		return nil, err
+	}
 
-    return results, nil
+	return results, nil
 }
 
 // createTempComponentDB joins the components, component_maps, and component_charts tables and selects the columns to return.
 func createTempComponentDB() *gorm.DB {
 	subQuery1 := DBManager.Table("components").
-	Select("components.id,components.index,components.name,row_to_json(component_charts.*) AS chart_config").
-	Joins("JOIN component_charts ON components.index = component_charts.index")
+		Select("components.id,components.index,components.name,row_to_json(component_charts.*) AS chart_config").
+		Joins("JOIN component_charts ON components.index = component_charts.index")
 
 	subQuery2 := DBManager.Table("query_charts").
-	Select("query_charts.index,query_charts.city,json_agg(row_to_json(component_maps.*)) as map_config").
-	Joins("LEFT JOIN unnest(query_charts.map_config_ids) AS id_value on true").
-	Joins("LEFT JOIN component_maps ON id_value = component_maps.id").
-	Group("query_charts.index, query_charts.city")
+		Select("query_charts.index,query_charts.city,json_agg(row_to_json(component_maps.*)) as map_config").
+		Joins("LEFT JOIN unnest(query_charts.map_config_ids) AS id_value on true").
+		Joins("LEFT JOIN component_maps ON id_value = component_maps.id").
+		Group("query_charts.index, query_charts.city")
 
 	query := DBManager.Table("(?) as components", subQuery1).
 		Select("*").
@@ -167,7 +167,7 @@ func GetAllComponents(city string, pageSize int, pageNum int, sort string, order
 	// Count the total amount of components
 	tempDB.Count(&totalComponents)
 
-	if city != ""{
+	if city != "" {
 		tempDB = tempDB.Where("query_charts.city = ?", city)
 	}
 
@@ -179,46 +179,46 @@ func GetAllComponents(city string, pageSize int, pageNum int, sort string, order
 		tempDB = tempDB.Where("components.name LIKE ?", "%"+searchByName+"%")
 	}
 
-	componentsColumn := []string{"id","index","name"}
-	queryChartsColumn := []string{"update_freq","source","short_desc","long_desc","use_case","links","contributors","query_type"}
+	componentsColumn := []string{"id", "index", "name"}
+	queryChartsColumn := []string{"update_freq", "source", "short_desc", "long_desc", "use_case", "links", "contributors", "query_type"}
 	allColumns := append(componentsColumn, queryChartsColumn...)
 
 	// Filter the components
-	if filterBy != "" && filterValue != "" && slices.Contains(allColumns,filterBy){
+	if filterBy != "" && filterValue != "" && slices.Contains(allColumns, filterBy) {
 		var filterByCol string
-		if slices.Contains(componentsColumn,filterBy){
+		if slices.Contains(componentsColumn, filterBy) {
 			filterByCol = "components"
 		}
 
-		if slices.Contains(queryChartsColumn,filterBy){
+		if slices.Contains(queryChartsColumn, filterBy) {
 			filterByCol = "query_charts"
 		}
 
 		switch filterMode {
 		case "eq": // equals
-			tempDB = tempDB.Where(filterByCol + ".\"?\" = ?", gorm.Expr(filterBy), filterValue)
+			tempDB = tempDB.Where(filterByCol+".\"?\" = ?", gorm.Expr(filterBy), filterValue)
 		case "ne": // not equals
-			tempDB = tempDB.Where(filterByCol + ".\"?\" <> ?", gorm.Expr(filterBy), filterValue)
+			tempDB = tempDB.Where(filterByCol+".\"?\" <> ?", gorm.Expr(filterBy), filterValue)
 		case "gt": // greater than
-			tempDB = tempDB.Where(filterByCol + ".\"?\" > ?", gorm.Expr(filterBy), filterValue)
+			tempDB = tempDB.Where(filterByCol+".\"?\" > ?", gorm.Expr(filterBy), filterValue)
 		case "lt": // less than
-			tempDB = tempDB.Where(filterByCol + ".\"?\" < ?", gorm.Expr(filterBy), filterValue)
+			tempDB = tempDB.Where(filterByCol+".\"?\" < ?", gorm.Expr(filterBy), filterValue)
 		case "in": // value in array
-			tempDB = tempDB.Where(filterByCol + ".\"?\" IN ?", gorm.Expr(filterBy), filterValue)
+			tempDB = tempDB.Where(filterByCol+".\"?\" IN ?", gorm.Expr(filterBy), filterValue)
 		default: // Default to eq
-			tempDB = tempDB.Where(filterByCol + ".\"?\" = ?", gorm.Expr(filterBy), filterValue)
+			tempDB = tempDB.Where(filterByCol+".\"?\" = ?", gorm.Expr(filterBy), filterValue)
 		}
 	}
 
 	tempDB.Count(&resultNum)
 
 	// Sort the components
-	if sort != "" && slices.Contains(allColumns,sort){
-		if slices.Contains(componentsColumn,sort){
+	if sort != "" && slices.Contains(allColumns, sort) {
+		if slices.Contains(componentsColumn, sort) {
 			tempDB = tempDB.Order("components." + sort + " " + order)
 		}
 
-		if slices.Contains(queryChartsColumn,sort){
+		if slices.Contains(queryChartsColumn, sort) {
 			tempDB = tempDB.Order("query_charts." + sort + " " + order)
 		}
 	}
@@ -255,7 +255,7 @@ func GetComponentByIDAll(id int) (component []CityComponent, err error) {
 		return component, err
 	}
 	return component, nil
-}	
+}
 
 func GetComponentByQueryVector(queryString string, limit int, scoreThreshold float64) (component []CityComponentScore, err error) {
 	vector, err := GenVector(queryString)
@@ -288,7 +288,7 @@ func GetComponentByQueryVector(queryString string, limit int, scoreThreshold flo
 
 	for _, item := range queryOutput {
 		c := CityComponentScore{}
-		
+
 		// Safe conversion for ID
 		if idVal, ok := item["id"]; ok {
 			switch v := idVal.(type) {
@@ -331,41 +331,40 @@ func GetComponentByQueryVector(queryString string, limit int, scoreThreshold flo
 	return component, nil
 }
 
-
 func CreateComponent(index string, name string, city string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (cityComponent CityComponent, err error) {
-    // component := Component{
+	// component := Component{
 	// 	Index:			 index,
-    //     Name:            name,
-    //     // HistoryConfig:   historyConfig,
-    //     // MapFilter:       mapFilter,
-    //     // TimeFrom:        timeFrom,
-    //     // TimeTo:          timeTo,
-    //     // UpdateFreq:      updateFreq,
-    //     // UpdateFreqUnit:  updateFreqUnit,
-    //     // Source:          source,
-    //     // ShortDesc:       shortDesc,
-    //     // LongDesc:        longDesc,
-    //     // UseCase:         useCase,
-    //     // Links:           links,
-    //     // Contributors:    contributors,
-    //     // CreatedAt:       time.Now(),
-    //     // UpdatedAt:       time.Now(),
-    // }
+	//     Name:            name,
+	//     // HistoryConfig:   historyConfig,
+	//     // MapFilter:       mapFilter,
+	//     // TimeFrom:        timeFrom,
+	//     // TimeTo:          timeTo,
+	//     // UpdateFreq:      updateFreq,
+	//     // UpdateFreqUnit:  updateFreqUnit,
+	//     // Source:          source,
+	//     // ShortDesc:       shortDesc,
+	//     // LongDesc:        longDesc,
+	//     // UseCase:         useCase,
+	//     // Links:           links,
+	//     // Contributors:    contributors,
+	//     // CreatedAt:       time.Now(),
+	//     // UpdatedAt:       time.Now(),
+	// }
 
 	// queryCharts := QueryCharts{
 	// 	City: city,
-	// 	HistoryConfig: historyConfig, 
-	// 	MapFilter: mapFilter, 
-	// 	TimeFrom: timeFrom, 
-	// 	TimeTo: timeTo, 
-	// 	UpdateFreq: updateFreq, 
-	// 	UpdateFreqUnit: updateFreqUnit, 
-	// 	Source: source, 
-	// 	ShortDesc: shortDesc, 
-	// 	LongDesc: longDesc, 
-	// 	UseCase: useCase, 
-	// 	Links: links, 
-	// 	Contributors: contributors, 
+	// 	HistoryConfig: historyConfig,
+	// 	MapFilter: mapFilter,
+	// 	TimeFrom: timeFrom,
+	// 	TimeTo: timeTo,
+	// 	UpdateFreq: updateFreq,
+	// 	UpdateFreqUnit: updateFreqUnit,
+	// 	Source: source,
+	// 	ShortDesc: shortDesc,
+	// 	LongDesc: longDesc,
+	// 	UseCase: useCase,
+	// 	Links: links,
+	// 	Contributors: contributors,
 	// 	CreatedAt: time.Now(),
 	// 	UpdatedAt: time.Now(),
 	// }
@@ -373,17 +372,17 @@ func CreateComponent(index string, name string, city string, historyConfig json.
 	// cityComponent = CityComponent{
 	// 	Name: name,
 	// 	City: city,
-	// 	HistoryConfig: historyConfig, 
-	// 	MapFilter: mapFilter, 
-	// 	TimeFrom: timeFrom, 
-	// 	TimeTo: timeTo, 
-	// 	UpdateFreq: updateFreq, 
-	// 	UpdateFreqUnit: updateFreqUnit, 
-	// 	Source: source, 
-	// 	ShortDesc: shortDesc, 
-	// 	LongDesc: longDesc, 
-	// 	UseCase: useCase, 
-	// 	Links: links, 
+	// 	HistoryConfig: historyConfig,
+	// 	MapFilter: mapFilter,
+	// 	TimeFrom: timeFrom,
+	// 	TimeTo: timeTo,
+	// 	UpdateFreq: updateFreq,
+	// 	UpdateFreqUnit: updateFreqUnit,
+	// 	Source: source,
+	// 	ShortDesc: shortDesc,
+	// 	LongDesc: longDesc,
+	// 	UseCase: useCase,
+	// 	Links: links,
 	// 	Contributors: contributors,
 	// 	CreatedAt: time.Now(),
 	// 	UpdatedAt: time.Now(),
@@ -392,10 +391,10 @@ func CreateComponent(index string, name string, city string, historyConfig json.
 	// 建立 logic 還不確定，無法實作
 	// 首先建立 components => 其次建立 query_charts ，但是 query_charts 有多個城市，不確定是一個建立還是同時建立
 
-    // err = DBManager.Table("components").Create(&component).Error
-    // if err != nil {
-    //     return component, err
-    // }
+	// err = DBManager.Table("components").Create(&component).Error
+	// if err != nil {
+	//     return component, err
+	// }
 
 	// var tmp Component
 	// err = DBManager.Table("components").Where("name = ?", name).First(&tmp).Error
@@ -403,75 +402,73 @@ func CreateComponent(index string, name string, city string, historyConfig json.
 	// 	err = DBManager.Table("components").Create(&component).Error
 	// 	if err != nil {
 	// 		return cityComponent, err
-	// 	}	
+	// 	}
 	// }
 
-
 	// err = DBManager.Table("query_charts").Create(&queryCharts).Error
-    // if err != nil {
-    //     return cityComponent, err
-    // }
+	// if err != nil {
+	//     return cityComponent, err
+	// }
 
-    return cityComponent, nil
+	return cityComponent, nil
 }
 
 func UpdateComponent(id int, city string, name string, historyConfig json.RawMessage, mapFilter json.RawMessage, timeFrom string, timeTo *string, updateFreq *int64, updateFreqUnit string, source string, shortDesc string, longDesc string, useCase string, links pq.StringArray, contributors pq.StringArray) (cityComponent CityComponent, err error) {
 	component := Component{
-		Name: name, 
-		// HistoryConfig: historyConfig, 
-		// MapFilter: mapFilter, 
-		// TimeFrom: timeFrom, 
-		// TimeTo: timeTo, 
-		// UpdateFreq: updateFreq, 
-		// UpdateFreqUnit: updateFreqUnit, 
-		// Source: source, 
-		// ShortDesc: shortDesc, 
-		// LongDesc: longDesc, 
-		// UseCase: useCase, 
-		// Links: links, 
-		// Contributors: contributors, 
+		Name: name,
+		// HistoryConfig: historyConfig,
+		// MapFilter: mapFilter,
+		// TimeFrom: timeFrom,
+		// TimeTo: timeTo,
+		// UpdateFreq: updateFreq,
+		// UpdateFreqUnit: updateFreqUnit,
+		// Source: source,
+		// ShortDesc: shortDesc,
+		// LongDesc: longDesc,
+		// UseCase: useCase,
+		// Links: links,
+		// Contributors: contributors,
 		// UpdatedAt: time.Now()
 	}
 
 	queryCharts := QueryCharts{
-		City: city,
-		HistoryConfig: historyConfig, 
-		MapFilter: mapFilter, 
-		TimeFrom: timeFrom, 
-		TimeTo: timeTo, 
-		UpdateFreq: updateFreq, 
-		UpdateFreqUnit: updateFreqUnit, 
-		Source: source, 
-		ShortDesc: shortDesc, 
-		LongDesc: longDesc, 
-		UseCase: useCase, 
-		Links: links, 
-		Contributors: contributors, 
-		UpdatedAt: time.Now(),
+		City:           city,
+		HistoryConfig:  historyConfig,
+		MapFilter:      mapFilter,
+		TimeFrom:       timeFrom,
+		TimeTo:         timeTo,
+		UpdateFreq:     updateFreq,
+		UpdateFreqUnit: updateFreqUnit,
+		Source:         source,
+		ShortDesc:      shortDesc,
+		LongDesc:       longDesc,
+		UseCase:        useCase,
+		Links:          links,
+		Contributors:   contributors,
+		UpdatedAt:      time.Now(),
 	}
 
 	cityComponent = CityComponent{
-		Name: name,
-		City: city,
-		HistoryConfig: historyConfig, 
-		MapFilter: mapFilter, 
-		TimeFrom: timeFrom, 
-		TimeTo: timeTo, 
-		UpdateFreq: updateFreq, 
-		UpdateFreqUnit: updateFreqUnit, 
-		Source: source, 
-		ShortDesc: shortDesc, 
-		LongDesc: longDesc, 
-		UseCase: useCase, 
-		Links: links, 
-		Contributors: contributors, 
-		UpdatedAt: time.Now(),
+		Name:           name,
+		City:           city,
+		HistoryConfig:  historyConfig,
+		MapFilter:      mapFilter,
+		TimeFrom:       timeFrom,
+		TimeTo:         timeTo,
+		UpdateFreq:     updateFreq,
+		UpdateFreqUnit: updateFreqUnit,
+		Source:         source,
+		ShortDesc:      shortDesc,
+		LongDesc:       longDesc,
+		UseCase:        useCase,
+		Links:          links,
+		Contributors:   contributors,
+		UpdatedAt:      time.Now(),
 	}
 
-	
 	var tmp Component
 	err = DBManager.Table("components").Where("id = ?", id).First(&tmp).Error
-	if err != nil{
+	if err != nil {
 		return cityComponent, err
 	}
 

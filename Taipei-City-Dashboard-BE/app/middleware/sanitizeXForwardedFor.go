@@ -10,7 +10,7 @@ import (
 // sanitizeXForwardedFor strips an optional port from the first X-Forwarded-For entry.
 // Example: "118.163.65.239:56675, 10.224.0.10" -> "118.163.65.239"
 // This helps Gin's ClientIP() work correctly behind proxies that append a source port.
-func SanitizeXForwardedFor(c *gin.Context){
+func SanitizeXForwardedFor(c *gin.Context) {
 	xff := c.GetHeader("X-Forwarded-For")
 	if xff != "" {
 		first := strings.TrimSpace(strings.Split(xff, ",")[0])

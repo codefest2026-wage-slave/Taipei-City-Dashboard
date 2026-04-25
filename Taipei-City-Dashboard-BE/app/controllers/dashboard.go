@@ -34,7 +34,7 @@ func GetAllDashboards(c *gin.Context) {
 	// 		personalGroups = append(personalGroups, groupID)
 	// 	}
 	// }
-	
+
 	dashboards, err := models.GetAllDashboards(accountID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
@@ -59,7 +59,7 @@ func GetDashboardByIndex(c *gin.Context) {
 
 	components, err := models.GetDashboardByIndex(dashboardIndex, groups, city)
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound){
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})
 			return
 		}
@@ -150,23 +150,22 @@ func CreatePublicDashboard(c *gin.Context) {
 
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if query.City == ""{
+	if query.City == "" {
 		query.City = "taipei"
 	}
 
 	_, _, _, _, permissions := util.GetUserInfoFromContext(c)
 
-
 	var groupID int
-	if query.City == ""{
+	if query.City == "" {
 		// Get Group public(id=1)
 		groupID = 1
-	}else{
+	} else {
 		var errr error
 		groupID, errr = models.GetGroupIDByName(query.City)
 		if errr != nil {
@@ -174,7 +173,6 @@ func CreatePublicDashboard(c *gin.Context) {
 			return
 		}
 	}
-
 
 	// check has permission, role admin(id=1) editor(id=2)
 	if !util.HasPermission(permissions, groupID, 1) && !util.HasPermission(permissions, groupID, 2) {
@@ -236,7 +234,7 @@ func UpdateDashboard(c *gin.Context) {
 	}
 
 	// Trigger Qdrant rebuild in the background
-    go services.RebuildQdrantPublicCollection()
+	go services.RebuildQdrantPublicCollection()
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": dashboard})
 }

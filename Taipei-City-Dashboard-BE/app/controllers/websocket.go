@@ -18,7 +18,7 @@ func ServeWs(c *gin.Context) {
 	w, r = c.Writer, c.Request
 	// Upgrade the HTTP connection to a WebSocket connection
 	wsHandler := websocket.Handler(func(ws *websocket.Conn) {
-		defer func () {
+		defer func() {
 			ws.Close()
 			delete(clients, ws)
 		}()
@@ -43,9 +43,9 @@ func ServeWs(c *gin.Context) {
 			for client := range clients {
 				err := websocket.Message.Send(client, msg)
 				if err != nil {
-						// Handle error
-						fmt.Println("Client ", client, " Error :" ,err)
-						break
+					// Handle error
+					fmt.Println("Client ", client, " Error :", err)
+					break
 				}
 			}
 		}

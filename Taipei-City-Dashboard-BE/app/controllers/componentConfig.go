@@ -29,7 +29,7 @@ GET /api/v1/component
 */
 
 type componentQuery struct {
-	City		  string `form:"city"`
+	City          string `form:"city"`
 	PageSize      int    `form:"pagesize"`
 	PageNum       int    `form:"pagenum"`
 	Sort          string `form:"sort"`
@@ -72,7 +72,7 @@ func GetAllComponents(c *gin.Context) {
 	var query componentQuery
 	c.ShouldBindQuery(&query)
 
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
@@ -102,12 +102,12 @@ func GetComponentByID(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if query.City == ""{
+	if query.City == "" {
 		query.City = "taipei"
 	}
 
@@ -162,12 +162,12 @@ func UpdateComponent(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == ""){
+	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if query.City == ""{
+	if query.City == "" {
 		query.City = "taipei"
 	}
 
@@ -193,9 +193,9 @@ func UpdateComponent(c *gin.Context) {
 	}
 
 	// 5. Trigger Qdrant rebuild in the background
-    go services.RebuildQdrantPublicCollection()
+	go services.RebuildQdrantPublicCollection()
 
-    // 6. Return the component
+	// 6. Return the component
 	c.JSON(http.StatusOK, gin.H{"status": "success", "data": cityComponent})
 }
 
@@ -215,12 +215,12 @@ func UpdateComponentChartConfig(c *gin.Context) {
 
 	// 1.1 Get the city name from the URL
 	city := c.Param("city")
-	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+	if !(city == "taipei" || city == "metrotaipei" || city == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if city == ""{
+	if city == "" {
 		city = "taipei"
 	}
 
@@ -300,12 +300,12 @@ func DeleteComponent(c *gin.Context) {
 
 	// 1.1 Get the city name from the URL
 	city := c.Param("city")
-	if !(city == "taipei" || city == "metrotaipei" || city == ""){
+	if !(city == "taipei" || city == "metrotaipei" || city == "") {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
 		return
 	}
 
-	if city == ""{
+	if city == "" {
 		city = "taipei"
 	}
 
@@ -342,7 +342,7 @@ func GetComponentByQueryVector(c *gin.Context) {
 	if scoreThreshold < 0 || scoreThreshold > 1 {
 		scoreThreshold = 0.78
 	}
-	
+
 	cityComponent, err := models.GetComponentByQueryVector(query, limit, scoreThreshold)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"status": "error", "message": err.Error()})

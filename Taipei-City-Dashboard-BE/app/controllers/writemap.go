@@ -32,6 +32,6 @@ func WriteMap(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("JSON data written to person.json")	
-	c.JSON(http.StatusOK, gin.H{"message": "data write success"})	
+	fmt.Println("JSON data written to person.json")
+	c.JSON(http.StatusOK, gin.H{"message": "data write success"})
 }

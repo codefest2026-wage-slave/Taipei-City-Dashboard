@@ -33,9 +33,7 @@ const (
 	IssueLimitAPIRequestsTimes         = 20000
 	IssueLimitTotalRequestsTimes       = 20000
 	LimitRequestsDuration              = 60 * time.Second
-	
 
-	
 	// JWT Issuer
 	JwtIssuer = "Taipei citydashboard"
 	// JWT Expires Duration

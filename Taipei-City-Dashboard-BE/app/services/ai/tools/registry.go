@@ -56,11 +56,11 @@ func GetPopulationSummary(ctx context.Context, args string) (string, error) {
 
 	// Define result structure based on database schema
 	var result struct {
-		Year      int `gorm:"column:year"`
-		Young     int `gorm:"column:young_population"`
-		Working   int `gorm:"column:working_age_population"`
-		Elderly   int `gorm:"column:elderly_population"`
-		DataTime  time.Time `gorm:"column:data_time"`
+		Year     int       `gorm:"column:year"`
+		Young    int       `gorm:"column:young_population"`
+		Working  int       `gorm:"column:working_age_population"`
+		Elderly  int       `gorm:"column:elderly_population"`
+		DataTime time.Time `gorm:"column:data_time"`
 	}
 
 	// Query the dashboard database

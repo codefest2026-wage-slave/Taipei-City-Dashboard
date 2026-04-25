@@ -16,7 +16,6 @@ import (
 	ort "github.com/yalue/onnxruntime_go"
 )
 
-
 type QdrantQueryRequest struct {
 	Query          []float32 `json:"query"`
 	Limit          int       `json:"limit"`
@@ -134,22 +133,22 @@ func InitLmSession() *ort.DynamicSession[int64, float32] {
 }
 
 func InitTokenizer() *tokenizer.Tokenizer {
-    modelDir := global.LM.ModelPath
-    tokenizerPath := filepath.Join(modelDir, "tokenizer.json")
+	modelDir := global.LM.ModelPath
+	tokenizerPath := filepath.Join(modelDir, "tokenizer.json")
 	tk, err := pretrained.FromFile(tokenizerPath)
-    if err != nil {
-        // 啟動時失敗就報警並停止，這比執行中當機好找原因
-        log.Fatalf("Critical: Failed to load tokenizer: %v", err)
-    }
-    return tk
+	if err != nil {
+		// 啟動時失敗就報警並停止，這比執行中當機好找原因
+		log.Fatalf("Critical: Failed to load tokenizer: %v", err)
+	}
+	return tk
 }
 
 func GenVector(inputText string) ([]float32, error) {
-    // 1) 載入 tokenizer.json 直接檢查全域變數，不再讀取檔案
-    if global.LMTokenizer == nil {
-        return nil, fmt.Errorf("tokenizer is not initialized")
-    }
-    tk := global.LMTokenizer
+	// 1) 載入 tokenizer.json 直接檢查全域變數，不再讀取檔案
+	if global.LMTokenizer == nil {
+		return nil, fmt.Errorf("tokenizer is not initialized")
+	}
+	tk := global.LMTokenizer
 
 	// 2) 將查詢字串轉成 input_ids 與 attention_mask
 	text := "query: " + inputText
@@ -244,7 +243,7 @@ func GenVector(inputText string) ([]float32, error) {
 	for d := 0; d < int(hiddenSize); d++ {
 		norm += float64(embedding[d]) * float64(embedding[d])
 	}
-	
+
 	norm = math.Sqrt(float64(norm))
 	if norm > 0 {
 		for d := 0; d < int(hiddenSize); d++ {

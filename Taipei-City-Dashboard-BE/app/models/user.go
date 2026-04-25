@@ -159,17 +159,17 @@ func UpdateUser(userID int, name string, isAdmin, isActive, isWhitelist, isBlack
 		return user, err
 	}
 
-	taipei,_ := GetGroupIDByName("taipei")
-	metrotaipei,_ := GetGroupIDByName("metrotaipei")
+	taipei, _ := GetGroupIDByName("taipei")
+	metrotaipei, _ := GetGroupIDByName("metrotaipei")
 	if *isAdmin {
 		DeleteUserGroupRole(userID, 1, 3)
 		CreateUserGroupRole(userID, 1, 1)
-		if taipei != 0{
+		if taipei != 0 {
 			// DeleteUserGroupRole(userID, taipei, 3)
 			CreateUserGroupRole(userID, taipei, 1)
 		}
 
-		if metrotaipei != 0{
+		if metrotaipei != 0 {
 			// DeleteUserGroupRole(userID, metrotaipei, 3)
 			CreateUserGroupRole(userID, metrotaipei, 1)
 		}
@@ -177,12 +177,12 @@ func UpdateUser(userID int, name string, isAdmin, isActive, isWhitelist, isBlack
 	} else if !*isAdmin {
 		DeleteUserGroupRole(userID, 1, 1)
 		CreateUserGroupRole(userID, 1, 3)
-		if taipei != 0{
+		if taipei != 0 {
 			DeleteUserGroupRole(userID, taipei, 1)
 			// CreateUserGroupRole(userID, taipei, 3)
 		}
 
-		if metrotaipei != 0{
+		if metrotaipei != 0 {
 			DeleteUserGroupRole(userID, metrotaipei, 1)
 			// CreateUserGroupRole(userID, metrotaipei, 3)
 		}
