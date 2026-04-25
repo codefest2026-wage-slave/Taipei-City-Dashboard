@@ -2,6 +2,25 @@
 -- Run against: postgres-data → dashboard DB
 -- docker exec -i postgres-data psql -U postgres -d dashboard < disaster_resilience_schema.sql
 
+CREATE TABLE IF NOT EXISTS disaster_shelter_tpe (
+  id               SERIAL PRIMARY KEY,
+  name             VARCHAR(200),
+  district         VARCHAR(50),
+  village          VARCHAR(50),
+  address          VARCHAR(300),
+  person           INTEGER DEFAULT 0,
+  indoor_area      FLOAT,
+  suit_flood       BOOLEAN DEFAULT FALSE,
+  suit_mudflow     BOOLEAN DEFAULT FALSE,
+  suit_earthquake  BOOLEAN DEFAULT FALSE,
+  suit_tsunami     BOOLEAN DEFAULT FALSE,
+  suit_weak        BOOLEAN DEFAULT FALSE,
+  standing_shelter BOOLEAN DEFAULT FALSE,
+  lat              DOUBLE PRECISION,
+  lng              DOUBLE PRECISION,
+  data_time        TIMESTAMP WITH TIME ZONE
+);
+
 CREATE TABLE IF NOT EXISTS disaster_shelter_ntpc (
   id               SERIAL PRIMARY KEY,
   name             VARCHAR(200),

@@ -74,19 +74,19 @@ VALUES (
   NULL, 'metrotaipei'
 );
 
--- disaster_shelter: taipei view → same NTPC data (no TPE shelter dataset available)
+-- disaster_shelter: taipei view → TPE 防空避難處所清冊 (6052 records)
 INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, time_from, time_to, update_freq, update_freq_unit, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, query_history, city)
 VALUES (
   'disaster_shelter', '{}'::json,
   ARRAY(SELECT id FROM component_maps WHERE index='disaster_shelter'),
   '{}'::json, 'static', NULL, 0, NULL,
-  '新北市政府消防局',
-  '顯示新北市避難收容所依行政區的容量分布。',
-  '顯示新北市各行政區避難收容所的總收容人數，協助了解各區的避難承載能量。',
+  '臺北市政府',
+  '顯示臺北市防空避難處所依行政區的容量分布。',
+  '顯示臺北市各行政區防空避難處所的總容留人數，協助了解各區的避難承載能量。',
   '適用於災害發生前評估各區避難容量，支援疏散指揮決策。',
-  '{}'::text[], ARRAY['ntpc']::text[],
+  '{}'::text[], ARRAY['taipei']::text[],
   NOW(), NOW(), 'two_d',
-  'SELECT district AS x_axis, SUM(person) AS data FROM disaster_shelter_ntpc WHERE district IS NOT NULL GROUP BY district ORDER BY data DESC',
+  'SELECT district AS x_axis, SUM(person) AS data FROM disaster_shelter_tpe WHERE district IS NOT NULL GROUP BY district ORDER BY data DESC',
   NULL, 'taipei'
 );
 

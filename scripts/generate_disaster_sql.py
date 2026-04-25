@@ -2,7 +2,8 @@
 Fetch disaster resilience datasets and generate SQL + GeoJSON files.
 
 Data sources:
-  - NTPC shelters: data.ntpc (UUID 25e439ab)
+  - TPE shelters: data.taipei CSV (pid 70a6216e, scraped rid)
+  - NTPC shelters: data.ntpc (UUID 25e439ab, paginated size+page)
   - River water levels: wic.gov.taipei real-time API
   - Slope warnings: data.taipei CSV (rid afdd208e)
   - Old settlements: data.taipei CSV (rid b80ee1c2)
@@ -14,8 +15,11 @@ import csv
 import io
 import json
 import os
+import re
 import random
 import requests
+
+
 
 random.seed(42)
 
@@ -114,7 +118,83 @@ def bool_val(s):
     return "TRUE" if str(s).strip() in ("是", "1", "true", "True", "Y") else "FALSE"
 
 
-# ── 1. NTPC Shelters ──────────────────────────────────────────────────────────
+
+
+# ── 1. TPE Shelters (臺北市防空避難處所清冊) ──────────────────────────────────
+# API: https://data.taipei/api/v1/dataset/ffad9f86-a4f9-4743-8f18-632557d2e887
+# Fields: 地址, 面積(m²), 容留人數, 是否優先緊急避難
+# Note: no disaster-type suitability fields; no separate name field (use address)
+# District parsed from address "臺北市{district}{rest}"
+
+def build_shelter_tpe():
+    print("Fetching TPE shelters (臺北市防空避難處所清冊, paginated)...")
+    base_url = "https://data.taipei/api/v1/dataset/ffad9f86-a4f9-4743-8f18-632557d2e887"
+    rows = []
+    offset = 0
+    limit = 1000
+    while True:
+        resp = requests.get(
+            base_url,
+            params={"scope": "resourceAquire", "limit": limit, "offset": offset},
+            timeout=30,
+        ).json()
+        batch = resp["result"]["results"]
+        rows.extend(batch)
+        print(f"  offset={offset}: {len(batch)} records (total {len(rows)})")
+        if len(batch) < limit:
+            break
+        offset += limit
+    print(f"  Total TPE shelters: {len(rows)}")
+
+    sql_rows = []
+    features = []
+    for r in rows:
+        address = r.get("地址", "")
+        # Parse district from "臺北市{district}..." e.g. "臺北市信義區吳興街..."
+        import re as _re
+        m = _re.search(r"臺北市(\w+區)", address)
+        district = m.group(1) if m else ""
+
+        person = round(float(str(r.get("容留人數") or "0").strip() or 0))
+        indoor = float(str(r.get("面積") or "0").strip() or 0)
+        # 是否優先緊急避難 → standing shelter proxy
+        standing = bool_val(r.get("是否優先緊急避難", ""))
+        # 是否依建築物無障礙設施設計規範 → suit_weak proxy
+        suit_weak = bool_val(r.get("是否依建築物無障礙設施設計規範檢討", ""))
+
+        lng, lat = district_coords(district, "taipei")
+
+        sql_rows.append(
+            f"('{q(address)}','{q(district)}','','{q(address)}'"
+            f",{person},{indoor}"
+            f",FALSE,FALSE,FALSE,FALSE,{suit_weak},{standing}"
+            f",{lat},{lng},NOW())"
+        )
+        features.append({
+            "type": "Feature",
+            "geometry": {"type": "Point", "coordinates": [lng, lat]},
+            "properties": {
+                "name": address,
+                "district": district,
+                "village": "",
+                "address": address,
+                "person": person,
+                "suit_flood": False,
+                "suit_earthquake": False,
+                "suit_mudflow": False,
+                "suit_tsunami": False,
+                "suit_weak": suit_weak == "TRUE",
+                "standing": standing == "TRUE",
+                "primary_type": "general",
+                "city": "taipei",
+            }
+        })
+
+    sql = "TRUNCATE TABLE disaster_shelter_tpe;\n"
+    sql += "INSERT INTO disaster_shelter_tpe (name,district,village,address,person,indoor_area,suit_flood,suit_mudflow,suit_earthquake,suit_tsunami,suit_weak,standing_shelter,lat,lng,data_time) VALUES\n"
+    sql += ",\n".join(sql_rows) + ";\n"
+    return sql, features
+
 
 def build_shelter():
     print("Fetching NTPC shelters (paginated)...")
@@ -189,7 +269,7 @@ def build_shelter():
     return sql, features
 
 
-# ── 2. River Water Level ──────────────────────────────────────────────────────
+# ── 3. River Water Level ──────────────────────────────────────────────────────
 
 def build_river():
     print("Fetching river water levels...")
@@ -250,7 +330,7 @@ def build_river():
     return sql, features
 
 
-# ── 3. Slope Warnings ────────────────────────────────────────────────────────
+# ── 4. Slope Warnings ────────────────────────────────────────────────────────
 
 def build_slope():
     print("Fetching slope warnings...")
@@ -296,7 +376,7 @@ def build_slope():
     return sql, features
 
 
-# ── 4. Old Settlements ───────────────────────────────────────────────────────
+# ── 5. Old Settlements ───────────────────────────────────────────────────────
 
 def build_settlement():
     print("Fetching old settlement warnings...")
@@ -357,7 +437,8 @@ def export_geojson(features, filename):
 if __name__ == "__main__":
     print("=== Generating Disaster Resilience SQL + GeoJSON ===")
 
-    shelter_sql, shelter_features = build_shelter()
+    shelter_tpe_sql, shelter_tpe_features = build_shelter_tpe()
+    shelter_ntpc_sql, shelter_ntpc_features = build_shelter()
     river_sql, river_features = build_river()
     slope_sql, slope_features = build_slope()
     settlement_sql, settlement_features = build_settlement()
@@ -366,7 +447,8 @@ if __name__ == "__main__":
     with open(SQL_OUT, "w", encoding="utf-8") as f:
         f.write("-- Disaster Resilience Data Injection\n")
         f.write("-- Run: docker exec -i postgres-data psql -U postgres -d dashboard < /tmp/disaster_data.sql\n\n")
-        f.write(shelter_sql + "\n")
+        f.write(shelter_tpe_sql + "\n")
+        f.write(shelter_ntpc_sql + "\n")
         f.write(river_sql + "\n")
         f.write(slope_sql + "\n")
         f.write(settlement_sql + "\n")
@@ -375,7 +457,10 @@ if __name__ == "__main__":
 
     # Write GeoJSON files
     print("\nWriting GeoJSON files...")
-    export_geojson(shelter_features, "disaster_shelter.geojson")
+    # disaster_shelter: taipei features + newtaipei features in one GeoJSON
+    # (frontend filters by city property on the map)
+    all_shelter_features = shelter_tpe_features + shelter_ntpc_features
+    export_geojson(all_shelter_features, "disaster_shelter.geojson")
     export_geojson(river_features, "river_water_level.geojson")
     # Combine slope + settlement into one map layer
     slope_risk_features = slope_features + settlement_features
