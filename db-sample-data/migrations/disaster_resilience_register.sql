@@ -9,7 +9,17 @@ BEGIN;
 INSERT INTO component_maps (index, title, type, source, size, icon, paint, property) VALUES
 (
   'disaster_shelter',
-  '雙北避難收容所',
+  '臺北市避難收容所',
+  'circle',
+  'geojson',
+  'big',
+  'circle',
+  '{"circle-color":["match",["get","primary_type"],"flood","#3b82f6","earthquake","#f97316","mudflow","#a16207","tsunami","#7c3aed","#6b7280"],"circle-radius":["interpolate",["linear"],["coalesce",["to-number",["get","person"]],50],50,6,500,14,5000,22],"circle-opacity":0.85}',
+  '[{"key":"name","name":"收容所名稱"},{"key":"person","name":"收容人數"},{"key":"district","name":"行政區"},{"key":"suit_flood","name":"水災適用"},{"key":"suit_earthquake","name":"地震適用"},{"key":"suit_weak","name":"弱勢友善"}]'
+),
+(
+  'disaster_shelter_ntpc',
+  '新北市避難收容所',
   'circle',
   'geojson',
   'big',
@@ -55,26 +65,12 @@ INSERT INTO components (index, name) VALUES
 -- ── 3. query_charts — 6 rows (2 per component: one taipei + one metrotaipei)
 -- Pattern: ONE two_d row per city. Map data is served from static GeoJSON (nginx),
 -- NOT from query_charts map rows. Each city row queries its own data table.
--- For disaster_shelter: only NTPC data exists → both cities query disaster_shelter_ntpc
--- For river_water_level / slope_risk_tpe: only TPE data exists → both cities query TPE tables
+-- disaster_shelter city separation:
+--   taipei row → disaster_shelter.geojson (TPE only, 6052 features) + disaster_shelter_tpe table
+--   metrotaipei row → disaster_shelter.geojson + disaster_shelter_ntpc.geojson (both cities)
+--                     + UNION query over both tables
 
--- disaster_shelter: metrotaipei view → NTPC shelters by district
-INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, time_from, time_to, update_freq, update_freq_unit, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, query_history, city)
-VALUES (
-  'disaster_shelter', '{}'::json,
-  ARRAY(SELECT id FROM component_maps WHERE index='disaster_shelter'),
-  '{}'::json, 'static', NULL, 0, NULL,
-  '新北市政府消防局',
-  '顯示新北市避難收容所依行政區的容量分布。',
-  '顯示新北市各行政區避難收容所的總收容人數，協助了解各區的避難承載能量。',
-  '適用於災害發生前評估各區避難容量，支援疏散指揮決策。',
-  '{}'::text[], ARRAY['ntpc']::text[],
-  NOW(), NOW(), 'two_d',
-  'SELECT district AS x_axis, SUM(person) AS data FROM disaster_shelter_ntpc WHERE district IS NOT NULL GROUP BY district ORDER BY data DESC',
-  NULL, 'metrotaipei'
-);
-
--- disaster_shelter: taipei view → TPE 防空避難處所清冊 (6052 records)
+-- disaster_shelter: taipei view → TPE 防空避難處所清冊 (6052 records, TPE map layer only)
 INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, time_from, time_to, update_freq, update_freq_unit, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, query_history, city)
 VALUES (
   'disaster_shelter', '{}'::json,
@@ -88,6 +84,22 @@ VALUES (
   NOW(), NOW(), 'two_d',
   'SELECT district AS x_axis, SUM(person) AS data FROM disaster_shelter_tpe WHERE district IS NOT NULL GROUP BY district ORDER BY data DESC',
   NULL, 'taipei'
+);
+
+-- disaster_shelter: metrotaipei view → UNION TPE + NTPC; map shows both city layers
+INSERT INTO query_charts (index, history_config, map_config_ids, map_filter, time_from, time_to, update_freq, update_freq_unit, source, short_desc, long_desc, use_case, links, contributors, created_at, updated_at, query_type, query_chart, query_history, city)
+VALUES (
+  'disaster_shelter', '{}'::json,
+  ARRAY(SELECT id FROM component_maps WHERE index IN ('disaster_shelter','disaster_shelter_ntpc') ORDER BY id),
+  '{}'::json, 'static', NULL, 0, NULL,
+  '臺北市政府、新北市政府消防局',
+  '顯示雙北市避難收容所依行政區的容量分布。',
+  '整合臺北市防空避難處所與新北市避難收容所，依行政區顯示總容納人數，協助全域評估避難承載能量。',
+  '適用於災害發生前評估雙北各區避難容量，支援跨城市疏散指揮決策。',
+  '{}'::text[], ARRAY['taipei','ntpc']::text[],
+  NOW(), NOW(), 'two_d',
+  'SELECT district AS x_axis, SUM(person) AS data FROM (SELECT district, person FROM disaster_shelter_tpe UNION ALL SELECT district, person FROM disaster_shelter_ntpc) combined WHERE district IS NOT NULL GROUP BY district ORDER BY data DESC',
+  NULL, 'metrotaipei'
 );
 
 -- river_water_level: taipei view → TPE stations by water level
