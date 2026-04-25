@@ -95,6 +95,8 @@ def jitter(lng, lat, radius=0.006):
 
 def district_coords(district, city="taipei"):
     table = TPE_DISTRICTS if city == "taipei" else NTPC_DISTRICTS
+    if not district:
+        return jitter(121.5654, 25.0330) if city == "taipei" else jitter(121.4634, 25.0136)
     if district in table:
         return jitter(*table[district])
     for k, v in table.items():
@@ -115,10 +117,25 @@ def bool_val(s):
 # ── 1. NTPC Shelters ──────────────────────────────────────────────────────────
 
 def build_shelter():
-    print("Fetching NTPC shelters...")
-    url = "https://data.ntpc.gov.tw/api/datasets/25e439ab-49e7-4e5e-85ce-a25c13fd2770/json?limit=1000"
-    records = requests.get(url, timeout=30).json()
-    print(f"  Got {len(records)} records")
+    print("Fetching NTPC shelters (paginated)...")
+    uuid = "25e439ab-49e7-4e5e-85ce-a25c13fd2770"
+    records = []
+    page = 0
+    page_size = 30
+    while True:
+        batch = requests.get(
+            f"https://data.ntpc.gov.tw/api/datasets/{uuid}/json",
+            params={"size": page_size, "page": page},
+            timeout=30
+        ).json()
+        if not batch:
+            break
+        records.extend(batch)
+        print(f"  Page {page}: {len(batch)} records (total {len(records)})")
+        if len(batch) < page_size:
+            break
+        page += 1
+    print(f"  Total NTPC shelters: {len(records)}")
 
     sql_rows = []
     features = []
@@ -126,8 +143,8 @@ def build_shelter():
         district = r.get("district", "")
         village = r.get("village", "")
         lng, lat = district_coords(district, "newtaipei")
-        person = int(r.get("person") or 0)
-        indoor = float(r.get("floorspacebuildingothers_area") or 0)
+        person = round(float(r.get("person") or 0))
+        indoor = float("".join(c for c in str(r.get("floorspacebuildingothers_area") or "0") if c.isdigit() or c == ".") or 0)
 
         sql_rows.append(
             f"('{q(r.get('name',''))}','{q(district)}','{q(village)}',"

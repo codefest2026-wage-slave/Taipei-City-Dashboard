@@ -38,6 +38,13 @@ INSERT INTO component_maps (index, title, type, source, size, icon, paint, prope
   '[{"key":"name","name":"名稱"},{"key":"district","name":"行政區"},{"key":"red_threshold","name":"紅色警戒雨量(mm)"},{"key":"person_count","name":"保全人數"},{"key":"risk_type","name":"類型"}]'
 );
 
+-- ── 1b. component_charts (defines chart type + colors shown in FE) ──────────
+
+INSERT INTO component_charts (index, color, types, unit) VALUES
+('disaster_shelter',  ARRAY['#3b82f6','#f97316','#a16207','#7c3aed'], ARRAY['BarChart','MapLegend'], '人'),
+('river_water_level', ARRAY['#22c55e','#f59e0b','#f97316','#ef4444'], ARRAY['BarChart','MapLegend'], '公尺'),
+('slope_risk_tpe',    ARRAY['#ef4444','#f97316','#f59e0b'],           ARRAY['BarChart','MapLegend'], '人');
+
 -- ── 2. components ────────────────────────────────────────────────────────────
 
 INSERT INTO components (index, name) VALUES
