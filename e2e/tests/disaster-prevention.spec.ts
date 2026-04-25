@@ -138,23 +138,18 @@ test.describe('UI: 韌性防災儀表板', () => {
     }
   });
 
-  test('city switch metrotaipei → taipei should not error', async ({ page }) => {
-    await page.goto(`${BASE}/dashboard`);
-    const dashboardLink = page.getByText('韌性防災').first();
-    await expect(dashboardLink).toBeVisible({ timeout: 15_000 });
-    await dashboardLink.click();
-    await page.waitForURL(/disaster_prevention/, { timeout: 10_000 });
-    // Find city switcher and click taipei
-    const taipeiBtn = page.getByRole('button', { name: /臺北市|taipei/i }).first();
-    if (await taipeiBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-      await taipeiBtn.click();
-      // Should not show any error toast
-      await expect(page.getByText(/錯誤|error|failed/i)).not.toBeVisible({
-        timeout: 5_000,
-      });
-    } else {
-      test.skip(); // city switcher not visible, skip
-    }
+  test('city switch 雙北 → 臺北 should not error', async ({ page }) => {
+    // Enter via metrotaipei so getSelectList returns ["metrotaipei","taipei"] (2 items) → select renders
+    await page.goto(`${BASE}/dashboard?index=disaster_prevention&city=metrotaipei`);
+    await page.waitForURL(/disaster_prevention/, { timeout: 15_000 });
+    // Wait for at least one component tile to appear (ensures cityDashboard has loaded)
+    await expect(page.getByText('防災資源 KPI').first()).toBeVisible({ timeout: 20_000 });
+    // select[name="city"] is rendered by DashboardComponent when selectBtn=true and !selectBtnDisabled
+    const citySelect = page.locator('select[name="city"]').first();
+    await expect(citySelect).toBeVisible({ timeout: 10_000 });
+    await citySelect.selectOption({ value: 'taipei' });
+    // Should not show any error toast
+    await expect(page.getByText(/錯誤|error|failed/i)).not.toBeVisible({ timeout: 5_000 });
   });
 
   test('should have no console errors on dashboard load', async ({ page }) => {
