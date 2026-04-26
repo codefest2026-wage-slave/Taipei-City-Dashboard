@@ -49,8 +49,8 @@ CREATE TABLE labor_disasters_tpe (
     disaster_type   VARCHAR(100),
     deaths          INTEGER DEFAULT 0,
     injuries        INTEGER DEFAULT 0,
-    lng             NUMERIC(11,7),
-    lat             NUMERIC(11,7)
+    lng             DOUBLE PRECISION,
+    lat             DOUBLE PRECISION
 );
 
 -- ──────────────────────────────────────────────
