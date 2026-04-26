@@ -17,7 +17,91 @@ import json
 import os
 import re
 import random
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 import requests
+
+# ── Geocoding (ArcGIS World Geocoder, free, no key required) ──────────────────
+_ARCGIS_URL = (
+    "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates"
+)
+_geocode_cache: dict = {}
+_cache_lock = threading.Lock()
+_CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".geocode_cache.json")
+
+
+def _load_geocode_cache():
+    global _geocode_cache
+    if os.path.exists(_CACHE_FILE):
+        with open(_CACHE_FILE, encoding="utf-8") as _f:
+            _geocode_cache = json.load(_f)
+    print(f"  Geocode cache: {len(_geocode_cache)} entries loaded")
+
+
+def _save_geocode_cache():
+    with open(_CACHE_FILE, "w", encoding="utf-8") as _f:
+        json.dump(_geocode_cache, _f, ensure_ascii=False)
+
+
+def _clean_addr(addr):
+    """Strip floor/unit suffix before geocoding (e.g. '202號4樓' → '202號')."""
+    addr = re.sub(r"\d+~?\d*樓.*$", "", str(addr))
+    addr = re.sub(r"[Bb]\d+.*$", "", addr)
+    return addr.strip()
+
+
+def _fetch_geocode(clean_addr):
+    """Geocode one pre-cleaned address; stores result in _geocode_cache."""
+    with _cache_lock:
+        if clean_addr in _geocode_cache:
+            return
+    result = None
+    try:
+        resp = requests.get(
+            _ARCGIS_URL,
+            params={"SingleLine": clean_addr, "f": "json", "outSR": '{"wkid":4326}', "maxLocations": 1},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        cands = resp.json().get("candidates", [])
+        if cands and cands[0].get("score", 0) >= 80:
+            loc = cands[0]["location"]
+            result = [loc["x"], loc["y"]]
+    except Exception:
+        pass
+    with _cache_lock:
+        _geocode_cache[clean_addr] = result
+
+
+def batch_geocode(addresses, label="", max_workers=20):
+    """Geocode a list of raw addresses concurrently; saves results to disk cache."""
+    unique = list({_clean_addr(a) for a in addresses if a and _clean_addr(a)})
+    with _cache_lock:
+        pending = [a for a in unique if a not in _geocode_cache]
+    if pending:
+        print(f"  {label}: geocoding {len(pending)} new ({len(unique) - len(pending)} cached)...")
+        with ThreadPoolExecutor(max_workers=max_workers) as ex:
+            futs = [ex.submit(_fetch_geocode, a) for a in pending]
+            done = 0
+            for _ in as_completed(futs):
+                done += 1
+                if done % 500 == 0:
+                    print(f"    {done}/{len(pending)} done...")
+        _save_geocode_cache()
+    else:
+        print(f"  {label}: {len(unique)} addresses all cached")
+
+
+def geocode_or_fallback(address, fallback_lng, fallback_lat):
+    """Return ArcGIS-geocoded (lng, lat) or fall back to district centroid."""
+    clean = _clean_addr(address)
+    if clean:
+        with _cache_lock:
+            cached = _geocode_cache.get(clean)
+        if cached:
+            return cached[0], cached[1]
+    return fallback_lng, fallback_lat
 
 
 
@@ -145,24 +229,21 @@ def build_shelter_tpe():
             break
         offset += limit
     print(f"  Total TPE shelters: {len(rows)}")
+    batch_geocode([r.get("地址", "") for r in rows], label="TPE shelters")
 
     sql_rows = []
     features = []
     for r in rows:
         address = r.get("地址", "")
-        # Parse district from "臺北市{district}..." e.g. "臺北市信義區吳興街..."
-        import re as _re
-        m = _re.search(r"臺北市(\w+區)", address)
+        m = re.search(r"臺北市(\w+區)", address)
         district = m.group(1) if m else ""
 
         person = round(float(str(r.get("容留人數") or "0").strip() or 0))
         indoor = float(str(r.get("面積") or "0").strip() or 0)
-        # 是否優先緊急避難 → standing shelter proxy
         standing = bool_val(r.get("是否優先緊急避難", ""))
-        # 是否依建築物無障礙設施設計規範 → suit_weak proxy
         suit_weak = bool_val(r.get("是否依建築物無障礙設施設計規範檢討", ""))
 
-        lng, lat = district_coords(district, "taipei")
+        lng, lat = geocode_or_fallback(address, *district_coords(district, "taipei"))
 
         sql_rows.append(
             f"('{q(address)}','{q(district)}','','{q(address)}'"
@@ -216,13 +297,14 @@ def build_shelter():
             break
         page += 1
     print(f"  Total NTPC shelters: {len(records)}")
+    batch_geocode([r.get("address", "") for r in records], label="NTPC shelters")
 
     sql_rows = []
     features = []
     for r in records:
         district = r.get("district", "")
         village = r.get("village", "")
-        lng, lat = district_coords(district, "newtaipei")
+        lng, lat = geocode_or_fallback(r.get("address", ""), *district_coords(district, "newtaipei"))
         person = round(float(r.get("person") or 0))
         indoor = float("".join(c for c in str(r.get("floorspacebuildingothers_area") or "0") if c.isdigit() or c == ".") or 0)
 
@@ -436,6 +518,7 @@ def export_geojson(features, filename):
 
 if __name__ == "__main__":
     print("=== Generating Disaster Resilience SQL + GeoJSON ===")
+    _load_geocode_cache()
 
     shelter_tpe_sql, shelter_tpe_features = build_shelter_tpe()
     shelter_ntpc_sql, shelter_ntpc_features = build_shelter()
@@ -457,10 +540,10 @@ if __name__ == "__main__":
 
     # Write GeoJSON files
     print("\nWriting GeoJSON files...")
-    # disaster_shelter: taipei features + newtaipei features in one GeoJSON
-    # (frontend filters by city property on the map)
-    all_shelter_features = shelter_tpe_features + shelter_ntpc_features
-    export_geojson(all_shelter_features, "disaster_shelter.geojson")
+    # disaster_shelter.geojson: TPE-only (loaded by taipei city view)
+    # disaster_shelter_ntpc.geojson: NTPC-only (loaded by metrotaipei city view)
+    export_geojson(shelter_tpe_features, "disaster_shelter.geojson")
+    export_geojson(shelter_ntpc_features, "disaster_shelter_ntpc.geojson")
     export_geojson(river_features, "river_water_level.geojson")
     # Combine slope + settlement into one map layer
     slope_risk_features = slope_features + settlement_features

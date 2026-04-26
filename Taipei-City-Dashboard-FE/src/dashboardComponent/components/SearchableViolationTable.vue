@@ -92,7 +92,17 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 
-const props = defineProps({ chartData: Array });
+const props = defineProps({ series: Array });
+
+// series = [{data: [{x: '{"company_name":...}', y: 30000}, ...]}]
+const allRows = computed(() => {
+	return (props.series || []).flatMap(group =>
+		(group.data || []).map(item => {
+			try { return JSON.parse(item.x); }
+			catch { return null; }
+		}).filter(r => r && r.company_name)
+	);
+});
 
 const searchQuery = ref("");
 const filterCity  = ref("");
@@ -104,64 +114,64 @@ const page        = ref(1);
 const PAGE_SIZE   = 20;
 
 const availableYears = computed(() => {
-  const years = new Set(
-    (props.chartData || [])
-      .map(r => r.penalty_date?.slice(0, 4))
-      .filter(Boolean)
-  );
-  return [...years].sort((a, b) => b - a);
+	const years = new Set(
+		allRows.value
+			.map(r => r.penalty_date?.slice(0, 4))
+			.filter(Boolean)
+	);
+	return [...years].sort((a, b) => b - a);
 });
 
 const isFiltered = computed(() =>
-  searchQuery.value || filterCity.value || filterLaw.value || filterYear.value
+	searchQuery.value || filterCity.value || filterLaw.value || filterYear.value
 );
 
 const filteredRows = computed(() => {
-  let rows = props.chartData || [];
-  const q = searchQuery.value.toLowerCase();
-  if (q) rows = rows.filter(r => r.company_name?.toLowerCase().includes(q));
-  if (filterCity.value) rows = rows.filter(r => r.city === filterCity.value);
-  if (filterLaw.value)  rows = rows.filter(r => r.law_category === filterLaw.value);
-  if (filterYear.value) rows = rows.filter(r => r.penalty_date?.startsWith(filterYear.value));
+	let rows = allRows.value;
+	const q = searchQuery.value.toLowerCase();
+	if (q) rows = rows.filter(r => r.company_name?.toLowerCase().includes(q));
+	if (filterCity.value) rows = rows.filter(r => r.city === filterCity.value);
+	if (filterLaw.value)  rows = rows.filter(r => r.law_category === filterLaw.value);
+	if (filterYear.value) rows = rows.filter(r => r.penalty_date?.startsWith(filterYear.value));
 
-  return [...rows].sort((a, b) => {
-    const av = a[sortKey.value] ?? "";
-    const bv = b[sortKey.value] ?? "";
-    if (sortKey.value === "fine_amount") {
-      return sortDir.value * ((Number(bv) || 0) - (Number(av) || 0));
-    }
-    return sortDir.value * String(bv).localeCompare(String(av));
-  });
+	return [...rows].sort((a, b) => {
+		const av = a[sortKey.value] ?? "";
+		const bv = b[sortKey.value] ?? "";
+		if (sortKey.value === "fine_amount") {
+			return sortDir.value * ((Number(bv) || 0) - (Number(av) || 0));
+		}
+		return sortDir.value * String(bv).localeCompare(String(av));
+	});
 });
 
 const totalPages = computed(() => Math.ceil(filteredRows.value.length / PAGE_SIZE));
 const pagedRows  = computed(() =>
-  filteredRows.value.slice((page.value - 1) * PAGE_SIZE, page.value * PAGE_SIZE)
+	filteredRows.value.slice((page.value - 1) * PAGE_SIZE, page.value * PAGE_SIZE)
 );
 
 watch([searchQuery, filterCity, filterLaw, filterYear], () => { page.value = 1; });
 
 function sortBy(key) {
-  if (sortKey.value === key) sortDir.value *= -1;
-  else { sortKey.value = key; sortDir.value = -1; }
-  page.value = 1;
+	if (sortKey.value === key) sortDir.value *= -1;
+	else { sortKey.value = key; sortDir.value = -1; }
+	page.value = 1;
 }
 
 function sortIcon(key) {
-  if (sortKey.value !== key) return "unfold_more";
-  return sortDir.value === -1 ? "expand_more" : "expand_less";
+	if (sortKey.value !== key) return "unfold_more";
+	return sortDir.value === -1 ? "expand_more" : "expand_less";
 }
 
 function truncate(s, n) {
-  if (!s) return "—";
-  return s.length > n ? s.slice(0, n) + "…" : s;
+	if (!s) return "—";
+	return s.length > n ? s.slice(0, n) + "…" : s;
 }
 
 function clearAll() {
-  searchQuery.value = "";
-  filterCity.value = "";
-  filterLaw.value = "";
-  filterYear.value = "";
+	searchQuery.value = "";
+	filterCity.value = "";
+	filterLaw.value = "";
+	filterYear.value = "";
 }
 </script>
 

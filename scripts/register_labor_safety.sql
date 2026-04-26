@@ -28,9 +28,9 @@ ON CONFLICT (index) DO NOTHING;
 
 -- ── 3. component_maps ────────────────────────────────────────────────────────
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
-  ('labor_disasters_tpe', '臺北職災點位', 'circle', '勞動部', 'big',
+  ('labor_disasters_tpe', '臺北職災點位', 'circle', 'geojson', 'big',
    '{"circle-color":["match",["get","severity"],"fatal","#D50000","#FF6D00"],"circle-radius":7,"circle-opacity":0.85}'::json),
-  ('labor_disasters_ntpc', '新北行政區職災數', 'circle', '勞動局', 'big',
+  ('labor_disasters_ntpc', '新北行政區職災數', 'circle', 'geojson', 'big',
    '{"circle-color":"#F4511E","circle-radius":["interpolate",["linear"],["get","incidents"],1,8,5,14,10,20,20,28],"circle-opacity":0.8}'::json);
 
 -- ── 4. query_charts ──────────────────────────────────────────────────────────
@@ -40,7 +40,7 @@ INSERT INTO query_charts (index, query_type, query_chart, city, source, short_de
   time_from, time_to, update_freq, update_freq_unit, map_config_ids, map_filter, links, contributors, created_at, updated_at)
 VALUES (
   'labor_violation_search', 'two_d',
-  'SELECT company_name, penalty_date, law_category, violation_content, fine_amount, ''臺北'' AS city FROM labor_violations_tpe WHERE penalty_date IS NOT NULL ORDER BY penalty_date DESC',
+  $$SELECT json_build_object('company_name', company_name, 'penalty_date', TO_CHAR(penalty_date, 'YYYY-MM-DD'), 'law_category', law_category, 'violation_content', violation_content, 'fine_amount', fine_amount, 'city', '臺北')::text AS x_axis, COALESCE(fine_amount, 0) AS data FROM labor_violations_tpe WHERE penalty_date IS NOT NULL ORDER BY penalty_date DESC$$,
   'taipei', '勞動局',
   '查詢臺北市雇主勞動違規記錄（勞基法、性平法、職安法）。',
   '整合臺北市三大勞動法規的違規事業單位公告資料，支援公司名稱模糊搜尋與多維篩選。',
@@ -53,7 +53,7 @@ INSERT INTO query_charts (index, query_type, query_chart, city, source, short_de
   time_from, time_to, update_freq, update_freq_unit, map_config_ids, map_filter, links, contributors, created_at, updated_at)
 VALUES (
   'labor_violation_search', 'two_d',
-  'SELECT company_name, penalty_date, law_category, violation_content, fine_amount, city FROM (SELECT company_name, penalty_date, law_category, violation_content, fine_amount, ''臺北'' AS city FROM labor_violations_tpe UNION ALL SELECT company_name, penalty_date, law_category, violation_content, fine_amount, ''新北'' AS city FROM labor_violations_ntpc) combined WHERE penalty_date IS NOT NULL ORDER BY penalty_date DESC',
+  $$SELECT json_build_object('company_name', company_name, 'penalty_date', TO_CHAR(penalty_date, 'YYYY-MM-DD'), 'law_category', law_category, 'violation_content', violation_content, 'fine_amount', fine_amount, 'city', city)::text AS x_axis, COALESCE(fine_amount, 0) AS data FROM (SELECT company_name, penalty_date, law_category, violation_content, fine_amount, '臺北' AS city FROM labor_violations_tpe UNION ALL SELECT company_name, penalty_date, law_category, violation_content, fine_amount, '新北' AS city FROM labor_violations_ntpc) combined WHERE penalty_date IS NOT NULL ORDER BY penalty_date DESC$$,
   'metrotaipei', '勞動局',
   '查詢雙北雇主勞動違規記錄（勞基法、性平法、職安法）。',
   '整合臺北市與新北市三大勞動法規違規事業單位資料，為全台首個雙城合一可搜尋查詢工具。',

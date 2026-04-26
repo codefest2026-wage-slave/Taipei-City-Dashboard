@@ -1,13 +1,98 @@
 """
 Fix EV charging station GeoJSON files using correct data.taipei resource IDs.
-Geocodes station addresses to approximate coordinates using district centroids.
+Geocodes station addresses using ArcGIS World Geocoder; falls back to district centroids.
 
 Run from repo root: python scripts/fix_ev_geojson.py
 """
 import json
 import os
 import random
+import re
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 import requests
+
+# ── Geocoding (ArcGIS World Geocoder, free, no key required) ──────────────────
+_ARCGIS_URL = (
+    "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates"
+)
+_geocode_cache: dict = {}
+_cache_lock = threading.Lock()
+_CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".geocode_cache.json")
+
+
+def _load_geocode_cache():
+    global _geocode_cache
+    if os.path.exists(_CACHE_FILE):
+        with open(_CACHE_FILE, encoding="utf-8") as _f:
+            _geocode_cache = json.load(_f)
+    print(f"  Geocode cache: {len(_geocode_cache)} entries loaded")
+
+
+def _save_geocode_cache():
+    with open(_CACHE_FILE, "w", encoding="utf-8") as _f:
+        json.dump(_geocode_cache, _f, ensure_ascii=False)
+
+
+def _clean_addr(addr):
+    """Strip floor/unit suffix before geocoding."""
+    addr = re.sub(r"\d+~?\d*樓.*$", "", str(addr))
+    addr = re.sub(r"[Bb]\d+.*$", "", addr)
+    return addr.strip()
+
+
+def _fetch_geocode(clean_addr):
+    """Geocode one pre-cleaned address; stores result in _geocode_cache."""
+    with _cache_lock:
+        if clean_addr in _geocode_cache:
+            return
+    result = None
+    try:
+        resp = requests.get(
+            _ARCGIS_URL,
+            params={"SingleLine": clean_addr, "f": "json", "outSR": '{"wkid":4326}', "maxLocations": 1},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        cands = resp.json().get("candidates", [])
+        if cands and cands[0].get("score", 0) >= 80:
+            loc = cands[0]["location"]
+            result = [loc["x"], loc["y"]]
+    except Exception:
+        pass
+    with _cache_lock:
+        _geocode_cache[clean_addr] = result
+
+
+def batch_geocode(addresses, label="", max_workers=20):
+    """Geocode a list of raw addresses concurrently; saves results to disk cache."""
+    unique = list({_clean_addr(a) for a in addresses if a and _clean_addr(a)})
+    with _cache_lock:
+        pending = [a for a in unique if a not in _geocode_cache]
+    if pending:
+        print(f"  {label}: geocoding {len(pending)} new ({len(unique) - len(pending)} cached)...")
+        with ThreadPoolExecutor(max_workers=max_workers) as ex:
+            futs = [ex.submit(_fetch_geocode, a) for a in pending]
+            done = 0
+            for _ in as_completed(futs):
+                done += 1
+                if done % 100 == 0:
+                    print(f"    {done}/{len(pending)} done...")
+        _save_geocode_cache()
+    else:
+        print(f"  {label}: {len(unique)} addresses all cached")
+
+
+def geocode_or_fallback(address, fallback_lng, fallback_lat):
+    """Return ArcGIS-geocoded (lng, lat) or fall back to district centroid."""
+    clean = _clean_addr(address)
+    if clean:
+        with _cache_lock:
+            cached = _geocode_cache.get(clean)
+        if cached:
+            return cached[0], cached[1]
+    return fallback_lng, fallback_lat
 
 MAPDATA_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "Taipei-City-Dashboard-FE", "public", "mapData")
@@ -87,15 +172,20 @@ def build_ev_scooter():
         data = fetch_json(url)
         records = data.get("result", {}).get("results", [])
         print(f"  Got {len(records)} Taipei EV scooter records")
+        batch_geocode(
+            [r.get("地址") or r.get("address", "") for r in records],
+            label="TPE scooter",
+        )
         for r in records:
             dist = r.get("行政區") or r.get("district", "")
-            lng, lat = district_coords(dist, "taipei")
+            addr = r.get("地址") or r.get("address", "")
+            lng, lat = geocode_or_fallback(addr, *district_coords(dist, "taipei"))
             features.append({
                 "type": "Feature",
                 "geometry": {"type": "Point", "coordinates": [lng, lat]},
                 "properties": {
                     "name": r.get("單位") or r.get("name", ""),
-                    "address": r.get("地址") or r.get("address", ""),
+                    "address": addr,
                     "district": dist,
                     "city": "taipei",
                     "operator": r.get("單位", ""),
@@ -218,12 +308,16 @@ def build_ev_car():
         records = fetch_json(url)
         if isinstance(records, list):
             print(f"  Got {len(records)} NTPC EV car records")
+            batch_geocode(
+                [r.get("add", "") or r.get("地址", "") for r in records],
+                label="NTPC car",
+            )
             for r in records:
                 dist = r.get("dis", "") or r.get("行政區", "")
                 addr = r.get("add", "") or r.get("地址", "")
                 sty = r.get("sty", "AC")
                 charger_type = {"AC": "AC", "DC": "DC", "AC+DC": "AC+DC"}.get(str(sty).upper(), "AC")
-                lng, lat = district_coords(dist, "newtaipei")
+                lng, lat = geocode_or_fallback(addr, *district_coords(dist, "newtaipei"))
                 features.append({
                     "type": "Feature",
                     "geometry": {"type": "Point", "coordinates": [lng, lat]},
@@ -245,6 +339,7 @@ def build_ev_car():
 
 if __name__ == "__main__":
     print("=== Fixing EV Charging GeoJSON files ===")
+    _load_geocode_cache()
     build_ev_scooter()
     build_ev_car()
     print("Done.")
