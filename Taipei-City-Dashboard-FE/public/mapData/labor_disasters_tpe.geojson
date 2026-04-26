@@ -1,0 +1,3005 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5424989,
+          25.02113364
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "互助營造股份有公司",
+        "address": "臺北市大安區辛亥路2段與復興南路交叉口",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5780332,
+          25.04967108
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "達欣工程股份有限公司",
+        "address": "臺北市松山區八德路4段692號 捷運松山站",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5020537,
+          25.03902141
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "齊裕營造股份有限公司",
+        "address": "臺北市萬華區康定路與永福街交叉口",
+        "disaster_type": "物體倒塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5254592,
+          25.06056471
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "成傑營造股份有限公司",
+        "address": "臺北市中山區林森北路442號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.503061,
+          25.0415549
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "大佑祥開發事業股份有限公司",
+        "address": "臺北市萬華區內江街128號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5607675,
+          25.04243529
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "遠雄營造股份有限公司",
+        "address": "臺北市信義區忠孝東路4段553巷16號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5386818,
+          25.03191804
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "中鹿營造股份有限公司",
+        "address": "臺北市大安區建國南路2段39巷旁",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5323379,
+          25.04522121
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "利晉工程股份有限公司",
+        "address": "臺北市中正區市民大道3段8號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5877012,
+          25.06205875
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "王子水電企業股份有限公司",
+        "address": "臺北市內湖區金莊路、石潭路口",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5786878,
+          25.0684124
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "樹盛營造股份有限公司",
+        "address": "臺北市內湖區民權東路6段15巷與瑞光路76巷交叉口",
+        "disaster_type": "物體倒塌、崩塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5298604,
+          25.06828774
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "萬堡營造股份有限公司",
+        "address": "臺北市中山區民族東路184號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5225953,
+          25.06653406
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "",
+        "company_name": "際新室內裝修工程有限公司",
+        "address": "臺北市中山區中山北路3段47號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5390163,
+          25.05663066
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-12-31",
+        "company_name": "永祿工程有限公司",
+        "address": "臺北市中山區合江街68號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 0,
+        "injuries": 1,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5627737,
+          25.03733199
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-12-25",
+        "company_name": "享受享受娛樂有限公司",
+        "address": "臺北市信義區市府路1號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5598435,
+          25.01731402
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-12-22",
+        "company_name": "富盛美護有限公司",
+        "address": "臺北市大安區和平東路3段448-482號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5088832,
+          25.04274748
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-11-13",
+        "company_name": "錢櫃事業股份有限公司",
+        "address": "臺北市中正區中華路1段55號8樓",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5272914,
+          25.0654051
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-09-21",
+        "company_name": "統億大廈管理委員會主委韓長發",
+        "address": "臺北市中山區新生北路3段56巷1號",
+        "disaster_type": "與高溫、低溫之接觸(11)",
+        "deaths": 0,
+        "injuries": 1,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.600247,
+          25.08981648
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-08-24",
+        "company_name": "倚鋼工業有限公司",
+        "address": "臺北市內湖區大湖山莊街219巷53號旁",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5239124,
+          25.06024662
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-08-22",
+        "company_name": "九大牙體生技有限公司",
+        "address": "臺北市中山區錦州街12號4樓",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.526152,
+          25.03015525
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-08-17",
+        "company_name": "鼎瑞金屬有限公司",
+        "address": "臺北市大安區金華街110號工地",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.545818,
+          25.05805769
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-07-20",
+        "company_name": "林哲松（即億松工程行）",
+        "address": "臺北市松山區民生東路3段111號之",
+        "disaster_type": "墜落、滾落",
+        "deaths": 0,
+        "injuries": 1,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5864803,
+          25.00517276
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-06-11",
+        "company_name": "臺北市政府環境保護局木柵垃圾焚化廠",
+        "address": "臺北市文山區木柵路5段53號",
+        "disaster_type": "與高溫、低溫之接觸",
+        "deaths": 0,
+        "injuries": 1,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5161546,
+          25.04458398
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-06-03",
+        "company_name": "林妹玉（即洋庭坊）",
+        "address": "臺北市中正區南陽街15之2號1樓",
+        "disaster_type": "爆炸",
+        "deaths": 0,
+        "injuries": 2,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5566111,
+          25.14147562
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-05-30",
+        "company_name": "四四四禮儀家有限公司",
+        "address": "臺北市士林區菁山路110巷",
+        "disaster_type": "其他",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5728555,
+          25.08061694
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-05-20",
+        "company_name": "華營科技工程有限公司",
+        "address": "臺北市內湖區內湖路1段390號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5178287,
+          25.08618998
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-03-30",
+        "company_name": "川普工程有限公司",
+        "address": "臺北市士林區福港街208號",
+        "disaster_type": "物體倒塌、崩塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5362991,
+          25.0400714
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-03-04",
+        "company_name": "暐柏企業社",
+        "address": "臺北市大安區濟南路3段41號對面之109建233璞真合和案住宅大樓新建工程",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5102827,
+          25.07227698
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2024-03-03",
+        "company_name": "煒盛環境科技股份有限公司",
+        "address": "臺北市大同區酒泉街235號",
+        "disaster_type": "溺斃",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5814522,
+          25.037249
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-12-12",
+        "company_name": "李金祥(即億駿工程行)",
+        "address": "臺北市信義區福德街84巷口",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5670593,
+          25.0635944
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-11-24",
+        "company_name": "泓垣霖科技股份有限公司",
+        "address": "臺北市松山區民權東路5段41號",
+        "disaster_type": "與有害物質等之接觸",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5165369,
+          25.0631438
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-11-05",
+        "company_name": "廣林工程有限公司",
+        "address": "臺北市大同區民權西路153號",
+        "disaster_type": "火災",
+        "deaths": 0,
+        "injuries": 1,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5193103,
+          25.0939832
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-10-25",
+        "company_name": "?國勝(即上順玻璃行)",
+        "address": "臺北市士林區基河路300巷旁",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5305865,
+          25.0135945
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-10-13",
+        "company_name": "福清營造股份有限公司",
+        "address": "臺北市中正區思源街1號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5317943,
+          25.0522555
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-09-15",
+        "company_name": "崴盛水電有限公司",
+        "address": "臺北市中山區南京東路2段85、87號5及6樓",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.508386,
+          25.0533841
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-08-28",
+        "company_name": "創利工程有限公司",
+        "address": "臺北市大同區南京西路446號",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6065976,
+          25.0518784
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-08-25",
+        "company_name": "臺北捷運股份有限公司",
+        "address": "臺北市南港區忠孝東路7段214號2-1號",
+        "disaster_type": "感電",
+        "deaths": 0,
+        "injuries": 2,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5435575,
+          25.0428068
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-08-02",
+        "company_name": "東生營造股份有限公司",
+        "address": "臺北市大安區復興南路1段132號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5069661,
+          25.1360048
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-07-29",
+        "company_name": "台灣新明和工業股份有限公司",
+        "address": "臺北市北投區光明路236號",
+        "disaster_type": "與有害物等之接觸",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4972531,
+          25.02539808
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-07-12",
+        "company_name": "陳律達（即達信工程行）",
+        "address": "臺北市萬華區民和街109號對面",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5617509,
+          25.0415462
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-07-05",
+        "company_name": "利易通企業有限公司",
+        "address": "臺北市信義區忠孝東路4段545號旁",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5678454,
+          25.1444815
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-07-04",
+        "company_name": "福田園教育休閒農場",
+        "address": "臺北市士林區菁山路131巷18號，對面之「你農我農 友善田園」之菜園區",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5677054,
+          25.0331845
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-05-07",
+        "company_name": "崴倫興業有限公司",
+        "address": "臺北市信義區信義路5段17號",
+        "disaster_type": "跌倒",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6000207,
+          25.0555275
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-05-06",
+        "company_name": "國原營造股份有限公司",
+        "address": "臺北市南港區興南街71號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5563927,
+          25.0344423
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-04-08",
+        "company_name": "臺北市政府環境保護局",
+        "address": "臺北市大安區延吉街256號收集點",
+        "disaster_type": "被夾、被捲",
+        "deaths": 0,
+        "injuries": 1,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5285658,
+          25.0428449
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-03-17",
+        "company_name": "春源鋼鐵工業股份有限公司",
+        "address": "臺北市中正區忠孝東路二段64巷10號",
+        "disaster_type": "被撞",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5676306,
+          25.0802633
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2023-01-11",
+        "company_name": "北大消防安全設備有限公司",
+        "address": "臺北市內湖區瑞光路585號2樓",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5936932,
+          25.06186685
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-12-13",
+        "company_name": "齊裕營造股份有限公司",
+        "address": "臺北市內湖區安康路22巷旁",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5794049,
+          25.05429133
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-12-03",
+        "company_name": "崇偉營造工程股份有限公司",
+        "address": "臺北市內湖區新明路428巷2號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.55768,
+          25.04729
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-11-21",
+        "company_name": "富瑄營造股份有限公司",
+        "address": "臺北市松山區光復南路22巷口",
+        "disaster_type": "物體倒塌、崩塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5267509,
+          25.09929963
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-11-17",
+        "company_name": "上承營造股份有限公司",
+        "address": "臺北市士林區中山北路5段753號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.55695,
+          25.08751
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-10-08",
+        "company_name": "寬洋營造股份有限公司",
+        "address": "臺北市萬華區漢中街45號",
+        "disaster_type": "跌倒",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.61692,
+          2506102.0
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-09-19",
+        "company_name": "榮工工程股份有限公司",
+        "address": "臺北市南港區經貿二路157巷口",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.538313,
+          25.00274173
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-08-22",
+        "company_name": "ＯＯＯ",
+        "address": "臺北市文山區羅斯福路5段218巷6弄14號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.566123,
+          25.036226
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-08-13",
+        "company_name": "大陸工程股份有限公司",
+        "address": "臺北市信義區松壽路3號",
+        "disaster_type": "被刺",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5434919,
+          25.05335293
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-08-08",
+        "company_name": "華熊營造股份有限公司",
+        "address": "臺北市中山區南京東路3段223巷口",
+        "disaster_type": "被撞",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4907022,
+          25.14336693
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-07-31",
+        "company_name": "世久營造探勘工程股份有限公司",
+        "address": "臺北市北投區秀山路31號",
+        "disaster_type": "物體倒塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.52674,
+          25.030287
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-07-13",
+        "company_name": "大陸工程股份有限公司",
+        "address": "臺北市中正區西藏路100號前地下",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5501257,
+          25.0483569
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-06-18",
+        "company_name": "應州工程有限公司",
+        "address": "臺北市松山區八德路3段25號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5238165,
+          25.11189014
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-06-17",
+        "company_name": "宏利發建設有限公司",
+        "address": "臺北市北投區榮華一路6巷1號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5974932,
+          25.0505112
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-06-04",
+        "company_name": "大陸工程股份有限公司",
+        "address": "臺北市南港區忠孝東路7段126號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5445297,
+          25.03402415
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-05-13",
+        "company_name": "合興建設股份有限公司",
+        "address": "臺北市大安區信義路4段19巷",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5083191,
+          25.05516366
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-03-03",
+        "company_name": "永發工程行",
+        "address": "臺北市大同區貴德街75之1、2號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5498,
+          25.06338326
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-02-19",
+        "company_name": "漢威聯合股份有限公司",
+        "address": "臺北市松山區敦化北路340之9號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.548538,
+          25.04910566
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2022-01-01",
+        "company_name": "偉大建設股份有限公司",
+        "address": "臺北市松山區敦化北路2號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.508362,
+          25.113429
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-12-14",
+        "company_name": "恆合營造有限公司",
+        "address": "臺北市北投區承德路7段164巷口",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4993265,
+          25.02297191
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-09-28",
+        "company_name": "大陸工程股份有限公司",
+        "address": "臺北市萬華區萬大路346號前地底下",
+        "disaster_type": "被夾、被捲",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5054683,
+          25.03908084
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-07-10",
+        "company_name": "遠碩營造股份有限公司",
+        "address": "臺北市萬華區柳州街14號對面",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53319,
+          25.05621
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-07-01",
+        "company_name": "三井工程股份有限公司",
+        "address": "臺北市中山區松江路173巷口",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5313341,
+          25.0334359
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-05-14",
+        "company_name": "永康停車場股份有限公司",
+        "address": "臺北市大安區信義路2段224號1樓",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.507339,
+          25.119477
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-01-25",
+        "company_name": "東生營造股份有限公司",
+        "address": "臺北市北投區立農街1段332號對面",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.51114,
+          25.03687
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-01-10",
+        "company_name": "年建營造有限公司",
+        "address": "略",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.603114,
+          25.0613495
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2021-01-07",
+        "company_name": "馥餘實業股份有限公司",
+        "address": "臺北市內湖區潭美街585號1樓",
+        "disaster_type": "被夾、被捲",
+        "deaths": 2,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.54231,
+          25.0621
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-11-30",
+        "company_name": "屋頂達人工程有限公司",
+        "address": "中山區民權東路三段58號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5610647,
+          25.05163384
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-11-17",
+        "company_name": "東昇清潔工程有限公司",
+        "address": "臺北市松山區南京東路5段76、78號5樓",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5498463,
+          25.0213765
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-10-07",
+        "company_name": "王工南營造有限公司",
+        "address": "臺北市大安區樂業街72巷16號旁",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5866322,
+          25.0415806
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-09-30",
+        "company_name": "森城建設股份有限公司",
+        "address": "臺北市信義區中坡南路201巷",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.507339,
+          25.119477
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-09-22",
+        "company_name": "東生營造股份有限公司",
+        "address": "臺北市北投區立農街1段332號對面",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 1,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.557227,
+          25.049028
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-09-14",
+        "company_name": "鼎盛國際工程有限公司",
+        "address": "臺北市松山區光復北路26巷5號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.506394,
+          25.045212
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-08-02",
+        "company_name": "享福企業有限公司",
+        "address": "臺北市萬華區西寧南路36號",
+        "disaster_type": "被夾、被捲",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5599425,
+          25.0481049
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-06-20",
+        "company_name": "萬鎰營造有限公司",
+        "address": "臺北市松山區八德路4段138號",
+        "disaster_type": "物體倒塌、崩塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.29576,
+          25.02217
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-05-26",
+        "company_name": "永嘉升降設備停車設備維修工程",
+        "address": "臺北市萬華區西園路一段72巷2號",
+        "disaster_type": "墜落",
+        "deaths": 0,
+        "injuries": 3,
+        "severity": "injury"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.583834,
+          25.076409
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2020-02-05",
+        "company_name": "品興營造股份有限公司",
+        "address": "臺北市內湖區陽光街68巷115弄",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.503132,
+          25.123003
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-12-20",
+        "company_name": "國記營造股份有限公司",
+        "address": "北投區磺港路288號對面",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.497509,
+          25.093704
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-12-12",
+        "company_name": "江浚實業有限公司",
+        "address": "臺北市士林區延平北路7段1號",
+        "disaster_type": "被撞",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.54855,
+          25.056652
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-11-12",
+        "company_name": "聖鋒營造有限公司",
+        "address": "洲美快速道路高架橋",
+        "disaster_type": "公路交通事故",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.598622,
+          25.052546
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-11-05",
+        "company_name": "春原營造股份有限公司",
+        "address": "市民大道8段",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.547763,
+          25.051789
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-11-04",
+        "company_name": "泰源建材有限公司",
+        "address": "略",
+        "disaster_type": "滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5327787,
+          25.02523946
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-08-27",
+        "company_name": "菱光機械工業股份有限公司",
+        "address": "臺北市和平東路1段248巷口工地",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.563686,
+          25.040176
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-08-05",
+        "company_name": "華揚消防工程顧問股份有限公司",
+        "address": "臺北市基隆路1段200號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.54855,
+          25.056652
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-08-02",
+        "company_name": "恆泰科技工程有限公司",
+        "address": "臺北市松山區敦化北路170號",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5572521,
+          25.04250432
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-07-12",
+        "company_name": "萬士益冷氣股份有限公司",
+        "address": "臺北市大安區光復南路180巷8號1樓",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4971057,
+          25.12305032
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-06-17",
+        "company_name": "巨勳廣告工程有限公司",
+        "address": "臺北市北投區大業路65巷",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5158387,
+          25.0463369
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2019-01-30",
+        "company_name": "新寶發工程有限公司",
+        "address": "臺北市中正區忠孝西路1段50號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5248412,
+          25.04617993
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-12-10",
+        "company_name": "",
+        "address": "臺北市中正區北平東路20號對面-台鐵6號緊急逃生出口",
+        "disaster_type": "被撞",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.567943,
+          25.078155
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-11-17",
+        "company_name": "赫仕建築物管理維護股份有限公司",
+        "address": "臺北市內湖區堤頂大道二段 207 號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5498092,
+          25.06337111
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-09-20",
+        "company_name": "根基營造股份有限公司",
+        "address": "臺北市松山區敦化北路313巷旁",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5351206,
+          25.01324835
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-09-14",
+        "company_name": "捷凱物流股份有限公司",
+        "address": "臺北市中正區羅斯福路4段108巷",
+        "disaster_type": "被夾、被捲",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5594831,
+          25.08375132
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-08-30",
+        "company_name": "達欣工程股份有限公司",
+        "address": "臺北市中山區植福路189號對面",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5907998,
+          25.06663248
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-06-08",
+        "company_name": "中華電信股份有限公司臺灣北區電信分公司",
+        "address": "臺北市內湖區成功路2段404號",
+        "disaster_type": "",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.523172,
+          25.039517
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-05-17",
+        "company_name": "信創營造股份有限公司",
+        "address": "林森南路61巷與仁愛路1段23巷交口",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5310316,
+          25.11459731
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-04-25",
+        "company_name": "好室達室內裝修有限公司",
+        "address": "略",
+        "disaster_type": "火災",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.524577,
+          25.04960035
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-04-11",
+        "company_name": "榆莊室內裝修工程有限公司",
+        "address": "臺北市中山區林森北路76號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5482954,
+          25.02715119
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-03-12",
+        "company_name": "力山工程行",
+        "address": "臺北市大安區敦化南路2段112號旁",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5325997,
+          25.11779283
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-02-05",
+        "company_name": "全統西點麵包有限公司",
+        "address": "臺北市士林區天母東路36之4號",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5157519,
+          25.13593218
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2018-01-15",
+        "company_name": "狀元庭園綠化有限公司",
+        "address": "臺北市北投區溫泉路銀光巷22號",
+        "disaster_type": "",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5181788,
+          25.06942137
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-12-26",
+        "company_name": "勝堡村營造工程股份有限公司",
+        "address": "臺北市大同區承德路3段186號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5835832,
+          25.12668679
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-12-03",
+        "company_name": "宏林營造廠股份有限公司",
+        "address": "臺北市北投區三合街1段118巷2號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5089345,
+          25.08885058
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-08-24",
+        "company_name": "國際歡喜廣告設計有限公司",
+        "address": "臺北市士林區社正路9號",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5107131,
+          25.1167361
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-08-21",
+        "company_name": "華林營造股份有限公司",
+        "address": "臺北市北投區致遠二路95巷27號",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5191718,
+          25.1191804
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-07-23",
+        "company_name": "廣記營造股份有限公司",
+        "address": "臺北市北投區石牌路2段201號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5290889,
+          25.04096253
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-07-15",
+        "company_name": "廖光雄（即鉅光廣告工程行）",
+        "address": "臺北市中正區濟南路2段35－1號",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5230053,
+          25.09722886
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-06-05",
+        "company_name": "北都數位有線電視股份有限公司",
+        "address": "臺北市士林區美崙街",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5641319,
+          25.05432151
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-05-20",
+        "company_name": "新亞建設開發股份有限公司",
+        "address": "健康路與三民路交口",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.870009,
+          3.135386022
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-03-21",
+        "company_name": "瑞助營造股份有限公司",
+        "address": "臺北市文山區興隆路4段105巷31號",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.515407,
+          25.06316554
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-03-01",
+        "company_name": "富頂營造有限公司",
+        "address": "臺北市大同區民權西路203號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5443238,
+          25.05474589
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2017-02-05",
+        "company_name": "笠盟實業有限公司",
+        "address": "臺北市松山區復興北路181號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5322911,
+          25.03436962
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2016-12-20",
+        "company_name": "略",
+        "address": "臺北市中正區新生南路一段170巷4－1號",
+        "disaster_type": "被夾",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5112381,
+          25.04042547
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2016-10-26",
+        "company_name": "翊宏工程行",
+        "address": "臺北市中正區博愛路166號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.51423,
+          25.09462335
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2016-09-21",
+        "company_name": "亞洲土木包工業",
+        "address": "臺北市士林區承德路5段80號",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4841802,
+          2.509136981
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2016-08-25",
+        "company_name": "銘鴻河海工程有限公司",
+        "address": "略",
+        "disaster_type": "溺斃",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5139752,
+          25.0739771
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2016-06-30",
+        "company_name": "益勝工程有限公司",
+        "address": "臺北市大同區重慶北路3段313巷",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5919664,
+          25.07179069
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2016-05-06",
+        "company_name": "全日清企業有限公司",
+        "address": "臺北市內湖區成功路2段325號",
+        "disaster_type": "跌倒",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5020288,
+          25.04433363
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2016-04-25",
+        "company_name": "錡星實業有限公司",
+        "address": "臺北市萬華區康定路101巷",
+        "disaster_type": "墜落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5231611,
+          25.06859137
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-10-17",
+        "company_name": "迪揚工程有限公司",
+        "address": "中山北路與民族東路交叉口",
+        "disaster_type": "與有害物等之接觸",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5742905,
+          25.07657508
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-10-08",
+        "company_name": "立新展業有限公司",
+        "address": "臺北市內湖區瑞光路302號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.527269,
+          25.04200813
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-10-06",
+        "company_name": "萬堡營造股份有限公司",
+        "address": "臺北市中正區齊東街82巷3弄2號",
+        "disaster_type": "墜落、被刺",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5195235,
+          25.05452938
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-10-01",
+        "company_name": "金陽事業有限公司",
+        "address": "臺北市大同區赤峰街35號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5231125,
+          25.08513995
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-09-29",
+        "company_name": "銘祥營造有限公司",
+        "address": "臺北市士林區承德路4段150～152號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5863572,
+          25.06579128
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-09-28",
+        "company_name": "大文山保全股份有限公司",
+        "address": "臺北市內湖區金豐街2號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6141724,
+          25.05639807
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-08-10",
+        "company_name": "榮工工程股份有限公司",
+        "address": "臺北市南港區三重路36號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5122055,
+          25.09889159
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-08-05",
+        "company_name": "昕禹實業有限公司",
+        "address": "臺北市士林區承德路6段與洲美街口",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6073298,
+          25.05357336
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-08-04",
+        "company_name": "潤弘精密工程事業股份有限公司",
+        "address": "臺北市南港區南港路1段313號",
+        "disaster_type": "感電",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4957727,
+          25.12125081
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-07-26",
+        "company_name": "達宸工程實業股份有限公司",
+        "address": "臺北市北投區大度路1段167號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5527768,
+          25.15065401
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-07-20",
+        "company_name": "廣鎂營造事業有限公司",
+        "address": "臺北市北投區陽明路二段15號",
+        "disaster_type": "與有害物等之接觸",
+        "deaths": 2,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5284182,
+          25.08330652
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-06-02",
+        "company_name": "宜鋒營造工程有限公司",
+        "address": "臺北市中山區中山北路4段1巷1弄30號",
+        "disaster_type": "墜落、衝撞",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5514636,
+          25.08262682
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-05-30",
+        "company_name": "仁仁營造有限公司",
+        "address": "臺北市中山區明水路、樂群三路口",
+        "disaster_type": "溺斃",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -123.3358097,
+          338916.2759
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-05-19",
+        "company_name": "大陸工程股份有限公司",
+        "address": "臺北市中正區中華路1段59號旁",
+        "disaster_type": "物體飛落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.551244,
+          25.08451449
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-05-13",
+        "company_name": "坪芳園藝有限公司",
+        "address": "臺北市中山區明水路696號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5527159,
+          25.04801771
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-05-11",
+        "company_name": "達欣工程（股）公司",
+        "address": "臺北市松山區八德路3段81號",
+        "disaster_type": "跌倒",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.4845037,
+          25.13960854
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-03-29",
+        "company_name": "冠國營造有限公司",
+        "address": "臺北市北投區中央北路3段40巷45號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5514573,
+          25.02457957
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-03-19",
+        "company_name": "謙旭工程有限公司",
+        "address": "臺北市大安區和平東路3段117號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.6006028,
+          25.08390289
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-03-04",
+        "company_name": "齊裕營造股份有限公司",
+        "address": "臺北市內湖區成功路4段180號",
+        "disaster_type": "物體倒榻",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5471397,
+          25.09561607
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-01-29",
+        "company_name": "台灣日山電影有限公司",
+        "address": "臺北市士林區至善路2段34號",
+        "disaster_type": "物體倒塌、崩塌",
+        "deaths": 1,
+        "injuries": 2,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.571544,
+          25.03695031
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2015-01-09",
+        "company_name": "怡盛保全股份有限公司",
+        "address": "信義區忠孝東路5段236巷58～72號",
+        "disaster_type": "被夾、被捲",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5297778,
+          25.12277212
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2014-11-05",
+        "company_name": "有信消防工程有限公司",
+        "address": "臺北市大安區建國南路二段231號",
+        "disaster_type": "與有害物等之接觸",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5092779,
+          25.05918246
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2014-11-04",
+        "company_name": "鼎川營造股份有限公司",
+        "address": "臺北市大同區迪化街1段198號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.471587,
+          25.12681543
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2014-10-20",
+        "company_name": "利晉工程股份有限公司",
+        "address": "臺北市北投區立德路119號",
+        "disaster_type": "物體倒塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5189549,
+          25.1100719
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2014-10-06",
+        "company_name": "億欣營造股份有限公司",
+        "address": "臺北市北投區東華街1段366號旁",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5599188,
+          25.01699739
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2014-10-02",
+        "company_name": "三友物業有限公司",
+        "address": "臺北市大安區和平東路3段464巷2號",
+        "disaster_type": "物體倒塌",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5705447,
+          25.01864525
+        ]
+      },
+      "properties": {
+        "city": "taipei",
+        "incident_date": "2014-07-22",
+        "company_name": "啟赫營造股份有限公司",
+        "address": "臺北市信義區吳興街600巷76弄14號",
+        "disaster_type": "墜落、滾落",
+        "deaths": 1,
+        "injuries": 0,
+        "severity": "fatal"
+      }
+    }
+  ]
+}

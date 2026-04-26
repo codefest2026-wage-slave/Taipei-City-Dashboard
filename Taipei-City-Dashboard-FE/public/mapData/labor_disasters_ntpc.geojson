@@ -1,0 +1,498 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.388524063578,
+          25.0767405867
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "林口區",
+        "incidents": 22,
+        "total_deaths": 21,
+        "total_injuries": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.457632687622,
+          25.052213713085
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "新莊區",
+        "incidents": 20,
+        "total_deaths": 20,
+        "total_injuries": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.48550019416697,
+          25.056836200598593
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "三重區",
+        "incidents": 19,
+        "total_deaths": 19,
+        "total_injuries": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.537564025045,
+          24.976892003313
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "新店區",
+        "incidents": 15,
+        "total_deaths": 15,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.451074016025,
+          25.131961989744
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "八里區",
+        "incidents": 14,
+        "total_deaths": 17,
+        "total_injuries": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.65897689837,
+          25.063828600135
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "汐止區",
+        "incidents": 13,
+        "total_deaths": 13,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.476056278439,
+          25.01352180029
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "板橋區",
+        "incidents": 13,
+        "total_deaths": 12,
+        "total_injuries": 6
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.424518973299,
+          24.989947990975
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "樹林區",
+        "incidents": 12,
+        "total_deaths": 12,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.354367975776,
+          24.955862981712
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "鶯歌區",
+        "incidents": 10,
+        "total_deaths": 10,
+        "total_injuries": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.443191003726,
+          25.17112999464
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "淡水區",
+        "incidents": 10,
+        "total_deaths": 10,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.37178081722834,
+          24.936133579593744
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "三峽區",
+        "incidents": 8,
+        "total_deaths": 8,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.50022423896,
+          24.998103205579
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "中和區",
+        "incidents": 8,
+        "total_deaths": 8,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.473906990827,
+          25.084788010029
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "蘆洲區",
+        "incidents": 7,
+        "total_deaths": 7,
+        "total_injuries": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.458607000047,
+          24.973838014982
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "土城區",
+        "incidents": 7,
+        "total_deaths": 7,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.80832919896834,
+          25.09741712500036
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "瑞芳區",
+        "incidents": 6,
+        "total_deaths": 6,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.45723203265,
+          25.079390986394
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "五股區",
+        "incidents": 5,
+        "total_deaths": 5,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.62338,
+          25.217573
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "金山區",
+        "incidents": 3,
+        "total_deaths": 3,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.688189004403,
+          25.176173595328
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "萬里區",
+        "incidents": 2,
+        "total_deaths": 2,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.615955020122,
+          25.002437990626
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "深坑區",
+        "incidents": 2,
+        "total_deaths": 2,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.711798202817,
+          24.936647318671
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "坪林區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.548059,
+          24.8717079
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "烏來區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.643835,
+          25.009298
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "石碇區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.50111506763,
+          25.257839819071
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "三芝區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.567861000806,
+          25.291211696012
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "石門區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.90752295866,
+          25.020618003337
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "貢寮區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.431448963206,
+          25.059330996619
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "泰山區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.519872006737,
+          24.998041011858
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "永和區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.737583778626,
+          25.024924006356
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "平溪區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.859767,
+          25.036259
+        ]
+      },
+      "properties": {
+        "city": "newtaipei",
+        "district": "雙溪區",
+        "incidents": 1,
+        "total_deaths": 1,
+        "total_injuries": 0
+      }
+    }
+  ]
+}
