@@ -29,6 +29,7 @@ import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
 import SearchableViolationTable from "./components/SearchableViolationTable.vue";
+import SearchableFoodSafetyTable from "./components/SearchableFoodSafetyTable.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -225,6 +226,8 @@ function returnChartComponent(name, svg) {
 		return svg ? TextUnitChartSvg : TextUnitChart;
 	case "SearchableViolationTable":
 		return svg ? MapLegendSvg : SearchableViolationTable;
+	case "SearchableFoodSafetyTable":
+		return svg ? MapLegendSvg : SearchableFoodSafetyTable;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}

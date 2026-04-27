@@ -31,6 +31,7 @@ const parseSeries = computed(() => {
 });
 
 const totalMax = computed(() => {
+	if (props.series.length < 2 || !props.series[1]) return null;
 	if (props.series[0].name.slice(-2) === props.series[1].name.slice(-2)) {
 		let max = Math.max(
 			...props.series[0].data.map((d) => d.y),
