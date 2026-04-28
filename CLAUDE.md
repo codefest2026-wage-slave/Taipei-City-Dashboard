@@ -1,4 +1,6 @@
 # CLAUDE.md
+最高原則：
+- 必須是雙北組件，也就是 新北 以及 臺北資料都要有，任一邊沒有即不符合規則，你必須要想辦法探索到資料，如果沒有資料就直接回報
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
