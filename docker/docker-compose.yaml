@@ -29,6 +29,7 @@ services:
       VITE_TAIPEIPASS_SCOPE: ${ISSO_CLIENT_SCOPE}
     volumes:
       - ../Taipei-City-Dashboard-FE:/opt/Taipei-City-Dashboard-FE
+      - fe-node-modules:/opt/Taipei-City-Dashboard-FE/node_modules
     ports:
       - "8080:80"
     working_dir: /opt/Taipei-City-Dashboard-FE
@@ -104,6 +105,9 @@ networks:
   default:
     name: br_dashboard
     external: true
+
+volumes:
+  fe-node-modules:
 ###########################################
 ## Create docker network command sample: ##
 ## ------------------------------------- ##################################################################
