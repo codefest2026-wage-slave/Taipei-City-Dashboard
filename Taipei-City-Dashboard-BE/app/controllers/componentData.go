@@ -28,13 +28,13 @@ func GetComponentChartData(c *gin.Context) {
 	// 1.1 Get the city name from the URL
 	var query componentQuery
 	c.ShouldBindQuery(&query)
-	if !(query.City == "taipei" || query.City == "metrotaipei" || query.City == "") {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
-		return
-	}
-
 	if query.City == "" {
 		query.City = "taipei"
+	}
+
+	if !(query.City == "taipei" || query.City == "metrotaipei") {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "Invalid City Name"})
+		return
 	}
 
 	// 2. Get the chart data query and chart data type from the database
@@ -55,28 +55,29 @@ func GetComponentChartData(c *gin.Context) {
 	}
 
 	// 3. Get and parse the chart data based on chart data type
-	if queryType == "two_d" {
+	switch queryType {
+	case "two_d":
 		chartData, err := models.GetTwoDimensionalData(&queryString, timeFrom, timeTo)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
-	} else if queryType == "three_d" || queryType == "percent" {
+	case "three_d", "percent":
 		chartData, categories, err := models.GetThreeDimensionalData(&queryString, timeFrom, timeTo)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData, "categories": categories})
-	} else if queryType == "time" {
+	case "time":
 		chartData, err := models.GetTimeSeriesData(&queryString, timeFrom, timeTo)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"status": "success", "data": chartData})
-	} else if queryType == "map_legend" {
+	case "map_legend":
 		chartData, err := models.GetMapLegendData(&queryString, timeFrom, timeTo)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})

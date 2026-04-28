@@ -13,14 +13,12 @@ package app
 import (
 	"TaipeiCityDashboardBE/app/cache"
 	"TaipeiCityDashboardBE/app/initial"
-	"TaipeiCityDashboardBE/app/middleware"
 	"TaipeiCityDashboardBE/app/models"
 	"TaipeiCityDashboardBE/app/routes"
 	"TaipeiCityDashboardBE/global"
 	"TaipeiCityDashboardBE/logs"
 
 	"github.com/fvbock/endless"
-	"github.com/gin-gonic/gin"
 
 	ort "github.com/yalue/onnxruntime_go"
 )
@@ -30,66 +28,39 @@ import (
 
 // StartApplication initiates the main backend application, including the Gin router, postgreSQL, and Redis.
 func StartApplication() {
-	// 1. Connect to postgreSQL and Redis
 	models.ConnectToDatabases("MANAGER", "DASHBOARD")
+	defer models.CloseConnects("MANAGER", "DASHBOARD")
+
 	cache.ConnectToRedis()
+	defer cache.CloseConnect()
+
 	initial.InitCronJobs()
 
 	global.LMSession = models.InitLmSession()
+	defer func() {
+		global.LMSession.Destroy()
+		ort.DestroyEnvironment()
+	}()
+
 	global.LMTokenizer = models.InitTokenizer()
 
-	// 2. Initiate default Gin router with logger and recovery middleware
-	routes.Router = gin.Default()
-
-	// Set trusted proxies to ensure ClientIP() returns the user's actual IP.
-	// This is necessary when running behind a reverse proxy like Nginx.
-	// Trusting common private network ranges is a safe default for containerized environments.
-	if err := routes.Router.SetTrustedProxies([]string{"127.0.0.1", "::1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}); err != nil {
-		logs.FWarn("SetTrustedProxies failed: %v", err)
-	}
-
-	// 3. Add common middlewares that need to run on all routes
-	routes.Router.Use(middleware.AddCommonHeaders)
-	routes.Router.Use(middleware.SanitizeXForwardedFor)
-	// routes.Router.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     []string{"https://tuic.gov.taipei"},
-	// 	AllowMethods:     []string{"GET"},
-	// 	AllowHeaders:     []string{"Origin"},
-	// 	ExposeHeaders:    []string{"Content-Length"},
-	// 	AllowCredentials: true,
-	// }))
-
-	// 4. Configure routes and routing groups (./router.go)
-	routes.ConfigureRoutes()
-
-	// 5. Configure http server
 	addr := global.GinAddr
-
-	err := endless.ListenAndServe(addr, routes.Router)
-	if err != nil {
+	if err := endless.ListenAndServe(addr, routes.GetRouter()); err != nil {
 		logs.Warn(err)
 	}
 	logs.FInfo("Server on %v stopped", addr)
-
-	// If the server stops, close the database connections
-	models.CloseConnects("MANAGER", "DASHBOARD")
-	cache.CloseConnect()
-
-	// If the server stops, close the lm session and environment
-	global.LMSession.Destroy()
-	ort.DestroyEnvironment()
-
 }
 
 func MigrateManagerSchema() {
 	models.ConnectToDatabases("MANAGER")
+	defer models.CloseConnects("MANAGER")
+
 	models.MigrateManagerSchema()
 	initial.InitDashboardManager()
-	models.CloseConnects("MANAGER")
 }
 
 func InsertDashbaordSampleData() {
 	models.ConnectToDatabases("DASHBOARD")
+	defer models.CloseConnects("DASHBOARD")
 	initial.InitSampleCityData()
-	models.CloseConnects("DASHBOARD")
 }

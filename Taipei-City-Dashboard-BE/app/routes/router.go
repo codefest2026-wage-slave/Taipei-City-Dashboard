@@ -14,6 +14,7 @@ import (
 	"TaipeiCityDashboardBE/app/controllers"
 	"TaipeiCityDashboardBE/app/middleware"
 	"TaipeiCityDashboardBE/global"
+	"TaipeiCityDashboardBE/logs"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,17 @@ var (
 	Router      *gin.Engine
 	RouterGroup *gin.RouterGroup
 )
+
+func GetRouter() *gin.Engine {
+	Router = gin.Default()
+	if err := Router.SetTrustedProxies([]string{"127.0.0.1", "::1", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"}); err != nil {
+		logs.FWarn("SetTrustedProxies failed: %v", err)
+	}
+	Router.Use(middleware.AddCommonHeaders)
+	Router.Use(middleware.SanitizeXForwardedFor)
+	ConfigureRoutes()
+	return Router
+}
 
 // ConfigureRoutes configures all routes for the API and sets version router groups.
 func ConfigureRoutes() {
