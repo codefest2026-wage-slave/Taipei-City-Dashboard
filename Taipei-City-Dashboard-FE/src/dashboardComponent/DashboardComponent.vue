@@ -30,6 +30,7 @@ import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
 import SearchableViolationTable from "./components/SearchableViolationTable.vue";
 import SearchableFoodSafetyTable from "./components/SearchableFoodSafetyTable.vue";
+import RecheckPriorityRanking from "./components/RecheckPriorityRanking.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -228,6 +229,8 @@ function returnChartComponent(name, svg) {
 		return svg ? MapLegendSvg : SearchableViolationTable;
 	case "SearchableFoodSafetyTable":
 		return svg ? MapLegendSvg : SearchableFoodSafetyTable;
+	case "RecheckPriorityRanking":
+		return svg ? MapLegendSvg : RecheckPriorityRanking;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
