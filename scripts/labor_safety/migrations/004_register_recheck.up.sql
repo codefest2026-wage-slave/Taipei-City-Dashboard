@@ -44,7 +44,23 @@ INSERT INTO query_charts (
   'labor_recheck_priority',
   'two_d',
   'taipei',
-  $$SELECT company_name AS x_axis, risk_score AS data
+  $$SELECT json_build_object(
+      'company_name',    company_name,
+      'src_city',        'taipei',
+      'city',            '臺北',
+      'industry',        COALESCE(industry_name, industry_major, '未知'),
+      'total',           total_violations,
+      'labor',           labor_count,
+      'safety',          safety_count,
+      'gender',          gender_count,
+      'days_since',      days_since_last,
+      'fine',            total_fine,
+      'capital',         capital,
+      'disasters',       disaster_count,
+      'deaths',          disaster_deaths,
+      'injuries',        disaster_injuries
+    )::text AS x_axis,
+    risk_score AS data
     FROM labor_recheck_priority_tpe
     ORDER BY risk_score DESC NULLS LAST LIMIT 20$$,
   NULL,
@@ -71,10 +87,37 @@ INSERT INTO query_charts (
   'labor_recheck_priority',
   'two_d',
   'metrotaipei',
-  $$SELECT company_name AS x_axis, risk_score AS data FROM (
-      SELECT company_name, risk_score, '臺北' AS src FROM labor_recheck_priority_tpe
+  $$SELECT json_build_object(
+      'company_name',    company_name,
+      'src_city',        src_city,
+      'city',            city_label,
+      'industry',        COALESCE(industry_name, industry_major, '未知'),
+      'total',           total_violations,
+      'labor',           labor_count,
+      'safety',          safety_count,
+      'gender',          gender_count,
+      'days_since',      days_since_last,
+      'fine',            total_fine,
+      'capital',         capital,
+      'disasters',       disaster_count,
+      'deaths',          disaster_deaths,
+      'injuries',        disaster_injuries
+    )::text AS x_axis,
+    risk_score AS data
+    FROM (
+      SELECT company_name, industry_name, industry_major,
+             total_violations, labor_count, safety_count, gender_count,
+             days_since_last, total_fine, capital,
+             disaster_count, disaster_deaths, disaster_injuries,
+             risk_score, 'taipei' AS src_city, '臺北' AS city_label
+        FROM labor_recheck_priority_tpe
       UNION ALL
-      SELECT company_name, risk_score, '新北' AS src FROM labor_recheck_priority_ntpc
+      SELECT company_name, industry_name, industry_major,
+             total_violations, labor_count, safety_count, gender_count,
+             days_since_last, total_fine, capital,
+             disaster_count, disaster_deaths, disaster_injuries,
+             risk_score, 'newtaipei' AS src_city, '新北' AS city_label
+        FROM labor_recheck_priority_ntpc
     ) combined
     ORDER BY risk_score DESC NULLS LAST LIMIT 20$$,
   NULL,
