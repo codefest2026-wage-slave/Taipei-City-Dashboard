@@ -15,7 +15,6 @@ import json
 import os
 import random
 import re
-import subprocess
 import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -158,7 +157,10 @@ def geocode_or_fallback(addr, city):
 
 
 def fetch_top_employers(city):
-    """Fetch top-N rows via psql --csv (avoids host psycopg2 dependency)."""
+    """Fetch top-N rows via psycopg2 — works for local docker and cloud DB."""
+    import psycopg2
+    from _db import db_kwargs
+
     table = "labor_recheck_priority_tpe" if city == "taipei" else "labor_recheck_priority_ntpc"
     query = (
         f"SELECT id, company_name, COALESCE(address, '') AS address, "
@@ -168,16 +170,15 @@ def fetch_top_employers(city):
         f"disaster_count, risk_score "
         f"FROM {table} ORDER BY risk_score DESC NULLS LAST LIMIT {TOP_N};"
     )
-    cmd = [
-        "docker", "exec", "-i", "postgres-data",
-        "psql", "-U", "postgres", "-d", "dashboard",
-        "--csv", "-c", query,
+    keys = [
+        "id", "company_name", "address", "industry_name",
+        "total_violations", "labor_count", "safety_count", "gender_count",
+        "days_since_last", "capital", "disaster_count", "risk_score",
     ]
-    out = subprocess.check_output(cmd, text=True)
-    import csv
-    from io import StringIO
-    reader = csv.DictReader(StringIO(out))
-    return list(reader)
+    with psycopg2.connect(**db_kwargs()) as conn, conn.cursor() as cur:
+        cur.execute(query)
+        rows = cur.fetchall()
+    return [dict(zip(keys, [str(v) if v is not None else "" for v in r])) for r in rows]
 
 
 def build_geojson(rows, city_prop):
