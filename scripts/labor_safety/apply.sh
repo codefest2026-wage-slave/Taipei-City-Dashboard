@@ -11,12 +11,11 @@ docker exec -i postgres-data    psql -U postgres -d dashboard        -v ON_ERROR
 # docker exec -i postgres-manager psql -U postgres -d dashboardmanager -v ON_ERROR_STOP=1 -1 < "$ROOT/migrations/002_seed_dashboard.up.sql"
 
 echo "2/3 ETL ..."
-# Loaders added in Phase 2 — placeholders:
-# python3 "$ROOT/etl/load_violations_tpe.py"
-# python3 "$ROOT/etl/load_violations_ntpc.py"
-# python3 "$ROOT/etl/load_disasters.py"
-# python3 "$ROOT/etl/load_stats_tpe.py"
-# python3 "$ROOT/etl/generate_disaster_geojson.py"
+python3 "$ROOT/etl/load_violations_tpe.py"
+python3 "$ROOT/etl/load_violations_ntpc.py"
+python3 "$ROOT/etl/load_disasters.py"
+python3 "$ROOT/etl/load_stats_tpe.py"
+python3 "$ROOT/etl/generate_disaster_geojson.py"
 
 echo "3/3 verify row counts ..."
 docker exec -i postgres-data psql -U postgres -d dashboard -c "
