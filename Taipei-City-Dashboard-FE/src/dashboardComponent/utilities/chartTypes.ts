@@ -26,4 +26,6 @@ export const chartTypes: chartType = {
 	SearchableViolationTable: "雙北違規快查表",
 	SearchableFoodSafetyTable: "食安認證快查表",
 	RecheckPriorityRanking: "複查優先佇列引擎",
+	EmploymentAccessibilityRanking: "就業資源可及性缺口地圖",
+	DisasterVulnerability3D: "脆弱族群三維缺口熱力圖",
 };
