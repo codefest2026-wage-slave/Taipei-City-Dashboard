@@ -10,6 +10,7 @@ echo "1/3 down: dashboard registrations ..."
 docker exec -i postgres-manager psql -U postgres -d dashboardmanager -v ON_ERROR_STOP=1 -1 < "$ROOT/migrations/002_seed_dashboard.down.sql"
 
 echo "2/3 down: drop tables ..."
+docker exec -i postgres-data psql -U postgres -d dashboard -v ON_ERROR_STOP=1 -1 < "$ROOT/migrations/003_recheck_schema.down.sql"
 docker exec -i postgres-data psql -U postgres -d dashboard -v ON_ERROR_STOP=1 -1 < "$ROOT/migrations/001_create_tables.down.sql"
 
 echo "3/3 clean GeoJSON ..."
