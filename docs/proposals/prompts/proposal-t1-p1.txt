@@ -1,0 +1,90 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1: 跨橋通勤可靠度指數 (Cross-Bridge Commute Reliability Index, CBCRI)
+
+**Pitch (一句話)**: 把「從新北家到台北上班今天會遲到嗎？」變成像氣象指數一樣的每日「通勤可靠度天氣計」，並用 AI 解釋為什麼今天紅燈、給出唯一一條替代路徑。
+
+**核心受眾 (Persona)**:
+- 主受眾：住三重/蘆洲的機車族 (35 歲，每日 8:00 騎中興橋進中山區上班)、住板橋的捷運族 (28 歲，每日板南線到市府站)、住中和的雙北通勤公車族 (50 歲，搭 235/橘 5 過華中橋)。
+- 次受眾：交通局決策者 (橋梁壅塞與替代道分流的政策評估)。
+
+**雙北痛點**:
+1. 雙北以「橋」為界，**14 座主要聯外橋梁** (中興橋、忠孝橋、台北橋、華江橋、華中橋、光復橋、中正橋、福和橋、永福橋、秀朗橋、北安、社子、麥帥、堤頂大道) 是日通勤瓶頸 — 任一橋出事，全城堵。
+2. 現有官方 dashboard (見 `official-dashboard-inventory.md`) 有「交通路況」與「最新交通事故月統計」等獨立組件，**但沒有把「橋」當成主軸的整合視圖**，使用者無法回答最切身的問題：「今天從我家過哪座橋最快？」
+3. 雙北落差：台北市內 VD 偵測器密集 (`/Road/Traffic/VD/City/Taipei`)，新北側橋頭多為事故黑點但偵測點稀疏 — 凸顯資源不對稱。
+
+**核心價值 (看完能做什麼)**:
+- 早上出門前 1 個畫面看到自家所在行政區「過橋可靠度」紅綠燈與預估通勤時間。
+- AI 用一句話告訴你「今天紅燈：因為中興橋 7:42 有事故；建議改走台北橋 (+ 6 分鐘) 或改捷運 (+ 12 分鐘但 90% 機率不誤點)」。
+- 政府視角：歷史 VD + 事故疊圖找出「結構性瓶頸 vs 偶發性瓶頸」差異。
+
+**Demo 衝擊力 (大螢幕公共場合 2 分鐘腳本骨架)**:
+1. **[0:00-0:20] Hook** — 大螢幕顯示一張雙北地圖，14 座橋全閃紅。畫面中央彈出「今天平均跨橋通勤多花 17 分鐘 = 一年 68 小時 = 多上班 8.5 天」。
+2. **[0:20-1:00] 切換組件** — 點選「中興橋」→ 路況圖層、即時車速折線、橋頭事故紅點、替代橋的旅行時間對比，全部聯動高亮。下拉切「台北 / 雙北」展示資料覆蓋差異。
+3. **[1:00-1:40] AI 演示** — 自然語言輸入「我住三重，9 點前要到中山國中站」→ AI 用 RAG 檢索當下 VD/事故/Alert，生成「中興橋 → 改走台北橋；預估到站 8:54；信心度 82%」。
+4. **[1:40-2:00] 行動入口** — 一鍵「加入 Google Maps 導航」+「訂閱我的橋通勤通報」 (LINE Notify 推播；Demo 用 mock)。
+
+**關鍵雙北組件 (≥4，至少 1 個含地圖圖層)**:
+
+| # | 組件名稱 | 資料源 | 格式 | 雙北覆蓋 | 地圖層 |
+|---|---|---|---|---|---|
+| 1 | 跨橋可靠度即時地圖 (14 橋紅綠燈標) | TDX `/v2/Road/Traffic/Live/Section/City/Taipei` + `/NewTaipei`；新北市轄內橋梁 (data.ntpc UUID `38061B5C-165E-48BF-BAEC-158DBD5B2C52`) | 圖例 + 二維 | ✅ 雙北 14 橋 | ✅ Mapbox |
+| 2 | 橋頭事故熱區圖層 | 臺北市道路交通事故斑點圖 (data.taipei id `5f9da3f2-c298-4cb5-9f6c-3639d81b0e13`) + 每月新北市 A1 類交通事故 (data.ntpc UUID `5992155D-41DD-4466-98F3-CA2463835999`) | 二維 (點 cluster) | ✅ | ✅ Mapbox 同地圖第二圖層 |
+| 3 | 橋上 VD 即時車速時間序列 | TDX `/v2/Road/Traffic/Live/VD/City/Taipei` + `/NewTaipei` (歷史 7 日) | 時間序列 | ✅ | ❌ (Apexcharts) |
+| 4 | 替代橋通勤時間對比矩陣 | TDX MaaS TripPlanner `/api/maas/v2/TripPlanner` + ETag `/v2/Road/Traffic/ETag/City/Taipei`、`/NewTaipei` | 二維 (Heatmap) | ✅ | ❌ |
+| 5 | 跨橋公車車上擁擠度 (備用) | data.taipei `656784f0-f96e-4212-b027-f32724d420ad` + TDX 新北市公車預估到站 `/v2/Bus/EstimatedTimeOfArrival/City/NewTaipei` | 百分比 | ✅ | ❌ |
+
+**雙北對比角度**:
+- 同一座橋兩端：北端 (台北) VD 密集、南端 (新北) 偵測點少 → 揭露「資料量不均」是整合分析的真痛點。
+- 14 橋按「壅塞嚴重度」排名：板橋光復橋與中和秀朗橋常年穩居前 3，台北端則是中興橋 — 政府可量化「該補哪座橋的疏導預算」。
+
+**AI 應用 (選用)**:
+- 場景: 自然語言 → tool calling 路徑解釋。User 輸入「我從蘆洲到內湖科學園區」，模型呼叫 4 個 tool: `get_section_status(bridges=...)` → `get_alerts(area=...)` → `get_bus_eta(stops=...)` → `compose_recommendation(...)`，最後 llama3.3-ffm-70b 生成兩段中文：(a) 路線推薦含預估時間信心度、(b) 紅燈成因 (例：忠孝橋 8:00 事故影響到 9:30)。
+- 30 RPM 限制：每位使用者 query 預估觸發 1 次 LLM 呼叫，黑客松 demo 場合單機 demo 完全充裕；正式場景需做 token-cache + 指紋去重。
+
+**可解釋性**:
+- 模型不直接決定路線；路線是規則引擎 + MaaS API 算出，**llama 只負責「翻譯」與「敘事」**。畫面同步顯示「這句話依據哪些原始 API 回應」(展開可看 JSON)，避免黑箱。
+- Reliability Index 公式公開: `0.5 * 速度偏離歷史平均z-score + 0.3 * 事件影響半徑 + 0.2 * 替代橋備援度`。
+
+**行動入口**:
+1. 一鍵深連結 Google Maps / Apple Maps 導航。
+2. 一鍵訂閱「我的橋通勤通報」(LINE Notify, mock 版本)。
+3. 政府版：點選任意橋下拉「過去 30 天紅燈時數熱圖」→ 匯出 CSV 給交通局做政策簡報。
+
+**與現有 dashboard 差異**:
+- 既有 dashboard 有「交通路況」與「最新交通事故月統計」**獨立組件**；本提案以「橋」為敘事主軸把上述資料 **空間 join + 時序疊加 + AI 敘事**，產出單一可決策視圖。
+- 既有並未呈現「替代橋對比矩陣」與「Reliability Index」，這是新組件。
+- 既有「公車車上擁擠度」未與橋梁對應；本提案做跨橋公車路線過濾 (235/橘 5/513/615 等聯外路線)。
+
+**資料品質風險**:
+- 新北 VD 點少 → 以「橋頭」就近匹配；不足者用 ETag 補。
+- A1 統計為月資料 → 用於熱區疊圖而非即時；即時事故由 `/v2/Road/Alert` 取代。
+- 公車 N1 預估到站對新北市部分欄位可能空 (theme_01 文件附錄 5570 行已警示) → 顯示「資料來源狀態」。
+
+**技術可行性 (32 hr)**:
+- **Day 1 MVP (16 hr)**: 14 橋座標 hardcode + Mapbox 紅綠燈 marker + TDX VD 串接 + Apexcharts 速度時序 + 替代橋對比表。
+- **Day 2 polish (16 hr)**: 加事故熱區圖層、Reliability Index 計算、AI 敘事 (先 mock prompt → 接 llama)、行動入口、雙北切換動畫。
+
+**亮點 scoring (1-5 自評)**:
+- 受眾廣度 (市民+政府): 5/5
+- 雙北獨特性: 5/5 (橋是雙北 ONLY)
+- Demo 衝擊力: 5/5 (大螢幕地圖紅閃+數據驚嚇)
+- Story 完整度: 5/5
+- 應用價值 (對齊評分 40%): 5/5 (一句話可決策)
+- 技術整合深度 (對齊 30%): 4/5 (空間 join + 時序 + AI)
+- 創意突破 (對齊 30%): 4/5 (橋為主軸是新框架)
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

@@ -140,6 +140,48 @@ nav a.gold-pin::before {
 }
 #main .markdown-body a { color: var(--accent); }
 #main .markdown-body hr { background-color: var(--border); }
+#main .markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 18px 48px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(88,166,255,0.08);
+  margin: 18px 0 8px;
+  cursor: zoom-in;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+#main .markdown-body img:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 64px -16px rgba(0,0,0,0.6), 0 0 0 1px rgba(88,166,255,0.18);
+}
+#main .markdown-body img + em,
+#main .markdown-body p > img + br + em {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin-top: -4px;
+  margin-bottom: 16px;
+}
+/* lightbox */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  cursor: zoom-out;
+  padding: 32px;
+}
+#lightbox.open { display: flex; }
+#lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.8);
+}
 /* loader */
 .loader {
   text-align: center;
@@ -228,6 +270,8 @@ nav a.gold-pin::before {
     <div class="loader"><div class="spinner"></div><p>載入中…</p></div>
   </div>
 </main>
+
+<div id="lightbox"><img alt=""></div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
@@ -320,6 +364,21 @@ function route() {
 // menu toggle
 document.getElementById('menuToggle').addEventListener('click', () => {
   document.getElementById('sidebar').classList.toggle('open');
+});
+
+// lightbox: click any image in content to zoom
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = lightbox.querySelector('img');
+document.getElementById('content').addEventListener('click', (e) => {
+  if (e.target.tagName === 'IMG') {
+    lightboxImg.src = e.target.src;
+    lightboxImg.alt = e.target.alt || '';
+    lightbox.classList.add('open');
+  }
+});
+lightbox.addEventListener('click', () => lightbox.classList.remove('open'));
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') lightbox.classList.remove('open');
 });
 
 // init

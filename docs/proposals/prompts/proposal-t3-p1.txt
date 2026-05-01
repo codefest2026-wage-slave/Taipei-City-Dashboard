@@ -1,0 +1,87 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1: 「孩子能呼吸的路線」雙北兒童空污避難導航
+
+**Pitch (一句話)**: 把雙北 90 顆 PM2.5 微型感測器、AQI 站點、行道樹樹蔭、空品淨化區，串成一張「給過敏兒童家長」的上學/下課低暴露路徑地圖，AI 每天早晨生成一句話建議。
+
+**核心受眾**:
+- **第一**: 過敏兒童家長（雙北每 4 人就有 1 個過敏兒）、孕婦、慢性呼吸道患者
+- **第二**: 公園慢跑族、戶外通勤者、學校健康中心
+- **第三**: 環保局空品稽查人員（看哪裡感測值與站點背離 → 找潛在排放源）
+
+**雙北痛點**:
+- **台北盆地空污滯留**：盆地地形 + 冬季東北季風 → 板橋、土城、永和、蘆洲區常年 PM2.5 高於信義、內湖
+- **新北郊區工業排放**：新莊、樹林、五股工業區與住宅區比鄰，孩子上學經過工業區外圍即暴露
+- **行道樹分布不均**：台北行道樹 92,989 棵但集中信義/大安；新北樹林、三重密度低，跑步族沒蔭可躲
+- **空品淨化區資源傾斜**：台北空品淨化區點位 vs 新北空品淨化區點位密度差異大
+
+**核心價值（看數據→用數據→自動輔助）**:
+1. 看：地圖一眼看雙北 AQI 熱區與微型感測異常點
+2. 用：點選「我家在板橋、學校在永和」→ 系統推薦低 PM2.5 + 多樹蔭路徑
+3. 自動：AI 每天 7:00 推播家長端「今天送孩子走 XX 路最安全，因為 AQI 71 + 該路段樹蔭率 68%」
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00–0:20] Hook**：螢幕上一個小女孩咳嗽的剪影，旁邊出現「2026/05/01 板橋 AQI 132（橘色）」「PM2.5 微型感測 47 μg/m³」。文字：「這是小米的上學路。」
+2. **[0:20–1:00] 組件展示**：切換「台北/雙北」下拉 → Mapbox 地圖鋪上微型感測點熱力 + AQI 站點 + 行道樹密度層 + 空品淨化區。Apexcharts 時序圖跑出該地點過去 24h PM2.5 變化。
+3. **[1:00–1:40] AI Insight**：點「為小米規劃上學路徑」→ AI 對話框輸出：「建議走文化路一段→中山路二段，繞開民生路工地揚塵點。理由：該路段微型感測平均 PM2.5 比直線路徑低 38%，行道樹樹蔭率 72%。」
+4. **[1:40–2:00] 行動入口**：一鍵「加入家長 LINE 提醒」/ 「通報這裡空氣很糟」（送至 1999 / 環保局陳情）/ 「申請學校加裝空清」連結。
+
+**關鍵雙北組件 (≥4, ≥1 地圖)**:
+
+| # | 組件 | 資料源ID | 格式 | 雙北切換 | 地圖 |
+|---|------|---------|------|---------|------|
+| 1 | 雙北 AQI 即時熱區地圖（含 PM2.5/O3/NO2） | MOENV `AQX_P_432`（County 篩 臺北市/新北市） | 三維 + 時間序列 | ✅ | ✅ Mapbox |
+| 2 | 台北 90 顆微型感測點位 + 即時值 | data.taipei `30689973-fb92-4b3e-b46b-f6833c160e89`（布建90顆感測器位置）+ `db8b7f27-6139-43a7-addb-f45f122a47b0`（微型感測資料） | 點位 + 時序 | 台北限定/雙北擴充新北三峽站 `E413EC2B-986E-46D0-8CBD-2223CBA8CA06` | ✅ |
+| 3 | 雙北行道樹樹蔭密度圖層 | 台北 行道樹（工務局，inventory）+ 新北 `57F99AFB-94E2-4E67-9DE7-961F5E9A9E18` | 三維 / 點位聚合 | ✅ | ✅ |
+| 4 | 雙北空品淨化區 / 公園綠地避難點 | 台北 `空品淨化區` + 新北 `42D5F96B-C6F6-445A-A259-48C270B384E6` + 新北公園 `5FE3A136-29CC-4695-A17E-6636A32C3342` | 點位 + 多邊形 | ✅ | ✅ |
+| 5 | 過去 24h PM2.5 時序對比（家附近 vs 學校附近） | MOENV `AQX_P_09`（PM2.5）| 時間序列 | ✅ | ❌ Apexcharts |
+| 6 | 雙北各區 AQI 不健康日數百分比 | MOENV `AQX_P_434`（日 AQI 歷史） | 百分比 + 圖例 | ✅ | ❌ Apexcharts |
+
+**雙北對比角度**: 台北盆地+商業區（NO2/O3 主導，車輛）vs 新北工業帶（PM10/SO2 主導，固定污染源）。同一張地圖切換「台北/雙北」即顯出污染來源結構差異。
+
+**AI 應用 (llama3.3-ffm-70b-16k-chat, 30 RPM)**:
+- **個人化路徑敘事**：輸入家長住址、學校、預定時間 → 模型讀取沿途感測點 24h 資料，輸出 80 字以內中文建議（含「為什麼選這條路」）
+- **過敏程度分級**：輸入「孩子是輕度過敏 / 重度氣喘」→ 模型套用不同 PM2.5 閾值（35 vs 25 μg/m³）規劃
+- **快取策略**：路徑模板 + 行政區聚合，避免每點擊都打 API（30 RPM 限制下，預先批次生成「12 個行政區 × 3 個時段」共 36 條敘事，足夠晨間尖峰使用）
+
+**可解釋性**: AI 回答後附「資料來源：MOENV AQX_P_432 + 微型感測 db8b7f27」+ 信心分數（測站越近 → 信心越高）
+
+**行動入口**:
+1. 「加入家長提醒」(LINE Notify webhook，每天 7:00 推空氣建議)
+2. 「通報這條路臭/灰塵大」(送出至 1999 / 環保局 + 同步顯示在地圖供其他家長看)
+3. 「申請我家附近加裝感測器」(連 data.taipei 申請窗口)
+
+**與既有 dashboard 差異**:
+- 既有北市 dashboard 永續環境分頁只展示「空氣品質點位 + 公園綠地 + 行道樹」並列，沒有「我」的視角
+- 我們把空品淨化區、感測器、行道樹、AQI 串成「個人化路徑」服務，且雙北可比對
+
+**資料品質風險**:
+- 微型感測器精度低於標準站（±20%），需在 UI 標註「此為參考值」
+- 新北只有三峽一個 MOENV 標準站，須仰賴環境部 AQX_P_432 中其他鄰近站點 + 新北固定污染源 CEMS 補強
+- 行道樹資料更新慢（年更），但對「樹蔭路徑」夠用
+
+**技術可行性**: Mapbox 點聚合 + heatmap layer；Apexcharts area chart；FFM Llama 透過後端代理批次呼叫，前端 fetch cached JSON。
+
+**亮點 scoring (1–5)**:
+- 受眾廣度：5（家長/孕婦/慢跑族/通勤族）
+- 雙北獨特性：4（工業 vs 商業空污來源差異）
+- Demo 衝擊力：5（小米的上學路 — 具體人物）
+- Story 完整度：5
+- 應用價值：5（每天可用，非一次性）
+- 技術整合：4（Mapbox heatmap + AI 路徑生成）
+- 創意突破：4
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

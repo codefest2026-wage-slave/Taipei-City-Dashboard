@@ -1,0 +1,90 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3: 共融藝文導航 — AI 個人化「無障礙＋多語」文化參與助手
+
+**Pitch (一句話)**: 對身障者、長者、嬰幼兒家庭、不會中文的外籍人士來說，「藝文活動好不好玩」次要—**「我去得了嗎？聽得懂嗎？」**才是門檻；本案用 AI 把雙北所有藝文活動，重寫成「對你而言，能去嗎」。
+
+**核心受眾**:
+- 主受眾：身心障礙者（輪椅族、視障、聽障）、80+ 長者、嬰幼兒家長、外籍人士
+- 次受眾：場館經營者（看到自己場館的可及性評分）、社福團體
+- 第三方：觀傳局（無障礙觀光形象）、社會局（身障福利）
+
+**雙北痛點 (非假議題)**:
+- 雙北每月有近千場藝文活動，但**「無障礙資訊散落在各場館自家網站」**—輪椅族要逐一查
+- 北美館有電梯但松山文創園區許多展是樓中樓 / 老建築 → **「藝文活動本身的可及性」** 沒有任何公開資料
+- 嬰幼兒家庭：哺集乳室、親子廁所只有靜態地圖，沒有「結合活動的串聯」（「我帶 1 歲小孩去看展，途中能換尿布嗎？」）
+- 外籍人士：文化部 cloud.culture.tw 活動描述全為中文，新北觀光網有英日韓語但只限**觀光景點**而非當下活動
+
+**核心價值**:
+1. **可及性 score**：每場活動／每個場館計算「身障可及性、長者友善、嬰幼兒友善、外籍友善」四維分數
+2. **個人化推薦**：使用者選 persona（輪椅族／長者／帶嬰兒的爸爸／日語遊客）→ AI 重寫該活動「對你的友善度」
+3. **路徑串聯**：點推薦活動→ 自動串接「最近捷運站無障礙電梯／親子廁所／哺集乳室／AED」
+
+**Demo 衝擊力 (2 分鐘)**:
+1. **Hook (15s)**：螢幕呈現雙北本月藝文活動地圖（>800 筆）→ 切到 persona「輪椅族」→ 70% 活動消失（場館無障礙資訊缺失或不適）。一句話：「在雙北，輪椅族每 3 場展只能去 1 場。」
+2. **組件 (50s)**：下拉「雙北」→ ① 活動點位地圖（圖例切 4 種 persona） ② 活動可及性分數分布直方圖 ③ 場館 4 維度可及性百分比堆疊條 ④ 時間序列：當週活動量 × 各 persona 可參與比例
+3. **AI/Insight (30s)**：點「臺北市立美術館＋本週特展」→ AI 用輪椅族視角重寫：「主入口有斜坡、展覽位於 2F 有電梯、視障導覽僅週四、廁所無障礙在 B1...建議下午 3 點後人少時前往」
+4. **行動 (25s)**：「為我規劃一場無障礙文化下午」→ AI 串聯 (活動 → 最近捷運無障礙站 → 親子廁所 → 路徑) 一鍵存到行事曆
+
+**關鍵雙北組件 (4 必有，≥1 地圖)**:
+
+| # | 組件 | 資料源 ID | 格式 | 雙北 | 地圖 |
+|---|------|----------|------|------|------|
+| 1 | **本週藝文活動 + 可及性分層地圖**（地圖；圖例 4 persona; 下拉 北市/雙北） | 文化部 `cloud.culture.tw category=all`（即時雙北活動）+ TDX `GET /v2/Tourism/Activity/Taipei` + `GET /v2/Tourism/Activity/NewTaipei`（觀光活動）+ data.taipei `9a7af75b-9abd-4ac1-b359-685fbd7dac23`（北市文化快遞）+ data.ntpc `20A3B141-B1C1-4B61-B36A-7569E8CE24B3`（新北藝遊） | 點位 + 4 色圖例 | ✅ | ✅ |
+| 2 | **場館可及性 4 維雷達／堆疊條**（百分比） | data.taipei `f058688f-1fd0-40d4-85e6-18267484cd18`（北市藝文館所）+ `6bae44ab-1f66-4779-98b9-2f5b48276ecc`（北市表演空間）+ `2154ce42-42e6-4fdb-8356-d961cb2b0987`（北市街頭藝人展演場地）+ data.ntpc `F7A3961E-11C9-46B0-875A-285ACAF34245`（新北藝文空間）+ `C0CC9BD8-870D-454B-AFAA-277FAC536277`（新北街頭藝人展演場地）+ `64025643-34BF-489D-AC5C-13B90DDD7629`（新北市立博物館群） | Apex radar / stackedBar 100% | ✅ | — |
+| 3 | **支援設施串聯地圖層**（哺集乳室、親子廁所、無障礙廁所、AED、捷運無障礙電梯） | 環境部公廁分布（雙北既有）+ data.taipei `c4623400-4a4e-4fae-922c-d3c83ac0f064`（北市身障街頭藝人）— 反向看包容供給 + 文化資產 ID 同案 #2 | Mapbox 多圖層 toggle | ✅ | ✅ |
+| 4 | **可參與比例時間序列**（每週／4 persona 分群百分比） | 同 #1 + ETL pipeline 計算 | Apex multi-line + 百分比模式 | ✅ | — |
+| 5 (加碼) | **「為我規劃」行程卡片**（個人化路徑） | 自動串聯上述資料 + Mapbox Directions | 路徑+卡片 | ✅ | ✅ (路徑 overlay) |
+
+**雙北對比角度**:
+- 北市場館較多（藝文館所 70+ vs 新北 30+），但**無障礙比例**？要看資料才知道
+- 新北場館分散在 29 區，行動門檻高；北市集中市區，捷運覆蓋率較好
+- 外籍友善：新北觀光網有 4 語言（中英日韓），北市文化快遞主要中文 → 反差
+
+**AI 應用 (核心創新)**:
+- **可及性分數計算**：FFM 70B 讀取場館描述（場館「服務項目」、「空間」、「申請方式」欄位）→ 抽取「電梯/輪椅/手語/哺乳室/英日韓語」訊號 → 4 維 0-5 分。批次預生產，30 RPM × 24h = 4.3萬次 / 雙北 ~100 場館 + ~800 活動，綽綽有餘
+- **persona 視角重寫**：使用者選 persona → AI 將活動原始描述重寫為該 persona 視角（"從輪椅族角度，最重要的 3 件事..."）
+- **行程規劃 agent**：串接活動 → 場館 → 公廁／AED／無障礙設施 → Mapbox Directions API
+- **多語生成**：英／日／東南亞語版本
+
+**可解釋性**:
+- 可及性 4 維分數每維有 hover 顯示「AI 從哪段描述抽取出此分數」+ 原始連結
+- 任何 AI 重寫文字底下永遠有「原始活動描述」摺疊區
+- 標明「此分數為 AI 抽取，未經實地查證；歡迎場館官方更正」
+
+**行動入口**:
+- 「為我規劃一場下午」一鍵
+- 推薦活動 → 加入行事曆 (.ics) / Google Calendar
+- 「告訴場館這裡描述不準」回報按鈕（將社區回饋累積成資料）
+
+**與既有 dashboard 差異**:
+- 既有「無障礙設施／公廁／AED」是孤立資料，本案首次將之與**藝文活動**串聯
+- 既有觀光焦點是行銷／人流，本案焦點是**個別使用者能否實際參與**
+- 全雙北唯一以 persona 為核心的個人化文化儀表板
+
+**資料品質風險**:
+- 場館「無障礙程度」沒有結構化欄位 → AI 從文字抽取，會有 false positive；需在 UI 標明 "AI 推測"
+- 文化部活動 API 即時但欄位簡單（title, location, time）→ 需 cross-reference 到場館資料才能算出可及性
+- TDX 訪客模式 50 calls/IP/day → 雙北活動 API 一天打 2 次即可
+
+**技術可行性**:
+- 文化部活動 + TDX + 場館資料 ETL pipeline 簡單
+- AI 4 維分數預生產 + 快取，前端只讀 JSON
+- Mapbox Directions API 在自由方案內可用
+
+**亮點 scoring (1-5)**: 受眾 5 / 雙北獨特 4 / Demo 5 / Story 5 / 應用 5（AI 是核心） / 技術 4 / 創意 5
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

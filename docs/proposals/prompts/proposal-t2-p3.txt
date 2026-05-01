@@ -1,0 +1,89 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3：雙北災害韌性平衡儀 — 應變調度決策室
+
+> **聚焦：技術深度 + 應用價值 + 跨市應變盲區**
+
+**Pitch (一句話)**：給雙北災害應變中心一個「同框比較駕駛艙」，把雙北各區的「災情通報量／消防出勤負載／避難所開設率／防汛機具投入率」即時同步上牆，找出資源錯配與支援機會。
+
+**核心受眾 (Persona)**：
+- 主受眾：雙北災害應變中心 (EOC) 值班幕僚、消防局指揮官、市府研考會。
+- 次受眾：媒體記者（即時災情新聞）、議員（質詢資料）、學者（韌性研究）。
+
+**雙北痛點**：
+- 雙北分屬兩個 EOC，颱風夜「同一條基隆河、同一場雨」但兩市進度不同步：北市抽水機已佈設 80%、新北汐止段才 40%；資源跨市調度 = 機會但無人即時決策。
+- 既有 dashboard 著重「現況普查」，缺少**橫向對比與時序負載**：例如「凱米當晚雙北 119 報案分鐘均量」、「避難所開設率 vs 容量缺口」。
+- 媒體只能事後拼湊，市民無法即時看到應變透明度。
+
+**核心價值**：從「各市自顧自應變」→「雙北透明同步調度」的橫向整合 — 直接呼應評分主題「自動決策輔助」。
+
+**Demo 衝擊力 (2 分鐘腳本)**：
+1. **[0:00–0:20] Hook**：大螢幕分割成「雙北鏡像戰情室」，左北右新，正中央一條時間軸滑桿停在「凱米 2024-07-24 21:00」。
+2. **[0:20–1:00] 同步指標**：4 個 KPI 同時跳動 — 災害應變中心開設等級、避難所開設數/容量、抽水機佈設率、消防出動次數。觀眾立刻看到「新北抽水機投入率比台北落後 35%」紅燈。
+3. **[1:00–1:40] AI 通報摘要**：右側欄 llama3.3-ffm 每 2 分鐘自動生成「過去 30 分鐘雙北戰情摘要」3 段：戰況 / 缺口 / 建議調度。「建議：北市內湖 5 部閒置抽水機可支援新北汐止」。
+4. **[1:40–2:00] 行動入口**：跨市調度建議 → 一鍵生成正式 EOC 通報文 / 媒體新聞稿樣板 / 議員質詢備忘。
+
+**關鍵雙北組件 (≥4, ≥1 地圖層)**：
+
+| # | 組件名稱 | 資料源 ID / API | 格式 | 雙北覆蓋 | 地圖層 |
+|---|---|---|---|---|---|
+| 1 | **雙北 EOC 開設等級時序圖** (Apexcharts timeline) | 北市 `00ee0bd7...` 歷年災害應變中心 + 新北 `574D983F-8693-4161...` 成立災害應變中心 | 時間序列+圖例 | ✅ | — |
+| 2 | **雙北避難所開設率 vs 容量缺口** | 北市 `aaf97773...` 收容處所 + 12 區疏散避難地圖 + 新北 `25E439AB...` 收容處所 + `3A9D87F0...` 防空避難容量 | 二維+百分比 | ✅ | ✅ Mapbox heat |
+| 3 | **雙北防汛機具即時佈設地圖** | 北市 `cdbc2677...` 外租機械 + 新北 `FAE7F80A...` 移動式抽水機 + 新北 `3CDC5B9C...` 抽水站 | 二維點位+百分比 | ✅ | ✅（同地圖層） |
+| 4 | **雙北 119 出動負載熱圖** | 北市 `3c714c36...` 火災出動人車 + `e48c7436-c5d3...` 消防救護服務 + 新北 `3640207C-EB19...` 119 受理電話量 + `D60C65B2...` 緊急救護服務 | 時間序列+二維 | ✅ | — |
+| 5 | **雙北停班停課/管制區同步看板** | 新北 `C45E3221...` 停班停課 + `9FCADCE5...` 颱風管制區域 + 北市 `d5dd66c9...` 颱風緊急停車範圍 | 圖例 | ✅ | ✅（同地圖層） |
+| 6 | **歷史災害比例對比** (凱米/蘇拉/瑪莉亞) | 北市 `a6046af0...` 災害救助 + 新北 `381427DD...` 歷年重大災害 | 二維+百分比 | ✅ | — |
+
+**雙北對比角度**：用「同一場災害、雙市應變指標差」(時間序列+雷達圖) 找出制度差距 — 例如新北腹地大、避難所開設量需求高，但消防分隊密度低於北市。
+
+**AI 應用 (對齊 30 RPM)**：
+- llama3.3-ffm 跑「30 分鐘戰情摘要 + 跨市調度建議」：每 2 分鐘 1 次（避免超限）。
+- 結構化輸出 JSON：`{戰況: ..., 缺口: ..., 跨市調度建議: [...], 信心度: 0–1}`。
+- 通報摘要可一鍵轉「對外新聞稿」「對內 EOC 通報」「議員備忘」三種文體。
+- 為什麼選這個：對齊評分「自動決策輔助」最高層次。
+
+**可解釋性**：每個 KPI 旁顯示原始資料源連結 + 更新時間；AI 摘要強制標註「資料截止 X 時 / 計算口徑 / 排除項」。
+
+**行動入口**：
+- EOC 端：跨市調度建議單（含建議路線/時間）
+- 媒體端：即時新聞稿模板下載
+- 市民端：「雙北透明應變看板」公開頁（公益版本）
+
+**與現有 dashboard 差異**：
+這是**官方 dashboard 從未做的「雙北橫向同框」應變比較** — 把過去只能各市單看的 EOC 指標拉成同一個畫面，並用 AI 自動生成跨市調度建議。創新點在「Cross-Border Dashboard」概念。
+
+**資料品質風險**：
+- 119 受理電話量、消防出動數據多為「年度/月度」更新 → Demo 用歷史 replay (凱米當晚) 搭配模擬即時注入。
+- EOC 開設資料無 API 即時推送 → 用既有歷史 + colife.org NCDR 示警補充。
+- 跨市調度需驗證雙市資料時間一致性（風險中等）。
+
+**技術可行性 (32hr)**：
+- 4hr：資料清洗 + 雙北 schema 對齊
+- 10hr：分割鏡像戰情室 UI + 6 個 KPI 元件
+- 8hr：AI 結構化輸出 + 三類文體切換
+- 4hr：歷史 replay (凱米回放)
+- 6hr：buffer + 模擬 EOC 演練 Demo
+
+**亮點 scoring (1-5)**：
+- 受眾廣度：3（受眾偏專業端，但有公開公益版本）
+- 雙北獨特性：5（首創跨市同框比較）
+- Demo 衝擊力：4（戰情室視覺強，但需專業背景理解）
+- Story 完整度：4（凱米當晚回放）
+- 應用價值：5（直擊 EOC 真實工作流）
+- 技術整合：5（6 組件 + AI 結構化 + replay）
+- 創意突破：5（Cross-Border 概念）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

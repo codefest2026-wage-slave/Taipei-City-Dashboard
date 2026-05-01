@@ -1,0 +1,96 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts (chart library) + Mapbox GL JS (map library). NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + a Taipei/雙北 city dropdown filter.
+- Layout: read the proposal carefully and decide the panel mix yourself based on which components and AI features the proposal lists. Map should occupy a meaningful portion (40-55%) of the canvas. Each chart panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right corner. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable but small; numbers/legends accurate-looking; do NOT generate gibberish text — keep labels concise and clear.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2: 雙北末班車回家路 — 夜歸風險地圖 (Last-Mile Home Safety Index)
+
+**Pitch (一句話)**: 為夜班族、加班族、夜貓族打造的「我今晚還趕得回家嗎？」儀表板 — 倒數捷運末班、串接接駁公車與夜間 YouBike、AI 規劃今晚最安全 + 最快的回家路徑。
+
+**核心受眾 (Persona)**:
+- 主受眾：在信義區工作住林口的 30 歲行銷人 (常加班到 23:00，趕 23:48 桃園機場捷運)、住三峽鶯歌做餐飲業的 25 歲女性 (1:00 下班，公車已停)、夜班護理師 (大夜班 0:30 出門通勤至雙和醫院)。
+- 次受眾：社會局 (夜歸女性安全)、交通局 (深夜公車路線優化)。
+
+**雙北痛點**:
+1. 捷運末班車約 24:00-24:30，但**新北邊緣行政區 (三峽、鶯歌、林口、淡水、瑞芳)** 公車最後班次更早 (有些 22:30 後就停)，造成「捷運到站但公車已停」的接駁斷層。
+2. 計程車招呼站在台北市密集、新北市稀疏 — 雙北資源落差。
+3. 既有 dashboard 有「捷運首末班車時刻表」靜態資料，但**沒有「我現在從 A 點到 B 點還趕得上嗎？」的決策視圖**。
+4. 自行車竊盜 (data.taipei `5c5e9e13-9803-47c0-bbd2-1a4b3c11c49b`) 多發於深夜 — 路徑安全是真議題。
+
+**核心價值 (看完能做什麼)**:
+- 23:00 後在公司打開 → 一張地圖告訴你「下一班捷運 22 分後 (還有 6 班可搭)」、「到家 1.2 km 接駁有夜公車或 YouBike」、AI 估「成功到家機率 87%」+ 失敗備案 (深夜公車 / 計程車招呼站 / 24 hr 便利店過夜點)。
+- 看完可一鍵「現在出發」(跳深連結) 或「先吃個飯再走」(系統會在末班車剩 30 min 推播)。
+
+**Demo 衝擊力 (大螢幕公共場合 2 分鐘腳本骨架)**:
+1. **[0:00-0:20] Hook** — 全螢幕黑色背景，倒數時鐘 23:42:00 → 雙北地圖逐站「熄燈」(末班車已過的站變暗)。文字「平均每天 12,000 名雙北族卡在這條斷層線上」。
+2. **[0:20-1:00] 切換組件** — 大螢幕點選「林口站」→ 顯示 (a) 捷運末班倒數、(b) 林口接駁公車最後一班 22:50 已過、(c) 替代：YouBike 22 km / 計程車預估 480 元。下拉切雙北顯示熄燈速度差異。
+3. **[1:00-1:40] AI 演示** — 輸入「我在信義區 A4 加班到現在，住板橋」→ AI 給三方案：板南線末班 + 走 800 m 回家；公車 671 + 步行；夜間計程車。每方案標 "成功率 / 預估抵達 / 預估費用 / 安全風險"。
+4. **[1:40-2:00] 行動入口** — LINE 推播「離末班車 25 分」+ 一鍵叫車 + 夜間 24 hr 便利店清單 (備援過夜點)。
+
+**關鍵雙北組件 (≥4，至少 1 個含地圖圖層)**:
+
+| # | 組件名稱 | 資料源 | 格式 | 雙北覆蓋 | 地圖層 |
+|---|---|---|---|---|---|
+| 1 | 雙北「末班車熄燈動畫地圖」 | TDX `/v2/Rail/Metro/FirstLastTripInfo/TRTC` + 公車班表 `/v2/Bus/Schedule/City/Taipei`、`/NewTaipei` | 時間序列 (動畫) | ✅ 雙北捷運+公車 | ✅ Mapbox |
+| 2 | 末班車倒數即時看板 | TDX `/v2/Rail/Metro/LiveBoard/TRTC` + 公車預估到站 `/v2/Bus/EstimatedTimeOfArrival/City/Taipei` + `/NewTaipei` | 時間序列 | ✅ | ❌ Apexcharts |
+| 3 | 行政區「夜歸可達性指數」分布 | 上述 + 計程車招呼站 (data.taipei) + 新北通用無障礙計程車 (data.ntpc) | 百分比 (Choropleth) | ✅ 雙北 41 行政區 | ✅ Mapbox 同地圖第二圖層 |
+| 4 | 夜間 YouBike 還車空位率 | TDX `/v2/Cycling/Station/Availability/City/Taipei`、`/NewTaipei` (持續呼叫) | 百分比 + 二維 | ✅ | ❌ Apexcharts |
+| 5 | 夜間自行車竊盜熱點疊加 (避騎黑點) | data.taipei `5c5e9e13-9803-47c0-bbd2-1a4b3c11c49b` (僅台北側資料完整) | 二維 | ⚠ 台北為主，新北以行政區事故密度補 | ✅ Mapbox 第三圖層 |
+
+**雙北對比角度**:
+- 「夜歸可達性指數」做雙北 41 行政區 Choropleth：台北 12 區 vs 新北 29 區，**新北邊緣 (平溪、坪林、雙溪、貢寮、烏來、石碇、瑞芳、石門) 系統性低分**。一張圖把「公共運輸荒漠」具象化。
+- 同樣加班到 23:00，台北市民平均回家 28 min；新北邊緣行政區平均 67 min，最差 110+ min — 政策落差是「結構性，不是個案」。
+
+**AI 應用 (選用) — 對齊 2026 願景核心 (從工具→決策中樞)**:
+- 場景: **多 tool calling + RAG 對話**。User 輸入「23:30 信義 A4 出發回鶯歌，預算 200」→ llama3.3-ffm-70b 規劃：
+  - tool 1: `get_metro_last_train(from='市政府', to='鶯歌')` → 板南線末班 23:48 → 改 G 線 / 機捷
+  - tool 2: `get_bus_eta(area='鶯歌')` → 鶯歌 705 末班 23:00 已過
+  - tool 3: `get_taxi_estimate(...)` → 480 元，超預算
+  - tool 4: `get_youbike_at(station='鶯歌火車站')` → 4 台可借
+  - 回應：「板南→G→板橋轉台鐵到鶯歌→YouBike 1.5 km 回家；總時間 72 min；費用 65 元；信心度 78%。注意：台鐵末班 23:55，要在 23:48 前進站。」
+- 30 RPM 充裕：晚間使用尖峰 22:00-1:00，預估 query 量在 demo 場景內。
+
+**可解釋性**:
+- 「夜歸可達性指數」公式公開: `0.4 * 末班車剩餘班次 + 0.3 * 替代運具數 + 0.2 * 步行距離合理性 + 0.1 * 安全 (事故/竊盜)`。
+- AI 給的每個方案旁邊顯示「依據資料時間戳」+ 「若資料失效會 fallback 到 ?」。
+
+**行動入口**:
+1. 「加入末班車提醒」LINE 推播 (Demo mock)。
+2. 「現在走」深連結 Google Maps。
+3. 「夜間備援點」清單：24 hr 便利店、女性安全友善店家 (台北市友善店家資料)。
+4. 政府用：匯出「夜間運輸空白行政區清單」給社會局 / 交通局做政策參考。
+
+**與現有 dashboard 差異**:
+- 既有 dashboard 有捷運靜態時刻表 + 公車預估到站，**但未做「個人夜歸路徑」聯合視圖**。
+- 既有未做行政區「夜歸可達性指數」這種 derived metric。
+- AI 對話介面是全新的決策入口 (對齊「從看數據→用數據決策」)。
+
+**資料品質風險**:
+- 新北市深夜公車班次表完整度未知 → 預先抓樣本驗證；缺值用「最後班次標 ⚠ 不確定」。
+- 自行車竊盜資料台北為主 (id `5c5e9e13-...`) → 雙北切換時提示「新北側以事故密度替代」。
+- TDX 末班 API (`FirstLastTripInfo`) 部分路線可能無資料 → 用班表回推。
+
+**技術可行性 (32 hr)**:
+- **Day 1 MVP**: 末班熄燈動畫地圖 + 倒數看板 + 行政區指數計算。
+- **Day 2 polish**: AI tool calling 接 llama + 自行車竊盜疊圖 + 行動入口 mock + 雙北切換動畫。
+
+**亮點 scoring (1-5 自評)**:
+- 受眾廣度 (市民+政府): 5/5
+- 雙北獨特性: 5/5 (邊緣行政區末班斷層)
+- Demo 衝擊力: 5/5 (熄燈動畫 + 倒數時鐘)
+- Story 完整度: 5/5
+- 應用價值 (對齊 40%): 5/5
+- 技術整合深度 (對齊 30%): 5/5 (多 tool calling 是技術深度)
+- 創意突破 (對齊 30%): 5/5 (「可達性指數」+ AI 規劃 是新框架)
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. Ensure all rendered text is meaningful Traditional Chinese (or English numerals) — never random characters.

@@ -1,0 +1,93 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1: 雙北跨城血汗線 — 通勤勞動條件落差地圖
+
+**Pitch (一句話)**：
+住新北、上班北市的「跨城通勤族」每天多耗 1.5 小時通勤，卻常落入勞動條件較差的行業；本儀表板把雙北就業 OD、違法雇主、勞檢、職場申訴疊在同一張地圖上，讓政府看見「跨城外溢」造成的隱性過勞，讓市民知道自己是不是踩進地雷雇主。
+
+**核心受眾**：
+- 主：住新北通台北上班的中下階層勞工（板橋/三重/中和/新莊/汐止）
+- 次：勞動局督察/政策局處（決策面）、媒體（衝擊面）
+
+**雙北痛點**（不可替換的雙北議題）：
+1. 新北勞動人口大量外流台北 → 通勤族集中在低薪服務業/物流/餐飲
+2. 違法雇主資料雙北各自公告，跨城求職者沒有單一視角
+3. 北市勞檢密度 ≠ 新北勞檢密度，跨城雇主鑽漏洞
+4. 申訴與性別工作平等法案件分散兩市資料源，看不見系統性風險
+
+**核心價值**：
+把「個人血汗故事」放回「雙北空間結構」中，讓抽象的勞基法違法統計變成「我該不該換工作」的具體判斷。
+
+**Demo 衝擊力（2 分鐘 pitch）**：
+1. **Hook（0:00–0:20）**: 大螢幕打出 persona「阿芳，三重→信義區百貨樓管，月薪 32k，每天通勤 1h40m」。地圖出現一條從三重亮到信義的紅色 OD 流動線。
+2. **組件切換（0:20–1:00）**: 下拉切換到「雙北」模式，畫面同步浮現 12 條最大跨城 OD 流動線；右側 Apexcharts 堆疊長條顯示「跨城職業 vs 留在原市職業」的行業差異 → 跨城族集中在批發零售/住宿餐飲/支援服務（低薪三業）。
+3. **AI / Insight（1:00–1:30）**: 點擊任一 OD 流線，AI 助理朗讀 「住新北通台北的批發零售業勞工，2024 雙北合計勞檢違法率為 X%，較留在新北本地工作高 Y%」並顯示熱區 top3 違法雇主聚集點（去識別化匿名化呈現「行業聚集地」）。
+4. **行動入口（1:30–2:00）**: 切換到市民模式，輸入「我在板橋住、信義區做服務業，老闆要我每天加班 3 小時不給加班費」→ AI 比對勞檢公告 + 勞基法 84-1 條，回覆「您的雇主是否在違法名單／可申訴的最近窗口」並導航最近就業服務站 / 勞動檢查處。
+
+**關鍵雙北組件（≥4，含 ≥1 地圖）**：
+
+| # | 組件 | 資料源 ID / UUID | 格式 | 雙北切換 | 地圖 |
+|---|---|---|---|---|---|
+| 1 | **雙北就業 OD 流動地圖**（核心） | 主計處「臺北市勞動力及就業按半年別」`18f45255-8b16-4e6d-9a77-e48af4e497cd` + 新北勞動力 `13F9C688-9B29-48A6-AB91-2D03E34FC80B` + 行政院主計處工商普查 OD 推估 + 公教遷調 `7B223383-67D7-4C62-80F8-6C3F1AEB30B3`（用於校正） | 三維（行政區×行業×流向） | ✅ 台北/雙北 | ✅ Mapbox 弧線 OD layer |
+| 2 | **違法雇主聚集熱區地圖** | 北市「違反勞動基準法事業單位」`23630879-4926-4877-a48a-a0ae6cc2f7d5` + 新北「違法雇主資料_勞動基準法」`A3408B16-7B28-4FA5-9834-D147AAE909BF` + 新北「違法雇主資料_性別平等工作法」`D7B245C0-0BA7-4EE9-9021-5CA27AC52EB4` | 點位 + 熱區 | ✅ | ✅ Mapbox 熱區 |
+| 3 | **行業×通勤族 vs 在地族 對照堆疊長條** | 北市「就業人口之年齡結構」`df320c78-f66b-4504-92b4-cf2a2eb46f1b` + 新北「就業者年齡結構（含性別）」`C285509A-7FB2-434F-8542-0B4986C337A8` + 新北「就業者行業結構－服務業」`C839A9A7-3A90-48A5-8A55-467399E1FB11` | 二維百分比 + 圖例 | ✅ | — |
+| 4 | **勞檢密度對比柱狀** | 北市「勞動檢查概況」（line 729-740 區段）+ 北市「事業單位勞工檢查次數(82年以後)」`24c3dad7-...`（line 1198 主計處）+ 新北「歷年重大職災統計」`80743C0E-B7E7-4D4A-825B-DF354A542F65` | 時間序列 | ✅ | — |
+| 5 | **勞工資遣解僱概況時序** | 北市「臺北市勞工資遣解僱概況」`27d36de7-2fac-4b69-89a4-d99472210afe` + 新北「勞工(農民)保險及勞資爭議」`A8542567-894F-4674-88FE-C794918CF3A0` | 時間序列 + 多軸 | ✅ | — |
+| 6 | **性別工作平等申訴/職場性騷擾趨勢** | 北市「依性別工作平等法申訴概況」`2d39228b-28f1-47e9-9f54-6ec948796e99` + 新北「違法雇主資料_性別平等工作法」`D7B245C0-0BA7-4EE9-9021-5CA27AC52EB4` | 時間序列 | ✅ | — |
+
+（共 6 組件，超過 ≥4 門檻；2 個地圖層，超過 ≥1）
+
+**雙北對比角度**：
+- 新北「外流就業人口」VS 北市「外來工作人口」雙向 OD 對比
+- 同行業（如餐飲/批發零售）在雙北的違法雇主密度 / 勞檢密度比值
+- 新北性別工作平等違法案 VS 北市職場性騷擾申訴件數的成長率對比
+
+**AI 應用（llama3.3-ffm-70b-16k-chat，30 RPM 內）**：
+1. **「我的雇主是不是地雷？」自然語言查詢**：使用者輸入公司名 + 行業 + 行為描述 → 模型 (a) 對 違法雇主 CSV 做檢索（embedding 預先建好），(b) 比對勞基法條文（RAG），(c) 回覆風險等級 + 申訴管道。
+2. **OD 故事敘事 narrator**：點擊地圖任一流線時，AI 即時用 1 段 80-120 字描述「這條通勤線背後的勞動結構」（避免乾燥報表感）。
+3. **Rate limit 設計**：使用者前端 debounce 2s + 後端 token bucket 30 RPM，超出時 fallback 顯示 cached canned reply。
+
+**可解釋性**：
+- 違法雇主資料只顯示「行業群聚熱區」+「公告日期」，不顯示個別公司名稱於地圖（避免誤傷小店家），但點擊熱區可彈出官方公告原始 PDF 連結。
+- 風險等級用顏色 5 階 + 文字說明每個等級對應的勞基法條文。
+
+**行動入口**：
+- 「立即申訴」按鈕：依使用者地址自動匯出最近的勞動局申訴窗口
+- 「找職缺」按鈕：跳轉北市/新北就業服務處職缺資訊（北市 `67e8ddde-3cbb-4946-bf16-73774abcd1b9` + 新北「政府所屬就業服務據點」`4427DB9F-2EB0-4646-A291-E6031D564C4F`）
+- 「分享我的故事」匿名表單，未來可作群眾外包資料
+
+**與既有 dashboard 差異**：
+- 既有有「育嬰假性別比」「高齡就業人口年增結構」「全市年齡分區」「扶養比」，但**沒有任何 OD 通勤×勞動條件交叉組件**。
+- 既有違法雇主只是清單，本提案首次將其「空間化 + 時序化 + 行業化」。
+
+**資料品質風險**：
+- OD 流動需從通勤普查／健保投保資料推估，data.taipei 沒有直接 OD 資料 → mitigation：用「就業者行業結構」+「行政區性別人口」推估（雙北主計處資料）。Demo 階段以 2024 主計處推估值疊加，並標示「估算」浮水印。
+- 違法雇主名單為「不更新」或「每日」更新差異大 → 顯示資料快照日期。
+
+**技術可行性**：
+- 所有資料 CSV/JSON 直接抓取，雙北各 6-8 個資料集；地圖層用 Mapbox GL JS 弧線 (arc-layer) + heatmap-layer。
+- 風險：OD 弧線渲染效能（>500 條時掉幀）→ 限制顯示 top 30 流動線。
+
+**亮點 scoring（1-5）**：
+- 受眾洞察：5（雙北通勤族故事鮮明）
+- 雙北獨特性：5（OD 跨城是雙北黑客松最該被回答的議題）
+- Demo 衝擊：5（地圖 OD 弧線 + persona 故事很適合大螢幕）
+- 故事性：5（阿芳 persona 直接可上鏡）
+- AI 應用：4（NL 查地雷 + 故事敘事）
+- 技術：3（OD 推估有風險）
+- 創意：5
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

@@ -9,6 +9,9 @@
 
 ## 提案 #1: 跨橋通勤可靠度指數 (Cross-Bridge Commute Reliability Index, CBCRI)
 
+![提案 1 配置示意 — Mapbox 地圖 + 4 ApexCharts 元件](public/images/proposal-t1-p1.png)
+
+
 **Pitch (一句話)**: 把「從新北家到台北上班今天會遲到嗎？」變成像氣象指數一樣的每日「通勤可靠度天氣計」，並用 AI 解釋為什麼今天紅燈、給出唯一一條替代路徑。
 
 **核心受眾 (Persona)**:
@@ -84,6 +87,9 @@
 ---
 
 ## 提案 #2: 雙北末班車回家路 — 夜歸風險地圖 (Last-Mile Home Safety Index)
+
+![提案 2 配置示意 — Mapbox 地圖 + 4 ApexCharts 元件](public/images/proposal-t1-p2.png)
+
 
 **Pitch (一句話)**: 為夜班族、加班族、夜貓族打造的「我今晚還趕得回家嗎？」儀表板 — 倒數捷運末班、串接接駁公車與夜間 YouBike、AI 規劃今晚最安全 + 最快的回家路徑。
 
@@ -166,6 +172,9 @@
 ---
 
 ## 提案 #3: 通勤 RPG「我的雙北通勤生存日記」(Commute Quest)
+
+![提案 3 配置示意 — Mapbox 地圖 + 4 ApexCharts 元件](public/images/proposal-t1-p3.png)
+
 
 **Pitch (一句話)**: 把每天的雙北通勤變成一場 RPG 副本 — 系統用真實開放資料即時生成「今日關卡」(壅塞王、末班 BOSS、空位荒)，AI 寫成短篇敘事，玩家解鎖「通勤勳章」並在公開地圖看到全城難度排行。
 

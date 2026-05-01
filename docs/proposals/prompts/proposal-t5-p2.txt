@@ -1,0 +1,95 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2: 「補助雷達」— 雙北福利資格自然語言試算與最近資源導引
+
+**Pitch (一句話)**：
+台北 / 新北的勞動與社福補助條件不同步，市民根本搞不清楚自己「符合什麼補助 / 該去哪裡辦」；本儀表板讓市民用自然語言講一段自己的處境，AI 即時試算雙北所有可申請補助 + 在地圖上導引最近受理據點。
+
+**核心受眾**：
+- 主：求職青年、單親媽媽、低收入戶、中高齡轉職者、育兒家長、外籍移工
+- 次：里幹事 / 社工（前線轉介工具）
+
+**雙北痛點**：
+1. **同樣身分、不同補助**：北市生育獎勵、托育補助和新北的條件、金額、年齡上限都不同步，跨市搬家就要重新查
+2. **補助文件碎片化**：北市福利散在勞動局、社會局、衛生局；新北「政府福利補助資訊」每日更新（`73C24D1C-E1F0-44CE-8A31-CF835EF37E74`）但欄位純文字非結構化
+3. **里幹事憑經驗轉介**：沒有單一視窗能比對「此人 vs 雙北所有補助」
+4. **跨城求助繞遠路**：住新北但工作地在北市，到底該回新北戶籍地辦理還是北市辦理，混亂
+
+**核心價值**：
+把雙北 200+ 種補助制度「個人化試算 + 視覺化最近據點」，從報表變成行動工具。
+
+**Demo 衝擊力（2 分鐘 pitch）**：
+1. **Hook（0:00–0:20）**: persona「阿玲，板橋單親媽媽，1 個 3 歲小孩、1 個小一，去年離職現在打零工、月入 22k」，輸入到聊天框。
+2. **AI 試算（0:20–1:00）**: AI 即時跑完雙北 50+ 種主要補助，回傳一張卡片清單：「您可能符合：① 新北中低收入戶生活扶助 ② 新北托育補助 ③ 北市就業服務處職訓津貼（您工作地在北市可申請）④ 新北單親家庭補助；不符合：⑤ XX 因條件年齡」。每張卡片一行原因 + 一個「立即查辦理流程」按鈕。
+3. **地圖導引（1:00–1:30）**: 右側雙北地圖同時亮出阿玲家附近 5 個受理據點（社會局福利服務中心、就業服務站、區公所、托育資源中心、兒童托育中心），按距離排序、顯示開放時間。
+4. **進階（1:30–2:00）**: 切到「政策局處模式」：地圖換成「雙北補助申請熱區」分布；下拉雙北切換看「同一身分（單親）在雙北能領的補助總額」對比 → 衝擊力呈現政策落差。
+
+**關鍵雙北組件（≥4，含 ≥1 地圖）**：
+
+| # | 組件 | 資料源 ID / UUID | 格式 | 雙北 | 地圖 |
+|---|---|---|---|---|---|
+| 1 | **雙北補助 NL 試算助理（AI 主畫面 + RAG knowledge base）** | 新北「政府福利補助資訊」`73C24D1C-E1F0-44CE-8A31-CF835EF37E74` + 北市相關補助 dataset 群（如 `4a260f77-cd29-41be-817d-9893872c9765` 中低收入戶生活扶助、`528b8fdd-6bc1-4e84-943c-62f9edc5da3d` 低收入戶生活扶助、`a3f23233-88a9-4e15-b45f-49d41e71d496` 自立脫貧、`dde8fc5f-7033-4129-9882-f1b2e82bdf4c` 低收入戶輔導就業） | 結構化 + RAG 文本 | ✅ | — |
+| 2 | **雙北社福/勞動受理據點地圖**（核心） | 北市「就業服務處聯絡資訊」`67e8ddde-3cbb-4946-bf16-73774abcd1b9` + 北市「勞動局暨所屬機關聯絡資訊」`2fb262e5-b379-496f-9458-7f10fb9479c7` + 北市「社區公共托育家園」`7c66efcd-d073-401c-b18a-7a46728776c4` + 新北「政府所屬就業服務據點」`4427DB9F-2EB0-4646-A291-E6031D564C4F` + 新北「社區照顧關懷據點名冊」`ABFDE51A-E8C1-4B2B-BD8F-EEB548A793B7` | 點位 + ISO 同心圓 | ✅ | ✅ Mapbox |
+| 3 | **雙北補助申請熱區（脫貧/輔導就業）** | 北市「中低收入戶輔導就業服務」`dde8fc5f-7033-4129-9882-f1b2e82bdf4c` + 新北「中低收入戶人數及生活扶助」`F29F882D-BB0E-4B4A-832F-1C54CD202C93` + 新北「低收入戶人數及生活扶助」`7C280938-CD2E-4932-BBC9-8E6768DAB5B7` | 二維行政區+類別百分比 | ✅ | ✅ choropleth |
+| 4 | **雙北補助總額對比（單親/育兒/中低收三 persona）** | 北市「育嬰留職停薪勞工關懷」`ecf39112-832c-4b9d-9376-1ec3636d3c7f` + 北市「補助辦理勞動教育課程」`879c3928-394d-4a86-888f-967082fecd3c` + 新北「對民間團體補(捐)助經費表_v2」`DE7C31A8-72A6-4085-A6FC-5C399FF102EC` | 二維 + 圖例 | ✅ | — |
+| 5 | **雙北住宅補貼受理時序** | 新北「歷年住宅補貼受理情形統計表」`502D1589-3693-4F2C-9C05-22E3EC37330D` + 北市相關 | 時間序列 | ✅ | — |
+| 6 | **AI 已查補助知識庫覆蓋率指標**（meta） | 上述所有補助資料集 metadata | 百分比 | ✅ | — |
+
+**雙北對比角度**：
+- 同 persona「板橋單親媽 vs 中和單親媽 vs 大同區單親媽」可領補助總額對比
+- 新北 vs 北市同類型補助資格門檻差異（用 AI 自動萃取，視覺化矩陣）
+- 補助資金來源（公務預算 / 公益彩券盈餘 / 身心障礙者就業基金）的雙北結構差異
+
+**AI 應用**（核心亮點）：
+1. **NL → 結構化資格判斷**：使用者描述（自由文）→ llama3.3 萃取「年齡/家戶人數/收入/身分別/居住地/就業狀態」7-8 個結構化欄位 → 與 RAG 出的補助條文做規則比對 → 輸出符合度 0/1/部分符合 + 缺什麼條件。
+2. **RAG 知識庫**：先把雙北補助條文 chunk 化（每條補助一個 chunk），用 embedding 預建索引；NL query 先檢索 top-5 補助再喂給 llama3.3 做試算。
+3. **Rate limit 設計**：30 RPM → 每位使用者前端 cool-down 5s + cache 相同 query 1 小時，避免 demo 時並發爆 API。
+4. **可解釋**：每個試算結果旁邊一定附「依據條文：XX 第 X 條」連結到原始 dataset 條目。
+
+**可解釋性**：
+- 每個補助卡片顯示「資料來源 dataset 名稱 + 公告/更新日期」
+- AI 給出「不符合」結論時，必說明「缺哪個條件 + 距離達標差多少」（e.g.「您家戶月收 22k，本補助門檻為 18k 以下，差 4k」）
+- 備案：AI 不確定時 fallback 到人工窗口聯絡資訊，不裝懂
+
+**行動入口**：
+- 「現在打電話」（One-tap call 受理據點）
+- 「列印申請表」（連到 dataset 內附下載連結）
+- 「我要轉介里幹事 / 社工」（連結里長/社工聯絡）
+- 「設定提醒」（補助開放下次申請時通知）
+
+**與既有 dashboard 差異**：
+- 既有「育兒支持資源」「育嬰假性別比」是「政策端統計」；本提案是**市民端 NL 入口 + 試算 + 行動**，從未在 dashboard 出現過
+- 既有 dashboard 沒有「補助試算」這類 transactional 行動工具
+
+**資料品質風險**：
+- 新北「政府福利補助資訊」欄位非結構化純文字 → mitigation：先用 LLM 一次性離線結構化（cron 每日），demo 時讀預先 parsed JSON
+- 補助條文常變更 → 顯示「資料快照」日期，免責聲明「以官方最新為準」
+
+**技術可行性**：
+- RAG vector store（FAISS/Chroma 本地端跑），補助 chunk 約 200-500 條規模，完全可離線預建
+- llama3.3-ffm-70b-16k-chat 16k context 可一次塞 top-5 補助 + 使用者 prompt
+- 風險：LLM 試算錯誤造成法律誤導 → 強制顯示「本結果僅供參考，非法律意見」浮水印
+
+**亮點 scoring（1-5）**：
+- 受眾洞察：5（直接打中市民痛點，覆蓋多 persona）
+- 雙北獨特性：5（補助不同步是真實雙北議題）
+- Demo 衝擊：4（NL → 即時卡片很有 wow 效果）
+- 故事性：5（阿玲 persona）
+- AI 應用：5（最完整 NL + RAG + 結構化）
+- 技術：4（RAG + 結構化萃取要做但成熟）
+- 創意：5（市民端 transactional 是稀缺）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

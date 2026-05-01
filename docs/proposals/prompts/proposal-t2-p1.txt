@@ -1,0 +1,86 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1：水位剎車線 — 雙北河系 6 小時淹水倒數時鐘
+
+> **聚焦：故事性 + 大螢幕衝擊力 + 市民端**
+
+**Pitch (一句話)**：把雙北 5 條母河的水位站、雨量站、防洪閘門、抽水站串成一支「倒數中的剎車燈」，提前 6 小時告訴你「你住的那條街幾點會淹」。
+
+**核心受眾 (Persona)**：
+- 主受眾：住在汐止基隆河沿岸、三重蘆洲淡水河沿岸、新店景美溪沿岸、北市內湖大湖、社子島、關渡平原的住戶 (約 80 萬人)。
+- 次受眾：颱風夜值班的雙北水利處工程師、區公所里長、外送員/通勤族。
+
+**雙北痛點 (真實非全國通用)**：
+- 2024 年 0917 蘇拉、919 凱米雙颱期間，汐止基隆河水位逼近警戒、社子島曾局部淹水。但市民只能看到「全市風險」靜態圖，沒人告訴他「我家這條街幾點開始進水」。
+- 雙北防汛分屬不同單位：北市工務局水利處（雨水下水道）vs 新北水利局（河川閘門/橫移門/陸閘），兩市資料同一條河（淡水河、基隆河）但分屬不同 API，市民看不到全河系視角。
+- 汐止陸閘、橫移門關閉後，居民「進得去出不來」；新北市發布交通管制時，台北人完全不知。
+
+**核心價值**：從「現在淹了」→「6 小時後會淹到哪裡」的決策前移。
+
+**Demo 衝擊力（大螢幕公共場合 2 分鐘腳本，背景音效：雨聲漸強）**：
+1. **[0:00–0:20] Hook**：大螢幕中央一條會跳動的「淡水河系河流動脈圖」，左下角浮現「2024-07-24 凱米颱風 19:30」字樣，背景藍色慢慢推進，觀眾立刻看到三重、汐止、社子島亮紅。
+2. **[0:20–1:00] 倒數時鐘**：滑桿往未來推 6 小時，各水位站旁出現倒數「3hr 47min 後達警戒」，畫面上方時間序列圖（Apexcharts area）畫出 5 條河水位曲線疊加，觀眾一眼看出「基隆河比淡水河快 90 分鐘」。
+3. **[1:00–1:40] AI 敘事**：點下「翻譯成人話」按鈕，llama3.3-ffm 即時生成 3 句話：「汐止橫科里居民：目前水位 3.2m、3 小時後將達警戒水位 4.5m，建議提前移車至國道一號高架下臨停區。」雙北各區同時跳出客製化文案。
+4. **[1:40–2:00] 行動入口**：QR Code 直連個人化 LINE 推播訂閱（輸入地址→鎖定最近水位站）。
+
+**關鍵雙北組件 (≥4, ≥1 地圖層)**：
+
+| # | 組件名稱 | 資料源 ID / API | 格式 | 雙北覆蓋 | 地圖層 |
+|---|---|---|---|---|---|
+| 1 | **河系水位倒數地圖** (Mapbox 3D 河流動脈+時序滑桿) | WRA-IoW `/river/stations` (淡水/基隆/新店/景美/大漢) + 北市 `cd444840-bbfb-4b0a-bdfa-2a36d49b3794` 雨水下水道水位 | 三維點位+格網 | ✅ 共用水利署 API；新北補陸閘 `E445D330` | ✅ |
+| 2 | **6 小時雨量×水位疊加趨勢圖** (Apexcharts 雙軸 area) | CWA `O-A0002-001` 自動雨量站 + WRA-IoW 河川水位 | 時間序列 | ✅ 雙北雨量站皆有 | — |
+| 3 | **汛期防汛機械熱力圖** (移動式抽水機/外租機械即時佈設) | 北市 `cdbc2677-7f23-42e5-9b83-a57ab9bee39c` + 新北 `FAE7F80A-B075-4977-A654-BFDC11DC4CC6` + 新北抽水站 `3CDC5B9C-CE48-4DD6-8079-B9B3FA4B7296` | 二維點位 | ✅ | ✅（同地圖層） |
+| 4 | **陸閘/橫移門即時開關狀態** (汐止段+淡水河段獨家) | 新北 `E445D330-E40A-425F-AE61-3F1840A31242` 陸閘 + `C40BF768-8A36-4B99-94DB-622C27122D61` 橫移門 + WRA-IoW 防洪閘門 (台北端) | 圖例+點位 | ✅ | ✅（同地圖層） |
+| 5 | **歷史災情 vs 預測淹水落差比較表** (凱米 2024、蘇拉 2023 對比) | 北市 `a6046af0-7160-449c-a94c-2270a62bc305` 災害救助 + 新北 `381427DD-3CF4-43F4-AF0E-0AE4461F996C` 歷年重大災害 + `05E9A748-13C6-4FD0-BABB-AB48024E7F49` | 二維+百分比 | ✅ | — |
+
+**雙北對比角度**：台北盆地排水靠抽水站打回淡水河（淹水時間集中於市區內側）；新北汐止/三重靠陸閘+橫移門+抽水站三道，閘門關閉時間早於台北市 30–90 分鐘。Demo 用顏色對比展示「同一場雨，雙北防汛時序差」。
+
+**AI 應用 (對齊 30 RPM)**：
+- llama3.3-ffm-70b-16k-chat 跑「水位翻譯」：每 2 分鐘呼叫 1 次（共 30 次/hr 內），輸入地點+水位+趨勢，輸出 3 句白話風險文案。
+- 退場機制：API 失敗時 fallback 規則模板（不影響 Demo）。
+
+**可解釋性**：每張圖滑鼠 hover 顯示「資料來源 / 更新時間 / 警戒值依據」浮層；AI 文案標註「依據水利署 X 站警戒水位 4.5m 推估」。
+
+**行動入口**：
+- QR Code → LINE 訂閱（地址 → 最近 3 個水位站推播）
+- 「我家會淹嗎」一鍵試算（地址 + 過去最大降雨情境）
+- 「最近的避難所」按鈕 (使用 `aaf97773` + `25E439AB`)
+
+**與現有 dashboard 差異**：
+官方 dashboard「水位監測」「降雨淹水模擬圖」是**靜態+單市**；本案是**動態時序 + 跨市河系全鏈 + 6 小時前移**。引入新北獨有的陸閘/橫移門資料，這在現有 dashboard 不存在。
+
+**資料品質風險**：
+- WRA IoW 需 Bearer Token（會員）：黑客松前需提早申請（≥1 週）。
+- 颱風期才有真實警戒值資料 → Demo 用 2024 凱米歷史回放 (replay) 搭配當前即時數據雙模式。
+- 新北陸閘/橫移門資料更新頻率「每年」→ 用作靜態地圖層 + 模擬「關閉中」狀態切換按鈕。
+
+**技術可行性 (32hr 預算)**：
+- 8hr：水利署 API 接入 + Token 流程
+- 10hr：Mapbox 3D 河流動脈圖層 + 倒數時鐘元件
+- 6hr：AI 文案串接 (llama3.3-ffm) + cache
+- 4hr：歷史 replay 模式
+- 4hr：buffer / 文案 / Demo 演練
+
+**亮點 scoring (1-5)**：
+- 受眾廣度：5（雙北河岸 80 萬人 + 通勤族）
+- 雙北獨特性：5（同一河系卻分兩市資料，陸閘是新北獨家）
+- Demo 衝擊力：5（會跳動的河流動脈 + 倒數）
+- Story 完整度：5（凱米/蘇拉真實災難記憶）
+- 應用價值：5（從看→決策→行動三段都備）
+- 技術整合：4（水利署 Token 是風險）
+- 創意突破：4（時序+跨市+AI 翻譯）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

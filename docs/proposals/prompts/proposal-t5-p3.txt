@@ -1,0 +1,92 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3: 銀色 × 障礙就業地圖 — 雙北中高齡與身障再就業匹配落差
+
+**Pitch (一句話)**：
+60 歲的轉職長者和身障者在雙北求職時面對的是「資源在北市、需求在新北」的結構性落差；本儀表板把雙北中高齡/身障的「失業者分布」「職業重建據點」「庇護工場」「職訓課程」疊在同一張地圖，並用 AI 為個人推薦最適合的下一步。
+
+**核心受眾**：
+- 主：60 歲求職者、身心障礙就業者、二度就業婦女、家庭照顧者轉職
+- 次：勞動力重建運用處、職業重建個案管理員、身心障礙者就業基金督導
+
+**雙北痛點**：
+1. **資源錯位**：北市庇護工場 / 職重據點密度高，但中高齡和身障人口在新北更多（新北高齡化速率高於北市）
+2. **跨城就業歧視**：身障者往北市求職通勤難（無障礙設施缺口）；新北職務再設計補助 vs 北市補助條件不對齊
+3. **政策統計分散**：北市「身障就業資源地圖」`c5aafda8-ef14-4f66-a6b7-d5da995a14b5` 只有北市；新北身心障礙福利在另一資料源 → 雙北跨城找不到一站式資訊
+4. **中高齡新法上路後**：「中高齡者及高齡者就業促進法」執法落差，雙北違反案件統計分立（北市 `93b4...` 表）
+
+**核心價值**：
+把「弱勢求職媒合」從個案管理員手工 Excel 變成空間化視覺，並讓個案本人用一段話獲得個人化推薦。
+
+**Demo 衝擊力（2 分鐘 pitch）**：
+1. **Hook（0:00–0:20）**: persona「老陳，58 歲，三重住，去年家工廠關了，輕度肢障，會駕駛、會基礎電腦」。地圖打開三重周圍 → 顯示老陳 5 公里內的職業重建據點是 0 個（最近的 c5aafda8 北市職重據點都在台北橋對岸的大同區）。
+2. **資源落差展示（0:20–1:00）**: 切到雙北模式，地圖顯示雙北「身障就業資源點位」+「中高齡失業者熱區」雙圖層 → 一眼看到「需求紅 vs 資源藍」的錯位。Apexcharts 同步出「雙北 60+ 失業者佔比 vs 雙北職重據點數」橫條對比，新北缺口刺眼。
+3. **AI 推薦（1:00–1:30）**: 老陳輸入「我會開車、輕度肢障、想做不太累的工作」→ AI 比對：(a) 新北 / 北市職訓課程（庇護工場/按摩小棧/職重）(b) 北市庇護工場名冊 `fb88e4fd-c287-4fbb-91ab-0ed1fbeaf28c` (c) 新北「身心障礙福利機構」`193B12D8-9DCF-41E9-A93A-AD6266154A9C` → 推薦 3 個最匹配選項 + 路線圖。
+4. **政策面（1:30–2:00）**: 切換「政策局處模式」→ 地圖出「雙北違反中高齡就業促進法事業單位」熱區（北市 `93b4...`）→ 雙北加總後新北違法熱區意外集中在板橋／中和工業區。提供「資源該往哪佈」的建議洞察。
+
+**關鍵雙北組件（≥4，含 ≥1 地圖）**：
+
+| # | 組件 | 資料源 ID / UUID | 格式 | 雙北 | 地圖 |
+|---|---|---|---|---|---|
+| 1 | **雙北中高齡/身障就業資源地圖**（核心） | 北市「身障就業資源地圖」`c5aafda8-ef14-4f66-a6b7-d5da995a14b5` + 北市「庇護工場名冊」`fb88e4fd-c287-4fbb-91ab-0ed1fbeaf28c` + 新北「身心障礙福利機構」`193B12D8-9DCF-41E9-A93A-AD6266154A9C` + 新北「按摩小棧地圖據點」`1A552E3D-8D6D-4CC0-B8B6-B50336BD0647` + 新北「身心障礙口腔照護特約機構補助」`70BB4200-D92A-43ED-AA51-194DB7631DEB` | 點位（多類型） + 圖例 | ✅ | ✅ Mapbox cluster + 圖層篩選 |
+| 2 | **雙北中高齡失業熱區 choropleth** | 北市「失業率(年齡別)」`91c5ed02-532e-422f-826e-5f40864ff6e0` + 北市「推介就業服務按求職人年齡別」`7683f4fc-f820-48f8-a6ec-1db37479b2de` + 新北「就業者年齡結構（含性別）」`C285509A-7FB2-434F-8542-0B4986C337A8` + 新北「勞動力（含性別）」`13F9C688-9B29-48A6-AB91-2D03E34FC80B` | 三維（行政區×年齡×性別）choropleth | ✅ | ✅ Mapbox 行政區填色 |
+| 3 | **職訓人數結構（性別×年齡 heatmap）** | 北市「職業訓練人數概況」`c128c15a-34f4-4cd7-ae81-8cf8a77c33dc` + 新北「職業訓練（含性別）」`00DDE8DF-2FD9-4C48-8C44-BB54418EC09A` | 二維 heatmap | ✅ | — |
+| 4 | **違反中高齡就業促進法 / 身障就業違法雇主時序** | 北市「違反中高齡者及高齡者就業促進法事業單位」（line 1332-1343） + 北市「身障就業基金獎勵金季報」相關 + 新北「違法雇主資料_勞動基準法」`A3408B16-7B28-4FA5-9834-D147AAE909BF` | 時間序列 + 行業分組 | ✅ | — |
+| 5 | **雙北就業服務站 vs 職重據點密度對比** | 北市「就業服務處聯絡資訊」`67e8ddde-3cbb-4946-bf16-73774abcd1b9` + 新北「政府所屬就業服務據點」`4427DB9F-2EB0-4646-A291-E6031D564C4F` | 二維 + 百分比 | ✅ | （地圖共用 #1） |
+| 6 | **身心障礙福利機構服務量** | 北市「身心障礙福利機構服務使用者人數」`65ac45ff-06e0-443a-a578-88e7db811d9c` + 新北「身心障礙福利服務概況」`3475B3FE-5FD5-471F-A058-3436C3574E4C` | 時間序列 + 堆疊 | ✅ | — |
+
+**雙北對比角度**：
+- 雙北 60+ 失業熱區 vs 雙北職重據點數：算「每萬名 60+ 失業人口可用據點數」雙北落差比
+- 雙北職訓人數中 45+ 占比逐年變化
+- 雙北違反中高齡就業促進法的「行業集中度」對比
+
+**AI 應用**：
+1. **個人化推薦引擎**：使用者輸入「年齡 / 障礙類別 / 技能 / 通勤上限 / 期望工時」→ llama3.3 結合 (a) 庇護工場欄位（行業/工時）(b) 職訓課程（時間/類別）(c) 就業服務站（地點）→ 輸出 top3 推薦 + 路線。
+2. **政策敘事**：政策局處模式下，AI 一段話總結「雙北今年中高齡就業推介量 vs 失業增加量的剪刀差」並指出資源缺口熱區。
+3. **Rate limit**：個人推薦每次查詢約 1-2 RPM，足以支撐並發 demo；快取相同條件結果。
+
+**可解釋性**：
+- 推薦每個職訓/庇護工場必須說明「為什麼適合您」（年齡符合 / 通勤距離 / 技能匹配 / 工時符合）
+- 失業熱區數字必標明「資料來源 + 統計期 + 推估 caveat」（雙北行政區層級失業率有部分來自勞動部抽樣推估）
+
+**行動入口**：
+- 「立即報名職訓」（連 dataset 內報名管道）
+- 「預約職重個管」（撥打 / 線上預約）
+- 「我推薦的雇主」清單（以雇主進用身障/中高齡比例排序，正向引導）
+
+**與既有 dashboard 差異**：
+- 既有「高齡就業人口之年增結構」是純統計圖；本提案**首次將「需求熱區 + 資源點位 + 違法雇主」三者疊加**。
+- 既有「身障就業基金」只在預算表中出現，本提案把它變成「政策資金 → 受益人空間分布」的可追蹤鏈路。
+
+**資料品質風險**：
+- 新北職重據點等同類型資料未必齊全（雙北統計口徑不同）→ mitigation：用「身心障礙福利機構」作 proxy，明示「廣義據點」
+- 行政區層級失業率主計處不見得每月公布 → 用「推介求職人年齡別」資料 derived
+- 庇護工場欄位資料更新日 2022 → 標示「資料新舊」，並補充勞動部最新清單交叉驗證
+
+**技術可行性**：
+- 圖層管理用 Mapbox layer toggle，5-6 類點位 + 1 個 choropleth；複雜度中等
+- AI 推薦邏輯偏「規則 + LLM 解釋」混合，可控且可解釋
+
+**亮點 scoring（1-5）**：
+- 受眾洞察：5（中高齡 + 身障是常被忽略的雙重弱勢）
+- 雙北獨特性：4（資源錯位是真實議題；不如 #1 OD 直接但更深）
+- Demo 衝擊：4（資源 vs 需求紅藍對比視覺強烈）
+- 故事性：5（老陳 persona 直接）
+- AI 應用：4（個人推薦 + 政策敘事）
+- 技術：4（多圖層管理可行）
+- 創意：4
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

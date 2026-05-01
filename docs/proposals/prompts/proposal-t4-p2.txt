@@ -1,0 +1,84 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2：黃金 4 分鐘 — 雙北 OHCA 救活地圖 (邊陲地段救命落差)
+
+**Pitch (一句話)**：當你倒在板橋大遠百和倒在烏來瀑布前，活下來的機率差 8 倍 — 這個儀表板用 AED + 急救責任醫院 + 救護車 + 等時圈疊圖，讓市府看見「真正救不回來的地段」，讓市民看見「我這條路 4 分鐘內有沒有 AED」。
+
+**核心受眾**：
+- **市民端**：慢性病患者家屬、登山健行者、夜市/觀光客、長者照顧者
+- **政府端**：消防局救護科、衛生局醫政科、區公所
+- **公益端**：紅十字會、心臟學會、社區里長
+
+**雙北痛點**：
+1. 北市 12 行政區地小且 AED 密集 (2,728 個)，但**邊陲地帶 (北投、文山貓空) 仍有死角**
+2. 新北 29 區範圍是北市 7 倍，**雙溪、平溪、貢寮、烏來、坪林、石碇** 等山區/海岸 4 分鐘 AED 可達覆蓋率極低
+3. 北市消防 ROSC (Return of Spontaneous Circulation) 統計與 AED 分布從未疊圖比較
+4. 新北 13 家急救責任醫院集中板橋/中和/新莊，**東北角海岸與山區搶救空白**
+
+**核心價值**：用「等時圈」(isochrone) + 真實 OHCA 救活率，把「醫療資源不均」從口號變成可量化的紅色斑塊。
+
+**Demo 衝擊力 (2 分鐘 demo flow)**：
+1. **Hook (0:00-0:20)**：大螢幕雙北圖，4 分鐘 AED 等時圈疊圖 — 北市超過 95% 紅色覆蓋，**新北只有 41%，東北角有大片白色「死亡空白區」**
+2. **時間序列 (0:20-0:50)**：右側出現 Apex 折線 — 北市消防 OHCA 「AED-shock 到院前 ROSC」逐年提升 (`72c356d3` 資料)，但新北因山區救護車到場時間長，提升幅度遠低 → AI 字幕「邊陲地段每多一分鐘，存活率下降 10%」
+3. **下鑽 (0:50-1:30)**：點烏來區 → 出現「最近 AED 距 2.4 km，最近急救責任醫院 22 km，最近救護車到場時間中位數 18 min」三項紅色 KPI；切回北市萬華 → 對比同樣是「老舊聚落 + 高齡」，存活率高 4 倍
+4. **行動入口 (1:30-2:00)**：「我這條路最近 AED」按鈕 → Mapbox 路徑導航；「申請社區 AED 補助」連結；「報名 CPR 訓練」最近場次
+
+**關鍵雙北組件 (≥4，含地圖層)**：
+
+| # | 組件名稱 | 資料源 ID / UUID | 資料格式 | 雙北 | 地圖層 |
+|---|---------|------------------|---------|------|--------|
+| 1 | **AED 4 分鐘等時圈 + 急救責任醫院疊圖** (Mapbox) | TPE: AED 開放資料 (官方既有「AED資源設置分布概況」對應的 health.gov.taipei 來源) ／ NTPC: `61B29F27-219A-4394-9722-AF97A5707598` (公共場所AED) + `C2F23210-03C7-4461-B9D3-9EE4DF24C3E9` (急救責任醫院) + `713F49A4-4244-4BE7-B71D-5E83DB7859E8` (緊急醫療醫院能力分級) | 三維 (lng,lat,等時圈 polygon) | ✅ | ✅ choropleth + 點位 + isochrone |
+| 2 | **OHCA / ROSC 救活率時序** (Apex 多軸折線) | TPE: `72c356d3-9cdb-4474-8bfb-ffcc79d0d469` (消防各年度急救成功人數 — OHCA / CPR-ROSC / AED-shock-ROSC / 康復出院) | 二維時間序列 + 百分比 | TPE 主，新北以救護車營業機構數推估 | ✗ |
+| 3 | **AED 設施類型 vs 行政區覆蓋率** (Apex Heatmap) | 雙北 AED 資料聚合，依場所類型 (學校/捷運/公園/便利商店/夜市) 對行政區交叉表 | 三維熱力 (區×類型×數量) + 圖例 | ✅ | ✗ |
+| 4 | **救護車數量 vs 急救責任醫院能力** (Apex 雙圓餅 + KPI 卡) | TPE: 臺北市救護車設置 ／ NTPC: 113 年緊急醫療醫院能力分級 (重度/中度/一般) | 百分比 + 分類 | ✅ | ✗ |
+| 5 | **死因別死亡率 — 心臟疾病 / 腦血管** (Apex 柱) | TPE + NTPC 主計處死因別 (既有官方版可重用 schema 但**改用「行政區」維度** 而非市總計，這是與既有差異化點) | 二維 (區×死因) | ✅ | ✗ |
+
+**雙北對比角度**：
+- 北市 12 區 AED 4 分鐘覆蓋率 vs 新北 29 區覆蓋率 → 凸顯山區/海岸鄉鎮真實落差
+- 同樣是「夜市」場景：北市寧夏夜市 vs 新北樂華夜市 AED 密度
+- 北市急救成功率「直接從消防局」vs 新北只能從醫院能力分級反推 → 開放資料完整度差距本身就是發現
+
+**AI 應用**：
+- **個人化健康提醒**：依使用者輸入慢性病 (糖尿病/心律不整/長者) → llama 生成「你住地附近 AED 與心臟科醫院的應變建議書」
+- **救護車稀缺路段識別**：AI 分析救護車基地 + 路網 + 救援時間，推薦「下一個 AED 應放哪 5 個地點」
+- **批次預生成 29+12 = 41 區報告**，避開 30 RPM 限制
+
+**可解釋性**：
+- 等時圈計算用 Mapbox isochrone API，4 分鐘為「黃金搶救時間」公衛標準
+- 救活率公式 = `AED-shock 到院前 ROSC / OHCA 人數`，原始資料 100% 可追溯
+
+**行動入口**：
+- 「最近 AED」一鍵導航 (Mapbox Directions)
+- 「我家社區想設 AED」連到衛生局申請頁
+- 「報名 CPR + AED 訓練」連紅十字會場次
+
+**與既有 dashboard 差異**：
+- 既有官方有「AED 資源設置分布概況」**只是點圖，沒有等時圈、沒有覆蓋率、沒有救活率疊圖**
+- 既有「死因別死亡率」是市總計，**沒有與 AED 空間分布交叉**
+- OHCA 救活率資料 `72c356d3` **目前在任何官方儀表板都未被視覺化**
+
+**資料品質風險**：
+- 北市 OHCA 資料最後更新 2022，需確認近年 dump 或向消防局取
+- AED 點位地址 geocoding 需精度 ≥ 街廓
+- 救護車到場時間中位數需求向消防局取，無公開值則用「最近站點直線距離 / 平均車速 30km/h」推估，並標註「估算值」
+
+**技術可行性**：
+- Isochrone：Mapbox API 一張地圖 ~50 個 query 可接受 (依用戶下鑽請求 lazy load)
+- 等時圈計算可預先離線跑出 41 區 polygon 存 GeoJSON
+
+**亮點 scoring**：受眾 5 / 雙北獨特 5 / Demo 5 / Story 4 / AI 應用 3 / 技術 4 / 創意 4
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

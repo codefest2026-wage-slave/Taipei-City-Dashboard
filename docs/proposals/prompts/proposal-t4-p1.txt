@@ -1,0 +1,85 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1：「夜市黑歷史」雙北食安透視鏡 — 餐桌前的最後一道防線
+
+**Pitch (一句話)**：把雙北 8 千家餐飲店的「稽查違規 / 食材登錄黑歷史 / 食品抽驗不合格紀錄」串成一張可搜尋、可比對、可向 AI 問「這家店為什麼被罰」的市民級食安地圖，讓夜市消費者、家庭採買者、食物過敏者在點餐前 5 秒做決策。
+
+**核心受眾**：
+- **市民端**：夜市消費者 (士林/饒河 vs 樂華/南雅)、家庭採買者 (北市超市 vs 新北傳統市場)、食物過敏者、外送族
+- **政府端**：北市衛生局食安科、新北衛生局食藥科 — 跨市風險熱區比對、稽查資源調度
+- **媒體 / NGO**：消基會、食安記者 — 結構化違規資料庫
+
+**雙北痛點**：
+1. 北市夜市 (士林/饒河/寧夏/華西街) 觀光稽查密度高，但密集違規常被觀光稅紅利掩蓋
+2. 新北市場分散 29 區、攤商流動高，稽查家次/業者比例遠低於北市
+3. 食材登錄平台與抽驗結果分散在 5 個資料集，民眾根本查不到
+4. 現行政府網頁是「年報式」呈現，無法回答「我家附近 500m 內哪些店被抓過」
+
+**核心價值**：把官方零散開放資料變成一場「街口公審」— 由 AI 把生硬法條翻譯成「這家店去年的雞排油酸價超標 3 倍」的人話。
+
+**Demo 衝擊力 (2 分鐘 demo flow)**：
+1. **Hook (0:00-0:20)**：大螢幕雙北空拍熱力圖 — 紅點是近 12 個月食品抽驗不合格地點，士林夜市與板橋南雅夜市同時亮紅。標題：「上週你吃過的店，有 3 家在這裡」
+2. **下鑽 (0:20-0:50)**：點擊士林區 → 切換為「攤販稽查家次 vs 違規率」雙軸圖；切到新北 → 對比樂華夜市，發現「新北稽查家次只有北市 1/3，但違規率卻高 1.8 倍」
+3. **AI 敘事 (0:50-1:30)**：點某違規餐廳 pin → AI 用自然語言生成「違規履歷」：「這家麻辣燙在 113 年 8 月被驗出蘇丹色素 5 號殘留，業者於同月接受複驗仍未通過，目前處於高風險名單」
+4. **行動入口 (1:30-2:00)**：「我家附近誰被抓過？」輸入地址 → 回傳 500m 名單 + 一鍵「food.taipei 通報違規」/「掃 QR 看食材登錄履歷」
+
+**關鍵雙北組件 (≥4，含地圖層)**：
+
+| # | 組件名稱 | 資料源 ID / UUID | 資料格式 | 雙北 | 地圖層 |
+|---|---------|------------------|---------|------|--------|
+| 1 | **食安違規熱力圖 + 食材登錄密度** (Mapbox) | TPE: `09a917a0-0fb5-47e1-957c-5f1268fba517` (食品抽驗不合格清冊) + `40900e11-3002-4c9b-9e23-aa3b72e3d46e` (食材登錄平台) ／ NTPC: `078CB722-15AC-4E1E-B541-E75BFE0AA440` (食品抽驗) + `D2D69F7E-E283-406E-859B-E9E5DC98AC50` (市售抽驗合格率) | 三維 (lng,lat,違規分數) GeoJSON cluster | ✅ | ✅ heatmap + 點位 |
+| 2 | **食品衛生稽查家次 vs 違規率** (Apex 雙軸) | TPE: `7d50657f-b35b-496e-b83f-5713893b9a9e` (食品衛生管理工作 — 餐飲店/夜市攤販/傳統市場分項) ／ NTPC: 自食品抽驗資料聚合 | 二維時間序列 (月) | ✅ 切換 | ✗ |
+| 3 | **餐飲衛生分級評核業者比例** (Apex 圓餅 + Treemap) | TPE: `59579c19-a561-4564-8c0f-545bfb32c0f6` (通過餐飲衛生分級評核業者 — A/B/C 級) | 百分比 + 圖例 | ✅ (新北可用合格率 D2D69F7E 對齊) | ✗ |
+| 4 | **違規廣告處罰案件 (食/藥/醫材/化粧品)** (Apex 堆疊柱) | TPE: `80bbc388-4f91-4d3f-96f9-ab81fa33feca` ／ NTPC 食藥處公告聚合 | 二維分類時序 | ✅ | ✗ |
+| 5 | **AI 違規敘事面板** (側欄文字卡) | 任一 pin → llama3.3-ffm-70b-16k-chat 摘要 | 文字 | ✅ | ✗ |
+
+**雙北對比角度**：
+- 北市觀光夜市 (士林/饒河/寧夏) 違規率 vs 新北在地夜市 (樂華/南雅/輔大) 違規率
+- 北市稽查單位密度 vs 新北 29 區攤商每千人稽查家次落差
+- 北市食材登錄平台覆蓋率 (有自治條例強制) vs 新北市售抽驗合格率 (季更新)
+
+**AI 應用 (llama3.3-ffm-70b-16k-chat, 30 RPM)**：
+- **違規敘事生成**：將 「不符合規定原因 = 二氧化硫殘留 0.31 g/kg (限量 0.03)」翻譯成「這家蜜餞超標 10 倍，可能引發氣喘患者過敏」
+- **批次預先生成**：每家違規店家固定產出一段，存 Redis cache，避免 30 RPM 限制（共約 200-500 家 / 月，1 小時內可跑完）
+- **市民問答**：「我家延吉街附近有過敏原違規的店嗎？」→ RAG over 違規清冊 + 地理 filter
+
+**可解釋性**：
+- 違規分數公式公開：`(近 12 月不合格次數 × 嚴重度權重) - (主動登錄次數 × 0.3)`
+- 每張地圖 pin 可展開看「原始公文資料來源 + 開放資料集 ID」
+
+**行動入口 (看→決策→自動輔助)**：
+- 一鍵「1999 食安通報」電話 / line URL scheme
+- 「掃店家 QR 看食材登錄履歷」(food.taipei 既有平台 deep link)
+- 「加入個人食物過敏清單，下次經過自動 push」(localStorage MVP)
+
+**與既有 dashboard 差異**：
+- 既有北市儀表板有「合約醫院」「哺集乳室」但 **沒有食品違規地圖**
+- 既有官方「食材登錄平台」是清單頁，**沒有空間視覺化、沒有跨市對比、沒有 AI 解讀**
+- 北市無 Taipei Open Data 食安組件、新北也只有單獨的「食品抽驗合格率」表
+
+**資料品質風險**：
+- 北市食品抽驗不合格清冊 `09a917a0` 最後更新 2020-11，需向衛生局問是否有近期 dump 或改打 food.taipei API
+- 新北 `078CB722` 月更新但欄位需 API 試打確認 (無「主要欄位」資訊)
+- Mitigation：以最近 3-5 年穩定資料 demo，並標註「資料更新延遲」徽章
+
+**技術可行性**：
+- 抽驗資料 ~ 數千筆 / 年，可一次載入 GeoJSON
+- 地址需 geocoding：用 TGOS 或 Mapbox geocoder (新北攤商地址精度需後處理)
+- AI 採批次預生成 + on-demand fallback，避免 demo 卡 quota
+
+**亮點 scoring (1-5)**：受眾 5 / 雙北獨特 5 / Demo 5 / Story 5 / AI 應用 4 / 技術 3 / 創意 5
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

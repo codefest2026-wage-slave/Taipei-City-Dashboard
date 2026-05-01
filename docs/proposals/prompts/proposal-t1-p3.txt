@@ -1,0 +1,93 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3: 通勤 RPG「我的雙北通勤生存日記」(Commute Quest)
+
+**Pitch (一句話)**: 把每天的雙北通勤變成一場 RPG 副本 — 系統用真實開放資料即時生成「今日關卡」(壅塞王、末班 BOSS、空位荒)，AI 寫成短篇敘事，玩家解鎖「通勤勳章」並在公開地圖看到全城難度排行。
+
+**核心受眾 (Persona)**:
+- 主受眾：18-35 歲社群族 (Z 世代上班族 / 大學生 / 跨城實習生)，習慣 Threads/IG 分享「今日通勤多崩潰」迷因。
+- 次受眾：交通局公關部門 (用 storytelling 觸達年輕公民) + 黑客松評審 (對齊「探索 + 故事性」評審理解角度)。
+
+**雙北痛點**:
+1. 開放資料對年輕族群 = 「無聊」、「政府的東西」— **資料應用的最後一哩是「讓人想看」**。
+2. 通勤體驗在 Threads / Dcard 上常被討論 (#今日通勤地獄)，但都是片段抱怨，**沒有結構化資料對應**。本提案讓「抱怨」變成「資料證據」。
+3. 雙北落差: 「台北蛋黃 vs 新北蛋白」的通勤難度差距是日常梗 — 把它做成「副本難度」。
+
+**核心價值 (看完能做什麼)**:
+- 早上開 dashboard → 系統根據你的家/公司自動生成「今日關卡」: e.g.「板南線早高峰副本 (難度 ★★★★)、忠孝橋擁擠 BOSS 出沒、台北橋秘寶 (替代道通暢)」。
+- AI 用 100 字寫成一段「通勤日記」: 「2026/05/01 週四 8:12 — 板南線市政府站擁擠度 92%，這是你本月第 7 次紅燈。建議今日改捷運轉公車 273 → 新增勳章『繞道勇者』」。
+- 公開「雙北通勤難度排行榜」(行政區): 每天動態更新，產生分享圖片到社群。
+
+**Demo 衝擊力 (大螢幕公共場合 2 分鐘腳本骨架)**:
+1. **[0:00-0:20] Hook** — 大螢幕顯示像素風格「通勤副本選單」，41 個雙北行政區是 41 個關卡圖示。中央彈出今天的全城難度: 「★★★★☆ 高難度日 (因清明連假後第一個上班日)」。
+2. **[0:20-1:00] 切換組件** — 點選「板橋區關卡」→ 進入副本詳情：當前 boss (光復橋壅塞)、雜兵 (公車 307 擁擠 88%)、寶物 (中和線 9:08 暢通)、地圖即時動畫。下拉雙北切換看「全雙北副本熱力圖」。
+3. **[1:00-1:40] AI 演示** — 輸入「我住板橋，工作信義」→ AI 即時用 llama 生成「今日通勤短篇 (60 字)」+ 自動建議路線 + 解鎖「跨橋勇者」勳章 + 一張可分享卡片 (Mapbox snapshot + 文字)。
+4. **[1:40-2:00] 行動入口** — 「分享我的通勤日記」一鍵生成 IG 限動圖 + 訂閱每日 LINE 通勤日記。政府版：匯出「行政區通勤難度排名 + 民意敘事」給政策溝通。
+
+**關鍵雙北組件 (≥4，至少 1 個含地圖圖層)**:
+
+| # | 組件名稱 | 資料源 | 格式 | 雙北覆蓋 | 地圖層 |
+|---|---|---|---|---|---|
+| 1 | 雙北 41 行政區「今日通勤副本」熱力地圖 | TDX `/v2/Road/Traffic/Live/Section/City/Taipei` + `/NewTaipei` + 捷運 LiveBoard `/Rail/Metro/LiveBoard/TRTC` | 圖例 + 二維 | ✅ 41 行政區 | ✅ Mapbox |
+| 2 | 副本「BOSS 出沒榜」(Top10 壅塞點) | TDX VD 即時 `/v2/Road/Traffic/Live/VD/City/Taipei`、`/NewTaipei` | 二維 + 時間序列 | ✅ | ❌ Apexcharts (横條) |
+| 3 | 副本「寶物地圖」(空位率高的 YouBike + 路況暢通段) | TDX `/v2/Cycling/Station/Availability/City/Taipei`、`/NewTaipei` + Section 路況 | 百分比 | ✅ | ✅ Mapbox 第二圖層 (icon: 寶箱) |
+| 4 | 玩家通勤勳章 + 全城排行榜 | data.taipei + data.ntpc 行政區事故/壅塞統計 (歷史 7 日 VD) | 時間序列 | ✅ | ❌ Apexcharts (折線/雷達) |
+| 5 | 公車「擁擠雜兵」即時偵測 | data.taipei 公車車上擁擠度 (`656784f0-f96e-4212-b027-f32724d420ad`) + TDX 新北市公車 ETA `/v2/Bus/EstimatedTimeOfArrival/City/NewTaipei` | 百分比 | ✅ | ❌ |
+
+**雙北對比角度**:
+- 副本難度排行榜: 同樣是 8:00-9:00 通勤時段，台北市內副本平均難度 ★★★ vs 新北邊緣 ★★★★★。**用遊戲語言把雙北資源結構性差距「翻譯」給年輕人**。
+- 「跨城副本」(從新北通勤到台北) 比「市內副本」(台北→台北) 難度高 1.8x — 用 RPG 語言講出政策現實。
+
+**AI 應用 (選用) — 故事生成 + 個人化敘事**:
+- 場景: **每日敘事生成 + 勳章命名**。llama3.3-ffm-70b 接收 (a) 使用者起訖點、(b) 過去 30 天該路線歷史、(c) 今日即時資料，輸出 60-80 字「通勤日記」+ 勳章名稱 (如「霧鎖中和線」、「跨橋第三次擊敗光復橋」)。
+- 30 RPM 限制: 每位使用者每日 1 次敘事生成 (cache 24 hr)；demo 場合控制在 < 30 query。
+- 用 llama 是「故事性」必備 — 不能換成規則模板，因為敘事多樣性是體驗核心。
+
+**可解釋性**:
+- 「副本難度」公式公開 (壅塞 z-score + 公車擁擠度 + 事故密度 + 末班車緊迫度)。
+- 每段 AI 敘事尾段附「依據資料」摺疊區，攤開可看真實 API 數據與時間戳。
+- 勳章規則表完全公開，避免「黑箱演算法操弄玩家」之嫌。
+
+**行動入口**:
+1. 一鍵分享「我的通勤日記」到 IG/Threads/LINE (生成 1080x1920 圖片，含地圖 snapshot)。
+2. 訂閱每日 LINE「副本預報」(明天通勤難度預測；用 7 日 VD 歷史 + 國定假日)。
+3. 「集滿 30 個勳章換實體貼紙」(政府/交通局可做為公民教育推廣)。
+4. 政府版: 「副本難度趨勢報表」匯出給交通局做月報。
+
+**與現有 dashboard 差異**:
+- 既有 dashboard **完全沒有 RPG / 敘事 / 勳章框架** — 全新呈現典範。
+- 既有有「行政區人口分布」但沒有「行政區通勤難度排行」這種 derived gameplay metric。
+- AI 故事生成是「從工具→決策中樞」的另一種詮釋: 把資料「翻譯成情感」促成行為改變 (避開 boss、走寶物路線)。
+
+**資料品質風險**:
+- AI 敘事可能產生事實偏差 → 用 tool calling 強制 ground truth；最後一段「事實檢核」摘要顯示原始數據。
+- 副本難度公式可能被玩家詬病不公平 → 公式公開 + 提供 v1/v2 透明變更紀錄。
+- YouBike 「寶物」邏輯需動態 (每分鐘變化) → 接入 cache 與 30s polling。
+
+**技術可行性 (32 hr)**:
+- **Day 1 MVP**: 副本熱力地圖 + BOSS 榜 + 規則型勳章 (不接 AI)。Mapbox + Apexcharts 主場景能跑。
+- **Day 2 polish**: 接 llama 敘事 + 寶物地圖 + 分享卡片產生器 + 雙北切換動畫。
+
+**亮點 scoring (1-5 自評)**:
+- 受眾廣度 (市民+政府): 4/5 (Z 世代為主，政府為次)
+- 雙北獨特性: 4/5 (副本難度差距體現)
+- Demo 衝擊力: 5/5 (像素風 + 敘事卡片，公共大螢幕辨識度爆表)
+- Story 完整度: 5/5 (RPG 框架本身就是故事)
+- 應用價值 (對齊 40%): 4/5 (改變行為的力量)
+- 技術整合深度 (對齊 30%): 4/5
+- 創意突破 (對齊 30%): 5/5 (徹底跳脫傳統 dashboard 範式)
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

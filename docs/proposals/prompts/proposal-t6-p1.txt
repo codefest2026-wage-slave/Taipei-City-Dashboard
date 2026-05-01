@@ -1,0 +1,89 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1: 看不見的城市觀眾 — 雙北新住民・移工・原民 文化參與盲區地圖
+
+**Pitch (一句話)**: 把「假日去哪裡」這個被觀光行銷遮蔽的問題還給移工、新住民、都市原民——用族群人口與文化資源的疊圖，讓城市看見那些被忽略的觀眾。
+
+**核心受眾**:
+- 主受眾：新住民媽媽、東南亞移工（週末群聚於台北車站／桃園客運站／中和華新街）、都市原住民（台北南港/萬華＋新北汐止/三重）
+- 次受眾：民政局／原民會／勞工局新住民事務、社區營造工作者、書店/教會/同鄉會
+- 第三方：研究多元文化的研究員、想做包容性節目的策展人
+
+**雙北痛點 (非假議題)**:
+- 北市文化資源金額密集（北美館/兩廳院/松菸/華山）但**距離移工生活圈遙遠**；新北中和、三重、新莊聚集大量印尼/越南/菲律賓移工與新住民，卻幾乎沒有對應語言的文化活動
+- 客委會經費年年成長但**集中在客家文化園區（三峽/北市苗圃）**，與東南亞新住民完全脫鉤
+- 都市原住民從花東移居後，文化據點僅原民會「部落大學」（北市1據點）+ 新北原民團體散落各區，與漢人主流場館（北美館/淡水古蹟）資源差距巨大
+
+**核心價值**:
+1. **看見**：族群人口熱區 vs 文化補助流向 → 不對稱的視覺衝擊
+2. **解釋**：點任一行政區，AI 生成「該區某族群的週末選擇」摘要
+3. **行動**：列出該族群該行政區「同鄉會／教會／社區關懷據點／圖書館多語藏書」的具體入口
+
+**Demo 衝擊力 (2 分鐘)**:
+1. **Hook (15s)**：開場大螢幕雙北族群人口熱圖 → 中和華新街 18% 新住民、汐止 7% 都市原民 → 但旁邊套上「文化補助金額熱圖」，金錢全部集中信義/大安/松山。一句字幕：「13 萬移工的週末，城市給了什麼？」
+2. **組件 (45s)**：下拉切到「雙北」→ 三層地圖：① 各區新住民/原住民人口 choropleth ② 文化補助金額點位 ③ 文化據點+圖書館+寺廟+同鄉會點位。明顯資源錯位。
+3. **AI/Insight (30s)**：點選「中和區」→ AI 用印尼語/中文摘要：「中和區共有 1.2 萬印尼籍人口，最近文化活動在...，週日華新街有清真禮拜，新北圖書館中和分館有 X 本印尼文藏書」
+4. **行動 (30s)**：切到 persona「Siti，週日休假的印尼看護工」→ 推薦清單：① 華新街東協廣場聚會 ② 中和圖書館印尼文藏書 ③ 即將舉辦的新住民演藝活動
+
+**關鍵雙北組件 (4 必有 + 1 加碼，≥1 地圖)**:
+
+| # | 組件 | 資料源 ID | 格式 | 雙北 | 地圖 |
+|---|------|----------|------|------|------|
+| 1 | **族群人口分布熱圖**（地圖；下拉 北市/雙北） | data.taipei `8d1d9b1b-43ff-4c64-a0d9-9aa35b469ee5`（臺北市新住民統計）+ data.ntpc `3E0EC8A1-2E99-403B-B224-9335E24998F3`（新住民人口）+ `0DE9326D-22ED-4AC7-8491-65BEC2758AF9`（新北各區原住民人數） + `349b878c-d404-4f51-916c-f8dd6867ecf9`（北市原住民部落大學） | 二維 / 行政區 choropleth | ✅ | ✅ |
+| 2 | **文化補助金額流向 vs 族群人口錯位散點圖**（百分比＋時間序列） | data.taipei `3734ac48-c652-4ef8-b630-fb12ef63e56a`（北市文化局藝文補助案）+ `88e93699-7e06-4b10-a2c4-6746eb6d951e`（北市補助原住民民俗文化）+ data.ntpc `B3E2C8A4-62CE-41B1-9FDD-61F70CEF7721`（新北辦理演藝活動補助要點）+ `F3782313-6F12-4958-A5B3-3D29F72FAC84`（新北傑出演藝團隊獎勵） | Apex scatter + bar；x=族群人口比、y=人均補助 | ✅ | — |
+| 3 | **共融文化據點地圖層**（地圖；含圖例切換 寺廟/教會/客家/原民/新住民據點/圖書館） | data.taipei `cba93d7e-0f77-4c94-88ab-c91cb1b8a3ae`（北市新住民社區關懷據點）+ `b5f043ce-00be-4404-b975-02e29fe10f51`（北市寺廟一覽）+ `53ebc3f1-fe8e-4232-89bd-08c8f2ab618e`（北市客家文化主題公園）+ data.ntpc `7718C478-8C01-4570-8B12-643DA2285DEC`（新北原民團體）+ `F0E1879F-3C5B-429F-A12B-9540ACAC26E8`（新北寺廟）+ `6BE524A8-EF72-4CD7-82DE-E75C9F46821D`（新北圖書館）+ `4001B8D2-2B1D-4466-8515-134326471842`（新北客家文化活動）| 點位 + Mapbox 圖例分層 | ✅ | ✅ |
+| 4 | **族群週間／週末文化活動量趨勢**（時間序列 line） | data.taipei `9a7af75b-9abd-4ac1-b359-685fbd7dac23`（北市文化快遞）+ data.ntpc `20A3B141-B1C1-4B61-B36A-7569E8CE24B3`（新北藝遊）+ 文化部 `cloud.culture.tw category=3` 傳統藝術 (含原住民歌舞)+ category=7 講座 → 用關鍵字過濾 (新住民/客家/原民/東南亞/移工) | Apex multi-line；週幾 × 族群類別 | ✅ | — |
+| 5 (加碼) | **「Siti 的週日」persona 行動入口卡** | 上述資料合併 + AI 摘要 | 卡片 + 列表 | ✅ | — |
+
+**雙北對比角度**:
+- **錯位象限**：北市原民人口低但部落大學集中、補助高；新北原民人口高但文化補助稀缺
+- **新住民倒掛**：新北中和/三重新住民比例 > 北市，但新住民據點北市較多
+- **客家不平衡**：新北三峽客家文化園區規模大、北市客家公園小但人流旺
+- **圖書館多語藏書**：直接揭露雙北圖書館多語資源差距
+
+**AI 應用 (FFM 70B，30 RPM 預算)**:
+- **族群觀點 RAG**：使用者點任一行政區 + 族群下拉 → AI 用該族群（印尼/越南/泰/阿美/排灣）視角生成「週末文化選擇摘要」（含同鄉會、宗教場所、圖書館多語藏書、近期活動）
+- **多語自然語言查詢**："我是越南媽媽住中和，這週末有沒有越文活動？" → AI 解析地點＋語言＋日期 → 篩選文化部活動 API
+- **快取策略**：12 個行政區 (北市) + 29 區 (新北) × 5 族群 = 205 個摘要，半夜批次預生產，前端只查快取，避免 30 RPM 上限
+
+**可解釋性**:
+- 每張地圖都有圖例＋時間戳＋資料來源連結
+- 補助錯位散點上每點 hover 顯示原始補助案
+- AI 摘要附「資料根據」連結（哪個資料集、哪一筆活動）
+
+**行動入口**:
+- 點熱區 → 「該區可去的 5 個地方」
+- 「我是 [新住民/移工/都市原民]」persona switcher → 個人化推薦
+- 列表全部含 Google Maps 導航 + 該設施聯絡電話／網址
+
+**與既有 dashboard 差異**:
+- 既有「友善店家」是商業視角（外國旅客/觀光客），本案是**生活視角**（在地非華語人口）
+- 既有「觀光景點直播」是行銷導向，本案揭露**未被行銷的文化據點**（同鄉會、教會、寺廟、圖書館）
+- 既有族群相關只有「各行政區性別／年齡人口」，本案首次將**族群＋文化＋語言友善**三軸交叉
+
+**資料品質風險**:
+- 北市原住民「部落大學」資料集較舊（時間數列至 2020）
+- 新住民統計多為性別求職率（非文化活動參與）→ 需用代理變數（教會點位、同鄉會、清真寺）
+- 文化部 cloud.culture.tw 活動沒有「目標族群」標籤 → 用標題關鍵字（客家/原民/新住民/東南亞/越南/印尼）正則篩選（會有 false negative，需在 demo 時誠實揭露）
+
+**技術可行性**:
+- 所有資料 CSV/JSON，可離線預處理為 GeoJSON（行政區 boundary 可用 OSM）
+- Mapbox 標準分層 + Apexcharts scatter/bar/line 都是已支援
+- AI 預批次 + 即時 single-shot fallback，30 RPM 內可控
+
+**亮點 scoring (1-5)**: 受眾 5 / 雙北獨特 5 / Demo 5 / Story 5 / 應用 4 / 技術 4 / 創意 5
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

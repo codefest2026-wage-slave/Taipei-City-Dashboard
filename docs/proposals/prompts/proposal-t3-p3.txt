@@ -1,0 +1,89 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3: 「淡水河污染溯源」雙北河岸跑者 × 工業排放偵探
+
+**Pitch (一句話)**: 河岸跑者今天能不能跑？工廠排放查得到嗎？把河川水質、固定污染源 CEMS、土壤地下水列管場址、揚塵感測四層串成「淡水河流域污染溯源圖」，AI 從上游往下游推 — 「這次 BOD 飆高最可能來自新莊區 XX 段」。
+
+**核心受眾**:
+- **第一**: 雙北河濱跑者/騎車族（大佳、河濱、新店溪、大漢溪、淡水河沿線）
+- **第二**: 河岸住戶、釣客、學校環境教育課程
+- **第三**: 環保稽查員（事件發生時的線索面板）
+
+**雙北痛點**:
+- **河流跨市流動**：淡水河從新店、新北市出發，流經台北萬華/大同，再往新北蘆洲、八里出海。**上游污染下游受害**，但兩市稽查各自為政
+- **新北工業排放 vs 台北末端**：新北有大量列管土壤/地下水場址（樹林、土城、新莊舊工業區），雨後地下水帶污染入河
+- **河床揚塵雙北通病**：枯水期大漢溪、淡水河河床裸露揚塵，上風新北、下風台北都受害
+- **河岸跑者沒地方查當日水質**：環境部 WQX_P_01 有資料但市民不知道、也沒視覺化
+
+**核心價值**:
+1. 看：Mapbox 顯示淡水河流域沿線水質測站 RPI 分級（綠/黃/橘/紅）+ CEMS 工廠 + 列管場址
+2. 用：跑者點「新店溪河濱」→ 顯示今日 RPI、附近上游 24h 內有無告警、空氣 PM2.5、揚塵感測
+3. 自動：AI 偵探模式 — 輸入「2026/04/30 新店溪 BOD 飆高」→ 模型沿河上游 5km 內掃 CEMS、列管場址、降雨，輸出最可能成因 3 項
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00–0:20] Hook**：河岸跑者背影 + 字幕「今天可以下水嗎？」 — 點河岸點，跳出 RPI 「中度污染（橘色）」「pH 8.9 偏鹼」
+2. **[0:20–1:00] 組件**：Mapbox 淡水河流域全景，沿河顯示水質測站（顏色 = RPI）、CEMS 工廠 icon、列管場址 polygon、河床揚塵感測器。切「台北/雙北」 — 雙北才能看到完整的河流上下游關係。
+3. **[1:00–1:40] AI 溯源**：點「為什麼今天新店溪 BOD 突然 7.2？」→ AI 回：「過去 24h 上游 5km 內，新店區安坑工業段 CEMS 顯示 NH3-N 升高 + 昨晚 35mm 降雨可能沖刷土壤液化潛勢區。建議 1-2 日內避免接觸河水。」
+4. **[1:40–2:00] 行動**：「不要在這裡跑」推播 → LINE / 「通報污染」 → 1999 / 「下載今日水質報告」 → PDF
+
+**關鍵雙北組件 (≥4, ≥1 地圖)**:
+
+| # | 組件 | 資料源ID | 格式 | 雙北 | 地圖 |
+|---|------|---------|------|------|------|
+| 1 | 淡水河流域水質測站 RPI 分級地圖 | MOENV `WQX_P_01`（含淡水河、基隆河、新店溪、大漢溪測站） | 點位 + 時序 + 圖例 | ✅（流域跨雙北） | ✅ Mapbox |
+| 2 | 雙北固定污染源 CEMS 即時排放 | 新北 `D7330AE1-5869-4EE7-8821-03B1D7D13822`（即時）+ MOENV `AQX_P_19`（雙北工廠） | 點位 + 時序 | ✅ | ✅ |
+| 3 | 雙北土壤及地下水列管場址 | 新北 目前 `9987DC63-2C8D-4C75-903D-6EBD82D1792D` + 已解除 `198E688E-E6FE-49EB-8FB0-F29AAA4834A4` + 台北 `臺北市土壤及地下水污染控制場址`（inventory line 1499） | 點位 + 多邊形 | ✅ | ✅ |
+| 4 | 河床揚塵感測 + AQI 對照 | WRA `IoW-DustEmission`（含新北河床）+ MOENV `AQX_P_432` | 時間序列 + 點位 | ✅ | ✅ |
+| 5 | 台北河川水質檢測月度趨勢 | data.taipei `759db528-77b5-4aa3-b6fa-2b857890214e` | 時間序列 | 台北 + 雙北擴充 WQX_P_01 | ❌ Apexcharts |
+| 6 | 新北河濱公園/台北河濱跑步路線疊加 | 新北 `8D44BFAB-002C-4403-A283-D77C752AA1C3`（河濱公園設施）+ 台北 `健走步道 fde2a190-8299-4f70-9a1f-6c223109b512` | 點位 + 線 | ✅ | ✅ |
+| 7 | 沿河雨量 24h（沖刷成因關聯） | CWA `O-A0002-001`（雙北雨量站） | 時間序列 | ✅ | ❌ |
+
+**雙北對比角度**: 上游（新北新店、土城、樹林、新莊）排放 → 下游（台北萬華、大同、士林）水質。**沒有雙北就沒有故事**。AI 的偵探推理也只在跨市資料下才成立。
+
+**AI 應用 (污染溯源 + 環境敘事)**:
+- **溯源推理（最有創意）**：給定一個下游測站 + 異常時間，模型輸入上游 5km 內 CEMS + 列管場址 + 24h 降雨 → 輸出「3 個可能成因 + 信心分數」（不是給診斷，是給線索）
+- **環境敘事（市民端）**：給定河岸座標 → 模型輸出「這條河流經 X 區 Y 工業帶 Z 公里，主要影響因子⋯⋯」
+- **30 RPM 約束**：溯源查詢按使用者點擊節流（每 30 秒 1 次），敘事預生成（雙北 ~30 條河段 × 1 條 = 30 條，日更）
+
+**可解釋性**: AI 給的「可能成因」明確列出哪個 CEMS 點位、哪個列管場址 ID、哪個雨量站。可信度標籤（高/中/低）。
+
+**行動入口**:
+1. 「LINE 訂閱我家河岸的水質」
+2. 「我看到河面有油 → 通報」（一鍵送 1999 + 經緯度）
+3. 「邀請學校來這做環境教育」（連環境教育設施場所列表）
+
+**與既有 dashboard 差異**:
+- 既有 dashboard 永續環境分頁僅有「空氣品質」「公園綠地」「行道樹」三個圖卡，**沒有河川水質單獨組件**，更沒有跨市流域視角
+- 我們做的是**用空間關係（河流走向）+ 時間關係（雨後 24h）+ AI 推理 串成跨市環境正義工具**
+- 既有 dashboard 多為「現況看板」，我們是「偵探面板」
+
+**資料品質風險**:
+- WQX_P_01 月更（採樣後），即時性差 → 補 CEMS 即時 + 河水位即時呈現「動」
+- 列管場址 polygon 不一定齊全（多為點位） → UI 用緩衝圈表示
+- AI 推理為「可能成因」非「定論」，UI 上必須清楚標示「線索而非結論」（避免誤導/法律風險）
+
+**技術可行性**: Mapbox line + point 多層；Apexcharts 多軸時序；FFM Llama 透過 prompt template 限定輸出格式（JSON: `{causes: [{source_id, type, confidence}], summary}`）便於前端結構化渲染。
+
+**亮點 scoring (1–5)**:
+- 受眾廣度：3（河岸族群較窄但情感濃）
+- 雙北獨特性：5（流域跨市，沒雙北就無題）
+- Demo 衝擊力：5（偵探推理超有戲）
+- Story 完整度：5
+- 應用價值：4（河岸跑者每週可用）
+- 技術整合：5（最多資料源、AI 推理最深）
+- 創意突破：5（AI 溯源是其他主題沒有的玩法）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

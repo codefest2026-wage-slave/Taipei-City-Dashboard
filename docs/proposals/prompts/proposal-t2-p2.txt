@@ -1,0 +1,87 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2：弱勢盲區雷達 — 山坡老聚落 × 獨居長者疏散沙盤
+
+> **聚焦：AI 創新 + 社會公益 + 雙北獨特性**
+
+**Pitch (一句話)**：把雨量警戒值、土石流潛勢、消防搶救困難地區、長照據點、避難收容容量五層疊起來，用 AI 為每個「保全戶」生成一張個人化疏散卡片 — 解決「下了多少雨需要疏散誰」的最後一哩。
+
+**核心受眾 (Persona)**：
+- 主受眾：北市文山/北投/士林山坡 34 處老舊聚落、新北汐止/瑞芳/三峽/烏來山區獨居長者與身障家戶（土石流保全戶 279 戶/實居 227 人 + 列管邊坡 34,849 處）。
+- 次受眾：里長、社區守望相助志工、消防分隊長、社會局長照管理員。
+- 為什麼選這群：他們是**官方範例最常忽略的對象**——既不會看 dashboard，也常因獨居而錯過 LINE 警報。
+
+**雙北痛點**：
+- 北市山坡地老舊聚落 24hr 累積雨量達 300mm 即「黃色警戒勸告疏散」、400mm 紅色強制疏散；但**雨量警戒值是「集體閾值」**，個別保全戶（含獨居老人/慢性病患/輪椅族）疏散需求差異極大，沒人客製化。
+- 新北山區（瑞芳、烏來、雙溪）腹地廣、消防分隊距離保全戶常 >5km，「火災搶救困難地區」與「土石流保全戶」高度重疊，這個交集**從未被視覺化**。
+- 雙北邊界（如汐止-內湖、新店-文山）山系連通但行政分屬兩市，疏散路徑可能更近的避難所在「另一市」，但兩市系統不互通。
+
+**核心價值**：從「全市公告閾值」→「每戶/每人客製化疏散建議」的精度躍進。
+
+**Demo 衝擊力 (2 分鐘腳本)**：
+1. **[0:00–0:20] Hook**：大螢幕展示雙北山區 3D 地形 (Mapbox terrain)，紅點密集處（瑞芳、烏來、文山、北投）標示「247 位獨居長者位於土石流保全範圍內」。
+2. **[0:20–1:00] 圖層疊加**：依序開啟①土石流潛勢、②列管邊坡、③消防搶救困難、④長照據點 1km 緩衝圈，觀眾看到**「孤島區」（紅色潛勢但 1km 內無長照站）**赤裸暴露，雙北各 8–12 處。
+3. **[1:00–1:40] AI 客製卡片**：點選文山區指南里某保全戶，llama3.3-ffm 即時生成卡片：「林阿嬤，82 歲，輪椅族。預期降雨 250mm 還有 120 分鐘達黃色警戒，最近避難所為指南宮（步行 600m，無障礙），建議現在通知里長到府接送。」雙北邊界區自動推薦「跨市最近避難所」。
+4. **[1:40–2:00] 行動入口**：里長端「點名清冊」(誰已疏散/誰未聯繫)、市民端 LINE 推播「我可以幫忙」志工招募。
+
+**關鍵雙北組件 (≥4, ≥1 地圖層)**：
+
+| # | 組件名稱 | 資料源 ID / API | 格式 | 雙北覆蓋 | 地圖層 |
+|---|---|---|---|---|---|
+| 1 | **弱勢盲區疊圖（5 層）** Mapbox 3D 地形 | 北市 `6bed0f15...` 土石流警戒值 + 老舊聚落紅黃警戒值 + 列管邊坡警戒值 + `0f322478...` 火災搶救困難 + `e736535c...` 山坡地自主防災社區 | 圖例+多邊形+點位 | ✅ 北市 9 區山坡 + 新北 `3674522F...`(十大低漥) + 新北山區土石流（透過水保署 NCDR RSS） | ✅ |
+| 2 | **雨量逼近警戒倒數儀表板** (Apexcharts radial bar) | CWA `O-A0002-001` 雨量站 + 北市老舊聚落紅黃雨量警戒值 (CSV) | 百分比+時間序列 | ✅ | — |
+| 3 | **長照/避難所容量缺口熱圖** | 北市 `aaf97773...` 避難收容處所 + 各區簡易疏散避難地圖 (12 區 12 個 ID) + 新北 `25E439AB...` 避難收容處所 + `3A9D87F0...` 防空疏散避難設施容量 | 二維+百分比 | ✅ | ✅（同地圖層） |
+| 4 | **消防分隊到府時距等時圈** | 北市 `a9fa2045...` 消防分隊駐地 + 新北 `80DC6551...` 消防據點 + AED `61B29F27...` | 二維點位+等時圈 | ✅ | ✅（同地圖層） |
+| 5 | **NCDR 即時示警串流** (土石流/淹水/河川高水位) | NCDR RSS `/rss.aspx?AlertType=土石流` + `淹水` | 時間序列 | ✅ 全國含雙北 | — |
+
+**雙北對比角度**：北市山坡地多為都市邊緣（北投、文山）人口密集；新北山區（瑞芳/烏來/雙溪）人口稀疏但保全戶獨居比例高、消防到場時間 >2x。Demo 用對比直方圖呈現。
+
+**AI 應用 (對齊 30 RPM)**：
+- llama3.3-ffm 跑「個人化疏散卡片」：保全戶分批渲染（≤30 戶/分鐘自動節流），輸入年齡+行動能力+地址+當前雨量，輸出 4 句行動建議。
+- RAG：以「臺北防災 立即go」防災手冊 (`fc5c9391...`) 為知識庫，回答「我家附近沒避難所怎麼辦」。
+- 為什麼合理：AI 處理「無法以規則完整描述的人類情境」（個別老人狀況），規則 fallback 為通用模板。
+
+**可解釋性**：卡片底部標示「依據北市工務局 6bed0f15-... 警戒值 / WRA O-A0002-001 [站名] / 你的位置距 [避難所] X 公尺」。
+
+**行動入口**：
+- 里長端：保全戶點名清冊 + 一鍵 LINE 群發
+- 市民端：「我家算保全戶嗎？」自查工具
+- 志工端：「附近需要協助」志工媒合（鄰近 500m）
+
+**與現有 dashboard 差異**：
+官方「山坡地風險地點」是靜態圖層；本案疊加**雨量警戒倒數 + 個人化 AI 疏散卡片 + 消防到場時距 + 跨市避難所推薦**，將「集體警戒」進化為「個別行動指引」。
+
+**資料品質風險**：
+- 保全戶名單涉個資 → Demo 用合成假資料 + 真實位置；強調「方法論」而非真名。
+- 北市老舊聚落雨量警戒值 CSV 需 join 雨量站 ID，需先做資料清洗 (預估 4hr)。
+
+**技術可行性 (32hr)**：
+- 6hr：5 層 Mapbox 圖資清洗+疊圖
+- 8hr：雨量警戒倒數 + 等時圈 (使用 Mapbox isochrone API)
+- 8hr：AI 個人化卡片 + RAG 防災手冊
+- 4hr：跨市避難所推薦演算法
+- 6hr：buffer + Demo
+
+**亮點 scoring (1-5)**：
+- 受眾廣度：4（弱勢族群核心 + 里長志工延伸）
+- 雙北獨特性：5（北市都市邊緣山坡 vs 新北深山獨居）
+- Demo 衝擊力：5（孤島區可視化 + AI 卡片）
+- Story 完整度：4（角色明確：林阿嬤）
+- 應用價值：5（個人化疏散是真實痛點）
+- 技術整合：5（5 圖層 + AI + RAG + 等時圈）
+- 創意突破：5（從集體閾值 → 個人決策）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

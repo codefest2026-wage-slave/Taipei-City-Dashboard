@@ -1,0 +1,89 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2: 文化資源錯位診斷儀表板 — 雙北「文化沙漠」與「補助超集中」的政策視角
+
+**Pitch (一句話)**: 給文化局與議員一張可量化的「文化分配公平指數」儀表板，把模糊的「文化沙漠」抱怨變成可驗證的數字、可比較的鄰里。
+
+**核心受眾**:
+- 主受眾：北市文化局／新北文化局決策幕僚、市議員、文化政策研究者
+- 次受眾：藝文團隊（找補助）、公民團體監督預算
+- 第三方：媒體記者做城市專題
+
+**雙北痛點 (非假議題)**:
+- 北市 12 區人均文化補助高度傾斜（信義/大安/中正集中 70%+ 補助、文山/南港/北投得到不到 5%）
+- 新北 29 區更極端：板橋/三峽（園區效應）拿主要補助，烏來/平溪/雙溪/坪林/石碇基本是文化沙漠
+- 但「文化沙漠」不是只有預算問題—也包含**場館、藝文團體、表演空間、寺廟、博物館的綜合密度**
+- 現行政府網站只有「補助名單」與「場館地址」分開呈現，沒有跨整合的「公平診斷」
+
+**核心價值**:
+1. 用單一指標 **CRI (Cultural Resource Index)** = (補助額 + 場館數 + 演藝團體數 + 公共藝術數) / 人口，公開計算邏輯
+2. 顯示時間序列演進（過去 5 年補助是否更平均？還是更集中？）
+3. AI 自動寫「不平等敘事」段落，輔助記者/研究者引用
+
+**Demo 衝擊力 (2 分鐘)**:
+1. **Hook (20s)**：北市 vs 新北 CRI 直方圖排名 → 烏來、雙溪、坪林、平溪、貢寮、石碇 = 接近零；點選「平溪」→ 一句話彈窗「全區僅 1 個文化據點，過去 5 年補助 0 元」。但**天燈節是新北最大觀光活動**——觀光紅利沒回到地方文化生態。
+2. **組件 (50s)**：下拉到「雙北」→ ① CRI choropleth ② 補助時間序列堆疊面積（過去 5 年×類別） ③ 場館類型百分比甜甜圈 ④ 文化資產年代分佈時間軸
+3. **AI/Insight (30s)**：點「文化沙漠 Top 5 區」→ AI 生成「政策建議草稿」：「平溪、雙溪等東部山區，文化補助連續 5 年低於 0.1%，但同期觀光客成長...建議...」
+4. **行動 (20s)**：「下載這份政策摘要」→ 一鍵生成 PDF 含圖表＋AI 撰寫摘要，可直送議員辦公室
+
+**關鍵雙北組件 (4 必有，≥1 地圖)**:
+
+| # | 組件 | 資料源 ID | 格式 | 雙北 | 地圖 |
+|---|------|----------|------|------|------|
+| 1 | **CRI 文化資源指數 choropleth**（地圖；下拉 北市/雙北；圖例) | 加總自下方資料集 / 全市年齡分區 (主計處) 取人口分母 | 二維 + 圖例 | ✅ | ✅ |
+| 2 | **文化補助流向時間序列堆疊圖**（5年×類別；百分比 mode 切換） | data.taipei `3734ac48-c652-4ef8-b630-fb12ef63e56a`（北市藝文補助）+ `24205a7e-278a-4e78-9033-47ec5cf74595`（北市私有文化資產補助）+ `cde72570-11f5-4b17-8e95-422c805ebf39`（北市文化局經費概況）+ `88e93699-7e06-4b10-a2c4-6746eb6d951e`（北市原民民俗補助）+ data.ntpc `B3E2C8A4-62CE-41B1-9FDD-61F70CEF7721`（新北演藝補助要點）+ `F3782313-6F12-4958-A5B3-3D29F72FAC84`（新北傑出演藝團隊獎勵） | Apex stackedArea + 百分比切換 | ✅ | — |
+| 3 | **文化場館 / 藝文團體 / 公共藝術 點位地圖**（多圖層) | data.taipei `f058688f-1fd0-40d4-85e6-18267484cd18`（北市藝文館所）+ `6bae44ab-1f66-4779-98b9-2f5b48276ecc`（北市表演空間）+ `5d54376a-591d-431f-95cb-79d44f8228b2`（北市公共藝術）+ `f56e77c6-cc69-480c-8ba4-057fc7e1d8d6`（北市演藝團體）+ `32361b46-21be-4b6a-ba07-0b985c1cd8e2`（北市私立博物館）+ data.ntpc `0D07DB17-675D-4104-B809-62079BF061DA`（新北演藝團體）+ `47CCF63F-733F-422D-AB20-5B50E8A6F983`（新北公共藝術）+ `DF63A853-ABA9-4EC1-BD28-E74459E5D5C5`（新北博物館家族）+ `F7A3961E-11C9-46B0-875A-285ACAF34245`（新北藝文空間） | 點位 + 圖例分層 | ✅ | ✅ |
+| 4 | **文化資產年代分佈時間軸**（行政區×類別×年代） | data.taipei `46119295-2534-4ac9-82d5-5f4653ba15bb`（北市文化資產）+ data.ntpc `D8EB898F-6C59-4689-9191-48DBBEF16606`（新北文化資產） | Apex timeline / heatmap | ✅ | — |
+| 5 (加碼) | **CRI 排名 Top/Bottom 5 直方圖** | 上述計算結果 | bar + 百分比模式 | ✅ | — |
+
+**雙北對比角度**:
+- 北市內部 12 區 CRI 差距 vs 新北 29 區 CRI 差距 → 新北極端化更嚴重
+- 雙北古蹟分佈：北市集中艋舺/大稻埕/北投，新北集中淡水/三峽/九份／瑞芳 — 是否觀光熱→補助多的循環？
+- 補助時間序列：北市是否變更平均？新北是否仍向板橋/三峽集中？
+
+**AI 應用**:
+- **政策報告草稿生成器**：使用者選任一區或 CRI Top/Bottom N → AI 用 RAG 取出該區所有文化資料 → 生成 300 字摘要 (帶資料引用)
+- **公平性指標解釋**：AI 用自然語言解釋 Gini-like 係數變化原因（"2023 年補助 Gini 從 0.65 降至 0.58，主要因為 X 區增加 Y"）
+- 30 RPM 控制：報告生成是 user-triggered，預設快取 12+29=41 區的基本摘要，自訂查詢才打 API
+
+**可解釋性**:
+- CRI 公式公開、權重可調（slider）→ 評審/使用者可以即時看權重變化的影響
+- 每筆補助案可下鑽到原始 CSV 連結
+- AI 摘要必須附「本段引用 X 個資料集 / Y 筆紀錄」
+
+**行動入口**:
+- 「PDF 政策摘要下載」一鍵生成
+- 「鄰里比較」雷達圖（任選 3 區）
+- 議員陳情 template 帶入該區 CRI 數據
+
+**與既有 dashboard 差異**:
+- 既有 dashboard 沒有任何「文化補助／場館／藝文團體」資料層
+- 既有「公廁／無障礙」是基礎設施，本案是**治理績效**
+- 「友善店家／旅館」是商業，本案是**公共投入分配**
+
+**資料品質風險**:
+- 補助案資料部分為年度匯總、無精確地址 → 需用「補助對象登記地」替代
+- 北市/新北補助分類體系不一致 → 需手動 mapping (約 20 個類別)
+- 新北 29 區人口分母需從主計處資料合併
+
+**技術可行性**:
+- 純表格運算 + GeoJSON join，前端 Vue3 / Pinia
+- CRI 計算可預先 ETL 成 JSON，Apex/Mapbox 直接讀
+- AI 摘要 latency 容忍度高（user-triggered）
+
+**亮點 scoring (1-5)**: 受眾 4 / 雙北獨特 5 / Demo 4 / Story 3 / 應用 4 / 技術 5 / 創意 4
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

@@ -1,0 +1,90 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2: 「雙北碳排照妖鏡」住商 vs 工業減碳分區實況
+
+**Pitch (一句話)**: 把溫室氣體分部門排放、企業盤查、再生能源、節能輔導、八里焚化廠營運、電動車充電站六層資料疊起來，第一次讓市民看到「台北每人 X 噸碳，新北每人 Y 噸碳，差在哪」，AI 自動寫出政策成效解釋。
+
+**核心受眾**:
+- **第一**: 節能補助申請者（中小企業主、自家裝太陽能屋主）、ESG 部門小編
+- **第二**: 環保局/產業局承辦人（看自家政策成效）、議員質詢素材
+- **第三**: 市民（看「我家附近的碳熱點」做購屋/選校決策）
+
+**雙北痛點（雙北特有，非假議題）**:
+- **產業結構天差地別**：台北住商部門占碳排約 6 成（以服務業為主）、新北工業部門占比顯著（樹林、五股、林口工業區）。同一份「2050 淨零」KPI 套用兩市並不合理
+- **節能補助 vs 工業排放錯配**：台北產業局年發千萬節能補助給中小服務業，新北則需處理數百家固定污染源 CEMS 廠家，補助/輔導工具完全不同
+- **焚化廠跨市使用**：台北 3 座焚化廠、新北八里焚化廠，垃圾代清運/熱能回收電力誰算誰的？跨市帳是亂的
+- **再生能源裝置容量比例**：台北屋頂型太陽能受限、新北郊區地面型潛力大，現況差距明顯
+
+**核心價值**:
+1. 看：地圖按行政區/工業區上色，碳排越紅越深；切換「台北/雙北」直接看雙城差異
+2. 用：點工業區 → 跳出「該區前 5 大排放源（GHG_P_02 盤查資料）」+ 該年再生能源/節能輔導抵減量
+3. 自動：AI 生成「2025 vs 2024 碳排為何下降 8%？」的政策成因敘事 + 引用資料來源
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00–0:20] Hook**：兩個對比卡片並排 — 「台北 2024 人均 4.2 噸 CO2e」vs「新北 2024 人均 6.8 噸 CO2e」，下標：「同樣是雙北，差在哪？」
+2. **[0:20–1:00] 組件**：Mapbox 雙北行政區 choropleth（碳排密度），切換「台北/雙北」。點新北五股 → 浮出「前 5 大固定污染源 + 上月 SO2/NOx 即時 CEMS 值」。Apexcharts 顯示六部門堆疊面積圖。
+3. **[1:00–1:40] AI Insight**：「為什麼新北人均碳排比台北高 60%？」→ AI 回：「主因為工業部門（佔新北 42%、台北僅 12%）。新北 CEMS 監測 12 廠 NOx 排放占比 38%，而台北以住商空調用電為主⋯⋯」
+4. **[1:40–2:00] 行動**：「我是中小企業主 → 看節能補助」/「我家想裝太陽能 → 看再生能源核准件數熱區」/「下載我里的低碳認證進度」。
+
+**關鍵雙北組件 (≥4, ≥1 地圖)**:
+
+| # | 組件 | 資料源ID | 格式 | 雙北 | 地圖 |
+|---|------|---------|------|------|------|
+| 1 | 雙北行政區人均碳排 choropleth | MOENV `GHG_P_01`（縣市/年/部門）+ 台北 `493e8019-3de7-47fa-aa9b-cb4076e540a2`（總/人均排放） | 三維 + 圖例 | ✅ | ✅ Mapbox |
+| 2 | 雙北部門別碳排堆疊（住商/運輸/工業/廢棄物） | MOENV `GHG_P_03`（電力消費與溫室氣體） | 時間序列 + 百分比 | ✅ | ❌ Apexcharts stacked area |
+| 3 | 新北固定污染源 CEMS 即時排放點位 | 新北 `0F0967BD-3C42-4FD4-80AC-786509C315F3`（固定污染源）+ `D7330AE1-5869-4EE7-8821-03B1D7D13822`（CEMS 即時） | 點位 + 時序 | 新北為主，台北補環境部 AQX_P_19 | ✅ |
+| 4 | 雙北電動機車/汽車充電站布點 | 台北 `c66e2f53-92f5-4ccd-8aa9-eb71a288e09e` + 新北 `E461BC62-34D2-42C5-A871-F2FC2FB88D01` + `1BB694E3-17C7-4EF0-AC75-52990C40EDCD` | 點位 | ✅ | ✅ |
+| 5 | 台北節能輔導累計減碳量 + 服務業汰換補助 | inventory：產業局「節能輔導累計減碳量/節約電量/家數」三組（時間序列） | 時間序列 | 台北限定（新北無對等資料 → UI 標示「新北資料未公開，可申請」） | ❌ Apexcharts |
+| 6 | 台北低碳里認證進度 | data.taipei `ba984f2b-0867-4e3d-90f5-ac191444a2f9` | 百分比 + 點位 | 台北限定，雙北角度為「比較城市政策密度」 | ✅（行政里 polygon） |
+| 7 | 新北八里焚化廠發/售/用電量 vs 台北 3 廠 | 新北 `FDFDC704-CA66-4735-99FE-3DFB1F79EFB7` + 台北焚化廠（北投/木柵/內湖三廠 inventory） | 時間序列 | ✅ | ❌ Apexcharts |
+| 8 | 雙北再生能源累計裝置容量 | 台北 `131f97ec-740c-4428-935d-bad1ecefb45f` + 新北可從 GHG_P_03 推算 | 時間序列 + 圖例（太陽能/沼氣/水力） | ✅ | ❌ Apexcharts |
+
+**雙北對比角度**: 「住商型城市 vs 工業型城市」的減碳路徑。台北靠服務業節能輔導 + 行為改變、新北必須走產業轉型 + CEMS 監管。AI 生成的政策建議因此分流。
+
+**AI 應用 (政策敘事生成)**:
+- **市民問**：「我住板橋，附近碳排有改善嗎？」→ 模型輸入該行政區 5 年 GHG 趨勢 + 同期新北節能政策 → 輸出 100 字白話解釋
+- **議員/承辦人問**：「為什麼 2024 年廢棄物部門排放掉 12%？」→ 模型結合八里焚化廠營運資料 + 資源回收量 + 巨大廢棄物清運，回答可能成因
+- **快取**：政策敘事按「行政區 × 年度」預生成（雙北約 50 區 × 5 年 = 250 條），日更一次足夠
+
+**可解釋性**: 每張圖卡右上角「資料來源 + 計算公式」彈窗。AI 回答下方列出具體欄位（如 GHG_P_01 中 `total_co2e` for 新北市 工業 sector）。
+
+**行動入口**:
+1. 「我是中小企業 → 申請節能設備汰換補助」（連產業局表單）
+2. 「我想自家裝太陽能 → 看我里裝置容量空間」（連台電躉售）
+3. 「我里還沒拿到低碳認證 → 看缺哪幾項行動」
+
+**與既有 dashboard 差異**:
+- 既有 dashboard 只各別展示「溫室氣體排放統計」「節能輔導累計家數」「再生能源時間序列」幾張圖卡
+- 我們**第一次把 雙北的 GHG_P_01/02/03 + 兩市產業政策 + 焚化廠跨市帳 串聯**，並用 AI 解釋年度變化原因
+- 加上市民端行動入口，不只是給環保局看的 KPI 牆
+
+**資料品質風險**:
+- GHG_P_01 年更（2024 資料 2025 Q4 才出），即時性差 → 補 CEMS 即時值維持「動感」
+- 新北節能輔導資料未集中公開，需從產業局公文書或新聞稿補齊（可標註為「資料缺口，正在申請」）
+- 跨市垃圾代清運帳目灰色（八里燒了多少台北垃圾？）→ 此處反而是賣點（demo 中明說「這是雙北資料治理盲點」）
+
+**技術可行性**: Mapbox choropleth + 點位疊加；Apexcharts stacked area + grouped bar；FFM Llama 政策敘事走後端緩存層。
+
+**亮點 scoring (1–5)**:
+- 受眾廣度：4（市民 + 中小企業 + 公部門）
+- 雙北獨特性：5（產業結構真的不同）
+- Demo 衝擊力：4（人均碳排數字對比直觀）
+- Story 完整度：4
+- 應用價值：5（節能補助/太陽能/政策評估）
+- 技術整合：5（最多層、最多 AI 回呼）
+- 創意突破：4
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.
