@@ -7,8 +7,7 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo "1/3 migrations up ..."
 docker exec -i postgres-data    psql -U postgres -d dashboard        -v ON_ERROR_STOP=1 -1 < "$ROOT/migrations/001_create_tables.up.sql"
-# 002 seeded in Phase 3 — uncomment when ready:
-# docker exec -i postgres-manager psql -U postgres -d dashboardmanager -v ON_ERROR_STOP=1 -1 < "$ROOT/migrations/002_seed_dashboard.up.sql"
+docker exec -i postgres-manager psql -U postgres -d dashboardmanager -v ON_ERROR_STOP=1 -1 < "$ROOT/migrations/002_seed_dashboard.up.sql"
 
 echo "2/3 ETL ..."
 python3 "$ROOT/etl/load_violations_tpe.py"
