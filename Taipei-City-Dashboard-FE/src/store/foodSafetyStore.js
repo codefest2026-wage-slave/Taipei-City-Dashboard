@@ -197,6 +197,15 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		},
 
 		_removeLayerGroup(layer, mapStore) {
+			// Remove selection labels (created by _drawSelectionLabels)
+			if (mapStore.map) {
+				if (mapStore.map.getLayer("fsm_selection_labels-layer")) {
+					mapStore.map.removeLayer("fsm_selection_labels-layer");
+				}
+				if (mapStore.map.getSource("fsm_selection_labels-source")) {
+					mapStore.map.removeSource("fsm_selection_labels-source");
+				}
+			}
 			const ids =
 				layer === "school"
 					? ["fsm_schools", "fsm_supply_chain", "fsm_suppliers"]
@@ -220,16 +229,19 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		},
 
 		selectSchool(school) {
-			const mapStore = useMapStore();
 			this.setAnalysisFocus("school", school);
-			const [lng, lat] = school.geometry.coordinates;
-			mapStore.easeToLocation([[lng, lat], 14, 0, 0]);
-			// Always draw the school's supply arcs on click — this is the
-			// path-1 behavior in spec §5.2.1.
 			const arcs = this.supplyChain.filter(
 				(f) => f.properties.school_id === school.properties.id,
 			);
 			this.redrawSupplyArcs(arcs);
+			// Resolve connected supplier features by id.
+			const supplierIds = new Set(arcs.map((a) => a.properties.supplier_id));
+			const suppliers = this.suppliers.filter(
+				(s) => supplierIds.has(s.properties.id),
+			);
+			const focusFeatures = [school, ...suppliers];
+			this._drawSelectionLabels(focusFeatures);
+			this._fitBoundsTo(focusFeatures);
 		},
 
 		selectSupplier(supplier) {
@@ -238,30 +250,32 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				(f) => f.properties.supplier_id === supplier.properties.id,
 			);
 			this.redrawSupplyArcs(arcs);
+			const schoolIds = new Set(arcs.map((a) => a.properties.school_id));
+			const schools = this.schools.filter(
+				(s) => schoolIds.has(s.properties.id),
+			);
+			const focusFeatures = [supplier, ...schools];
+			this._drawSelectionLabels(focusFeatures);
+			this._fitBoundsTo(focusFeatures);
 		},
 
 		selectIncident(incident) {
-			const mapStore = useMapStore();
 			this.setAnalysisFocus("incident", incident);
-			// Highlight all affected schools by drawing arcs from supplier → schools
 			const arcs = this.supplyChain.filter(
 				(f) =>
 					f.properties.supplier_id === incident.supplier_id &&
 					incident.affected_school_ids.includes(f.properties.school_id),
 			);
 			this.redrawSupplyArcs(arcs);
-			// Fit bounds to affected schools
 			const affected = this.schools.filter(
 				(f) => incident.affected_school_ids.includes(f.properties.id),
 			);
-			if (affected.length === 0) return;
-			const lats = affected.map((f) => f.geometry.coordinates[1]);
-			const lngs = affected.map((f) => f.geometry.coordinates[0]);
-			const center = [
-				(Math.min(...lngs) + Math.max(...lngs)) / 2,
-				(Math.min(...lats) + Math.max(...lats)) / 2,
-			];
-			mapStore.easeToLocation([center, 12, 0, 0]);
+			const supplier = this.suppliers.find(
+				(s) => s.properties.id === incident.supplier_id,
+			);
+			const focusFeatures = supplier ? [supplier, ...affected] : [...affected];
+			this._drawSelectionLabels(focusFeatures);
+			this._fitBoundsTo(focusFeatures);
 		},
 
 		selectRestaurant(restaurant) {
@@ -300,6 +314,75 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			);
 		},
 
+		// Show text labels for the currently-clicked school/supplier and its
+		// connected partners. Replaces existing label layer on each call. Pass
+		// an empty array to clear.
+		_drawSelectionLabels(features) {
+			const mapStore = useMapStore();
+			if (!mapStore.map) return;
+			const sourceId = "fsm_selection_labels-source";
+			const layerId = "fsm_selection_labels-layer";
+
+			// Remove existing
+			if (mapStore.map.getLayer(layerId)) {
+				mapStore.map.removeLayer(layerId);
+			}
+			if (mapStore.map.getSource(sourceId)) {
+				mapStore.map.removeSource(sourceId);
+			}
+			if (!features || features.length === 0) return;
+
+			mapStore.map.addSource(sourceId, {
+				type: "geojson",
+				data: {
+					type: "FeatureCollection",
+					features: features,
+				},
+			});
+
+			mapStore.map.addLayer({
+				id: layerId,
+				type: "symbol",
+				source: sourceId,
+				layout: {
+					"text-field": ["get", "name"],
+					"text-size": 11,
+					"text-anchor": "top",
+					"text-offset": [0, 1.0],
+					"text-allow-overlap": false,
+					"text-optional": true,
+					"text-padding": 4,
+				},
+				paint: {
+					"text-color": "#00E5FF",
+					"text-halo-color": "#0A1228",
+					"text-halo-width": 2,
+					"text-halo-blur": 1,
+				},
+			});
+		},
+
+		_fitBoundsTo(features) {
+			const mapStore = useMapStore();
+			if (!mapStore.map || !features || features.length === 0) return;
+			if (features.length === 1) {
+				const [lng, lat] = features[0].geometry.coordinates;
+				mapStore.easeToLocation([[lng, lat], 14, 0, 0]);
+				return;
+			}
+			const lats = features.map((f) => f.geometry.coordinates[1]);
+			const lngs = features.map((f) => f.geometry.coordinates[0]);
+			const bounds = [
+				[Math.min(...lngs), Math.min(...lats)],
+				[Math.max(...lngs), Math.max(...lats)],
+			];
+			mapStore.map.fitBounds(bounds, {
+				padding: { top: 80, right: 420, bottom: 80, left: 240 },
+				maxZoom: 14,
+				duration: 600,
+			});
+		},
+
 		// ── Layer toggles within school map ─────────────────────
 		toggleSubLayer(name) {
 			this.layerToggles[name] = !this.layerToggles[name];
@@ -323,6 +406,15 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		// ── Reset on dashboard exit ─────────────────────────────
 		resetAll() {
 			const mapStore = useMapStore();
+			// Remove selection labels (created by _drawSelectionLabels)
+			if (mapStore.map) {
+				if (mapStore.map.getLayer("fsm_selection_labels-layer")) {
+					mapStore.map.removeLayer("fsm_selection_labels-layer");
+				}
+				if (mapStore.map.getSource("fsm_selection_labels-source")) {
+					mapStore.map.removeSource("fsm_selection_labels-source");
+				}
+			}
 			// Defensive removal of any fsm_* layers
 			["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_restaurants", "fsm_district_heat"]
 				.forEach((idx) => {

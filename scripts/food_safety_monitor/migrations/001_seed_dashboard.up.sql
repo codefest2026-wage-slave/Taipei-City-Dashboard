@@ -60,7 +60,7 @@ VALUES (
   '以學校節點呈現臺北市國中小，紅色標示曾發生食安事件學校，黃色標示供應商有疑慮學校。點擊節點展開供應鏈連線。',
   '家長挑學校；衛生局追蹤校園食安；研究者分析供應鏈風險。',
   'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_supply_chain','fsm_suppliers') ORDER BY id),
+  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_suppliers') ORDER BY id),
   '{}', '{}', '{mock}', NOW(), NOW()
 );
 
@@ -77,7 +77,7 @@ VALUES (
   '雙城國中小節點疊加，紅黃綠三色標示風險等級，點擊學校展開供應鏈連線（deck.gl ArcLayer）。',
   '家長跨城挑學校；衛生局聯合追蹤；研究者分析雙北供應鏈交織。',
   'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_supply_chain','fsm_suppliers') ORDER BY id),
+  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_suppliers') ORDER BY id),
   '{}', '{}', '{mock}', NOW(), NOW()
 );
 
