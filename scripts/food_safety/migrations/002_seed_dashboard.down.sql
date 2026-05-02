@@ -8,6 +8,6 @@ DELETE FROM dashboards       WHERE id = 503;
 DELETE FROM query_charts     WHERE index LIKE 'food_%';
 DELETE FROM component_maps   WHERE index LIKE 'food_%';
 DELETE FROM component_charts WHERE index LIKE 'food_%';
-DELETE FROM components       WHERE id BETWEEN 1011 AND 1015;
+DELETE FROM components       WHERE id BETWEEN 1011 AND 1016;
 
 COMMIT;
