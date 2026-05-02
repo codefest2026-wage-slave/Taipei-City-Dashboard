@@ -129,11 +129,39 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
       >
         <div class="nutrition-head">
           <span class="nutrition-date">{{ latestNutrition.date }}</span>
-          <span class="nutrition-score">{{ latestNutrition.score }}</span>
+          <span class="nutrition-score">{{ latestNutrition.score }}<small>/5</small></span>
         </div>
-        <div class="nutrition-menu">
+
+        <div
+          v-if="latestNutrition.dishes && latestNutrition.dishes.length"
+          class="dish-list"
+        >
+          <div
+            v-for="d in latestNutrition.dishes"
+            :key="`${d.category}-${d.name}`"
+            class="dish-row"
+          >
+            <span class="dish-cat">{{ d.category }}</span>
+            <span class="dish-name">
+              {{ d.name }}
+              <span
+                v-if="d.is_veg"
+                class="dish-veg"
+              >素</span>
+            </span>
+            <span
+              class="dish-score"
+              :class="`dish-score-${d.score}`"
+            >{{ d.score }}</span>
+          </div>
+        </div>
+        <div
+          v-else
+          class="nutrition-menu"
+        >
           {{ latestNutrition.menu }}
         </div>
+
         <div
           v-if="latestNutrition.ai_review"
           class="ai-review"
@@ -431,10 +459,74 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	font-weight: 700;
 	text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
 }
+.nutrition-score small {
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.45);
+	font-weight: 400;
+	margin-left: 2px;
+}
 .nutrition-menu {
 	font-size: 12px;
 	color: var(--fsm-text);
 	margin: 4px 0 8px;
+}
+.dish-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin: 8px 0;
+}
+.dish-row {
+	display: grid;
+	grid-template-columns: 36px 1fr 22px;
+	gap: 8px;
+	align-items: center;
+	padding: 4px 6px;
+	background: rgba(255, 255, 255, 0.03);
+	border-left: 2px solid rgba(255, 255, 255, 0.15);
+	border-radius: 0 3px 3px 0;
+	font-size: 12px;
+}
+.dish-cat {
+	font-size: 10px;
+	color: rgba(255, 255, 255, 0.55);
+	letter-spacing: 1px;
+}
+.dish-name {
+	color: var(--fsm-text);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.dish-veg {
+	display: inline-block;
+	margin-left: 4px;
+	padding: 0 4px;
+	font-size: 10px;
+	color: #00E676;
+	border: 1px solid rgba(0, 230, 118, 0.4);
+	border-radius: 2px;
+	background: rgba(0, 230, 118, 0.1);
+}
+.dish-score {
+	font-family: var(--fsm-mono, monospace);
+	font-size: 12px;
+	font-weight: 600;
+	text-align: center;
+	padding: 1px 4px;
+	border-radius: 2px;
+}
+.dish-score-0, .dish-score-1, .dish-score-2 {
+	color: #FF1744;
+	background: rgba(255, 23, 68, 0.12);
+}
+.dish-score-3 {
+	color: #FFC107;
+	background: rgba(255, 193, 7, 0.12);
+}
+.dish-score-4, .dish-score-5 {
+	color: #00E676;
+	background: rgba(0, 230, 118, 0.12);
 }
 .ai-review {
 	margin-top: 8px;
