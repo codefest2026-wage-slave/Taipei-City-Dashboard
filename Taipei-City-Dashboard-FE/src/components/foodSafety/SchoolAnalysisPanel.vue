@@ -9,7 +9,9 @@ import { useFoodSafetyStore } from "../../store/foodSafetyStore";
 const fs = useFoodSafetyStore();
 const f = computed(() => fs.analysisFocus);
 
-// School view: connected suppliers (via supply chain) with their latest FAIL audit
+// School view: connected suppliers (via supply chain). The "alert" status uses
+// the observation-period rule: red if ANY of the supplier's latest 3 audits is
+// FAIL. latestFail (if any) shown as the most recent FAIL within that window.
 const connectedSuppliers = computed(() => {
 	if (f.value?.type !== "school") return [];
 	const schoolId = f.value.payload.properties.id;
@@ -19,7 +21,8 @@ const connectedSuppliers = computed(() => {
 		.filter((s) => ids.has(s.properties.id))
 		.map((s) => {
 			const audits = fs.supplierAudits[s.properties.id] || [];
-			const latestFail = audits.find((r) => r.status === "FAIL");
+			const last3 = audits.slice(0, 3);
+			const latestFail = last3.find((r) => r.status === "FAIL");
 			return {
 				id: s.properties.id,
 				name: s.properties.name,
