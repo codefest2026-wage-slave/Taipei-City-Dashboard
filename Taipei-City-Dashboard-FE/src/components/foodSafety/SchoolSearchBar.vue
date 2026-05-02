@@ -1,14 +1,27 @@
 <!-- Search input that lets the user find a school by name. Lives inside the
-     FoodSafetyControls card body, so styling is intentionally plain (no extra
-     panel framing) to match the surrounding dashboard component card. -->
+     FoodSafetyControls card body — the parent dashboardcomponent-chart has
+     overflow-y: scroll, so the results dropdown is rendered INLINE (not
+     absolute) so it can flow within the scroll area instead of being clipped. -->
 <script setup>
 import { ref } from "vue";
 import { useFoodSafetyStore } from "../../store/foodSafetyStore";
 
 const fs = useFoodSafetyStore();
 const focused = ref(false);
+let blurTimer = null;
 
+function onFocus() {
+	focused.value = true;
+}
+function onBlur() {
+	// Slight delay so a @mousedown on a dropdown <li> can fire its pick()
+	// before this handler hides the list.
+	blurTimer = setTimeout(() => {
+		focused.value = false;
+	}, 150);
+}
 function pick(school) {
+	if (blurTimer) clearTimeout(blurTimer);
 	fs.selectSchool(school);
 	fs.schoolSearchQuery = school.properties.name;
 	focused.value = false;
@@ -21,8 +34,8 @@ function pick(school) {
       v-model="fs.schoolSearchQuery"
       type="text"
       placeholder="搜尋學校名稱..."
-      @focus="focused = true"
-      @blur="setTimeout(() => focused = false, 150)"
+      @focus="onFocus"
+      @blur="onBlur"
     >
     <ul
       v-if="focused && fs.schoolSearchResults.length"
@@ -47,7 +60,6 @@ function pick(school) {
 
 <style scoped>
 .fsm-search {
-	position: relative;
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -56,7 +68,7 @@ function pick(school) {
 	box-sizing: border-box;
 	padding: 6px 10px;
 	font-size: 12px;
-	color: var(--color-normal-text, #d7e3f4);
+	color: var(--color-normal-text, #f5f5f5);
 	background: rgba(255, 255, 255, 0.03);
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	border-radius: 3px;
@@ -66,33 +78,28 @@ function pick(school) {
 	border-color: rgba(0, 229, 255, 0.5);
 }
 .fsm-search input::placeholder {
-	color: rgba(215, 227, 244, 0.4);
+	color: rgba(255, 255, 255, 0.4);
 }
 .fsm-search-dropdown {
-	position: absolute;
-	top: calc(100% + 2px);
-	left: 0;
-	right: 0;
-	margin: 0;
+	margin: 4px 0 0;
 	padding: 0;
 	list-style: none;
-	background: var(--color-component-background, #1f2125);
+	background: rgba(255, 255, 255, 0.04);
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	border-radius: 3px;
-	max-height: 240px;
+	max-height: 200px;
 	overflow-y: auto;
-	z-index: 100;
 }
 .fsm-search-dropdown li {
 	display: flex;
 	justify-content: space-between;
 	padding: 6px 10px;
 	cursor: pointer;
-	color: var(--color-normal-text, #d7e3f4);
+	color: var(--color-normal-text, #f5f5f5);
 	font-size: 12px;
 }
 .fsm-search-dropdown li:hover {
-	background: rgba(255, 255, 255, 0.05);
+	background: rgba(255, 255, 255, 0.08);
 }
 .status-red    { color: #FF1744; }
 .status-normal { color: rgba(255, 255, 255, 0.5); }
