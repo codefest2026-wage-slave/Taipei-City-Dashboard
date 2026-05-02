@@ -1,0 +1,44 @@
+{
+  "dag_infos": {
+    "dag_id": "food_safety_inspection_metrotaipei",
+    "start_date": "2026-05-02",
+    "schedule_interval": "@monthly",
+    "catchup": false,
+    "tags": [
+      "food_safety_inspection_metrotaipei",
+      "雙北",
+      "Taipei-City",
+      "New-Taipei-City",
+      "食品安全",
+      "稽查與檢驗"
+    ],
+    "description": "雙北食品查核及檢驗資訊平台稽查/檢驗紀錄（個人農場 + 商業業者），包含違規法條標準化與危害等級判斷。",
+    "default_args": {
+      "owner": "airflow",
+      "email": ["DEFAULT_EMAIL_LIST"],
+      "email_on_retry": false,
+      "email_on_failure": true,
+      "retries": 1,
+      "retry_delay": 60
+    },
+    "ready_data_db": "postgres_default",
+    "ready_data_default_table": "food_safety_inspection_metrotaipei",
+    "ready_data_history_table": "",
+    "raw_data_db": "postgres_default",
+    "raw_data_table": "",
+    "load_behavior": "replace"
+  },
+  "data_infos": {
+    "name_cn": "雙北食品查核及檢驗資訊平台稽查紀錄",
+    "airflow_update_freq": "@monthly",
+    "source": "食品查核及檢驗資訊平台 2026-05-02 雙北快照（個人農場、商業業者 v2）",
+    "source_type": "local csv snapshot",
+    "source_dept": "衛生福利部食品藥物管理署 / 臺北市衛生局 / 新北市衛生局",
+    "gis_format": null,
+    "output_coordinate": "",
+    "is_geometry": 0,
+    "dataset_description": "彙整臺北市與新北市之食品稽查/檢驗結果，包含業者、產品、違規法條與危害等級資訊，提供食安風險追蹤之資料基礎。",
+    "etl_description": "讀取個人農場與商業業者兩份 CSV，加上業者類型欄位後合併；標準化欄位名稱、轉換民國日期至西元日期、由地址擷取縣市/行政區，最後寫入資料庫。",
+    "sensitivity": "public"
+  }
+}
