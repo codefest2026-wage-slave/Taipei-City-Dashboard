@@ -32,6 +32,28 @@ watch(
 	{ deep: false },
 );
 
+// Apply restaurant filter expression whenever the dropdown selection changes.
+watch(
+	() => ({ ...fs.restaurantFilters }),
+	() => {
+		if (fs.activeLayer === "restaurant") {
+			fs.applyRestaurantFilters();
+		}
+	},
+	{ deep: true },
+);
+
+// Also apply filter once when restaurant layer first appears.
+watch(
+	() => fs.activeLayer,
+	(layer) => {
+		if (layer === "restaurant") {
+			// Slight delay to ensure layer is added by Mapbox pipeline first.
+			setTimeout(() => fs.applyRestaurantFilters(), 700);
+		}
+	},
+);
+
 const attachedHandlers = new Set();
 function attachLayerClickHandler(layerId) {
 	if (attachedHandlers.has(layerId)) return;
