@@ -29,6 +29,7 @@ import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
 import RiskMatrixChart from "./components/RiskMatrixChart.vue";
+import FoodSafetyControls from "./components/FoodSafetyControls.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -50,6 +51,7 @@ import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
 import RiskMatrixChartSvg from "./assets/chart/RiskMatrixChart.svg";
+import FoodSafetyControlsSvg from "./assets/chart/FoodSafetyControls.svg";
 
 
 const props = defineProps({
@@ -226,6 +228,8 @@ function returnChartComponent(name, svg) {
 		return svg ? TextUnitChartSvg : TextUnitChart;
 	case "RiskMatrixChart":
 		return svg ? RiskMatrixChartSvg : RiskMatrixChart;
+	case "FoodSafetyControls":
+		return svg ? FoodSafetyControlsSvg : FoodSafetyControls;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
@@ -326,7 +330,7 @@ function returnChartComponent(name, svg) {
         </button>
       </div>
       <div
-        v-else-if="mode.includes('map')"
+        v-else-if="mode.includes('map') && config.chart_config.types[0] !== 'FoodSafetyControls'"
         class="dashboardcomponent-header-toggle"
       >
         <label class="toggleswitch">

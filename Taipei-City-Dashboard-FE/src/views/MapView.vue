@@ -23,7 +23,6 @@ import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
 import FoodSafetyOverlays from "../components/foodSafety/FoodSafetyOverlays.vue";
-import FoodSafetyControlsCard from "../components/foodSafety/FoodSafetyControlsCard.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
@@ -279,11 +278,6 @@ function popularBasicLayerGA(map_config) {
         "
         class="map-charts"
       >
-        <!-- Food Safety Monitor (dashboard 504): sidebar layer toggle + legend
-             above the chart components. Conditional on this dashboard only. -->
-        <FoodSafetyControlsCard
-          v-if="contentStore.currentDashboard.index === 'food_safety_monitor' && foodSafetyStore.activeLayer === 'school'"
-        />
         <DashboardComponent
           v-for="(item, arrayIdx) in parseMapLayers.hasMap"
           :key="`map-layer-${item.index}-${item.city}`"

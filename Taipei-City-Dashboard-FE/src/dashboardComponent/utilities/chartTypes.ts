@@ -24,4 +24,5 @@ export const chartTypes: chartType = {
 	MapLegend: "地圖圖例", // V
 	TextUnitChart: "文字數值圖", // V
 	RiskMatrixChart: "風險矩陣四象限圖", // V
+	FoodSafetyControls: "食安控制面板", // V
 };

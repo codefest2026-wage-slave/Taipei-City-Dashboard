@@ -6,5 +6,5 @@ DELETE FROM dashboards WHERE id = 504;
 DELETE FROM query_charts WHERE index LIKE 'fsm_%';
 DELETE FROM component_maps WHERE index LIKE 'fsm_%';
 DELETE FROM component_charts WHERE index LIKE 'fsm_%';
-DELETE FROM components WHERE id BETWEEN 1021 AND 1025;
+DELETE FROM components WHERE id BETWEEN 1020 AND 1026;
 COMMIT;
