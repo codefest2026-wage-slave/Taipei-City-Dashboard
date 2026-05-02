@@ -12,7 +12,6 @@ missing from the aggregated source_counties.
 import csv
 import re
 import sys
-from collections import defaultdict
 from pathlib import Path
 
 import psycopg2
@@ -49,18 +48,35 @@ def parse_filename(path: Path):
 
 
 def detect_ingredient_column(reader_fieldnames, path):
-    """Return the field name in this CSV that holds 食材名稱, or None."""
+    """Return the field name in this CSV that holds 食材名稱, or None.
+
+    Resolution order (first wins):
+      1. Exact match for INGREDIENT_HEADER ('食材名稱').
+      2. Exact match for any FALLBACK_HEADER ('品名' / '食材' / '菜色').
+      3. Suffix match (clean.endswith(fb)) — catches '食材品名', '料理菜色'
+         while rejecting '供應商食材分類' or '食材來源縣市'.
+      4. Otherwise None — caller will skip the file.
+    """
     if not reader_fieldnames:
         return None
     fnmap = {f.strip(): f for f in reader_fieldnames if f}
+
     if INGREDIENT_HEADER in fnmap:
         return fnmap[INGREDIENT_HEADER]
+
+    for fb in FALLBACK_HEADERS:
+        if fb in fnmap:
+            print(f"  ⚠️  {path.name}: using fallback column {fb!r} (exact, no '食材名稱')",
+                  file=sys.stderr)
+            return fnmap[fb]
+
     for fb in FALLBACK_HEADERS:
         for clean, original in fnmap.items():
-            if fb in clean:
-                print(f"  ⚠️  {path.name}: using fallback column {original!r} (no '食材名稱')",
-                      file=sys.stderr)
+            if clean.endswith(fb):
+                print(f"  ⚠️  {path.name}: using fallback column {original!r} "
+                      f"(endswith {fb!r}, no '食材名稱')", file=sys.stderr)
                 return original
+
     return None
 
 
@@ -92,7 +108,10 @@ def aggregate():
                     name = (raw or "").strip()
                     if not name:
                         continue
-                    name = name[:200]  # match VARCHAR(200)
+                    if len(name) > 200:
+                        skipped.append((path.name,
+                                        f"name truncated to 200 chars: {name[:40]}…"))
+                        name = name[:200]  # match VARCHAR(200)
                     rec = agg.get(name)
                     if rec is None:
                         rec = [0, ym, ym, set()]
@@ -106,7 +125,7 @@ def aggregate():
                     if county and county != "全國":
                         rec[3].add(county)
                     row_count += 1
-        except Exception as e:
+        except (OSError, csv.Error, UnicodeDecodeError) as e:
             skipped.append((path.name, f"read error: {e}"))
             continue
 
