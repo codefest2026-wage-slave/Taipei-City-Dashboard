@@ -81,6 +81,32 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 	},
 
 	actions: {
+		// Register a programmatically-drawn truck silhouette as a Mapbox SDF
+		// image. Idempotent — safe to call multiple times. The SDF mode lets us
+		// tint the icon per-feature via paint icon-color.
+		_ensureTruckImage() {
+			const mapStore = useMapStore();
+			const m = mapStore.map;
+			if (!m || m.hasImage("fsm-truck")) return;
+			const size = 32;
+			const canvas = document.createElement("canvas");
+			canvas.width = size;
+			canvas.height = size;
+			const ctx = canvas.getContext("2d");
+			ctx.fillStyle = "#000";
+			// Cab
+			ctx.fillRect(2, 12, 8, 10);
+			// Cargo box
+			ctx.fillRect(11, 8, 17, 14);
+			// Wheels (filled circles)
+			ctx.beginPath();
+			ctx.arc(7, 25, 2.5, 0, Math.PI * 2);
+			ctx.arc(22, 25, 2.5, 0, Math.PI * 2);
+			ctx.fill();
+			const imageData = ctx.getImageData(0, 0, size, size);
+			m.addImage("fsm-truck", imageData, { sdf: true });
+		},
+
 		// ── Loading ─────────────────────────────────────────────
 		async loadAllMockData() {
 			if (this.loadedAt) return;
@@ -205,7 +231,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selected_school-source")) {
 					mapStore.map.removeSource("fsm_selected_school-source");
 				}
-				["fsm_connected_suppliers-ring", "fsm_connected_suppliers-dot"].forEach((id) => {
+				["fsm_connected_suppliers-truck", "fsm_connected_suppliers-halo"].forEach((id) => {
 					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
 				});
 				if (mapStore.map.getSource("fsm_connected_suppliers-source")) {
@@ -411,7 +437,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 					"circle-color": "rgba(0,0,0,0)",
 					"circle-radius": 16,
 					"circle-stroke-width": 2.5,
-					"circle-stroke-color": "#00E5FF",
+					"circle-stroke-color": ["match", ["get", "incident_status"], "red", "#FF1744", "#00E5FF"],
 					"circle-stroke-opacity": 0.85,
 				},
 			});
@@ -423,12 +449,13 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		_drawConnectedSuppliers(supplierFeatures) {
 			const mapStore = useMapStore();
 			if (!mapStore.map) return;
+			this._ensureTruckImage();
 			const sourceId = "fsm_connected_suppliers-source";
-			const ringLayerId = "fsm_connected_suppliers-ring";
-			const dotLayerId = "fsm_connected_suppliers-dot";
+			const haloLayerId = "fsm_connected_suppliers-halo";
+			const truckLayerId = "fsm_connected_suppliers-truck";
 
 			// Remove existing
-			[ringLayerId, dotLayerId].forEach((id) => {
+			[truckLayerId, haloLayerId].forEach((id) => {
 				if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
 			});
 			if (mapStore.map.getSource(sourceId)) mapStore.map.removeSource(sourceId);
@@ -442,31 +469,9 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				},
 			});
 
-			// Outer ring with neon glow
+			// Halo glow layer (blurred circle behind truck)
 			mapStore.map.addLayer({
-				id: ringLayerId,
-				type: "circle",
-				source: sourceId,
-				paint: {
-					"circle-color": "rgba(0,0,0,0)",
-					"circle-radius": 10,
-					"circle-stroke-width": 6,
-					"circle-stroke-color": [
-						"case",
-						["any",
-							["==", ["get", "hazard_level"], "Critical"],
-							["==", ["get", "hazard_level"], "High"]],
-						"#FF1744",
-						"#00E5FF",
-					],
-					"circle-stroke-opacity": 0.4,
-					"circle-blur": 0.3,
-				},
-			});
-
-			// Inner sharp center dot
-			mapStore.map.addLayer({
-				id: dotLayerId,
+				id: haloLayerId,
 				type: "circle",
 				source: sourceId,
 				paint: {
@@ -478,27 +483,46 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 						"#FF1744",
 						"#00E5FF",
 					],
-					"circle-radius": 4,
-					"circle-opacity": 1,
+					"circle-radius": 13,
+					"circle-opacity": 0.25,
+					"circle-blur": 0.7,
 				},
 			});
 
-			// Click handler so user can select a supplier (only the visible/connected ones)
+			// Truck icon (SDF, tinted)
+			mapStore.map.addLayer({
+				id: truckLayerId,
+				type: "symbol",
+				source: sourceId,
+				layout: {
+					"icon-image": "fsm-truck",
+					"icon-size": 0.7,
+					"icon-allow-overlap": true,
+					"icon-ignore-placement": true,
+				},
+				paint: {
+					"icon-color": [
+						"case",
+						["any",
+							["==", ["get", "hazard_level"], "Critical"],
+							["==", ["get", "hazard_level"], "High"]],
+						"#FF1744",
+						"#00E5FF",
+					],
+				},
+			});
+
+			// Click handler — register once. Use the truck layer for hit-testing.
 			if (!this._supplierClickAttached) {
-				mapStore.map.on("click", ringLayerId, (e) => {
+				mapStore.map.on("click", truckLayerId, (e) => {
 					const f = e.features?.[0];
 					if (!f) return;
 					this.selectSupplier(f);
 				});
-				mapStore.map.on("click", dotLayerId, (e) => {
-					const f = e.features?.[0];
-					if (!f) return;
-					this.selectSupplier(f);
-				});
-				mapStore.map.on("mouseenter", ringLayerId, () => {
+				mapStore.map.on("mouseenter", truckLayerId, () => {
 					mapStore.map.getCanvas().style.cursor = "pointer";
 				});
-				mapStore.map.on("mouseleave", ringLayerId, () => {
+				mapStore.map.on("mouseleave", truckLayerId, () => {
 					mapStore.map.getCanvas().style.cursor = "";
 				});
 				this._supplierClickAttached = true;
@@ -543,7 +567,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selected_school-source")) {
 					mapStore.map.removeSource("fsm_selected_school-source");
 				}
-				["fsm_connected_suppliers-ring", "fsm_connected_suppliers-dot"].forEach((id) => {
+				["fsm_connected_suppliers-truck", "fsm_connected_suppliers-halo"].forEach((id) => {
 					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
 				});
 				if (mapStore.map.getSource("fsm_connected_suppliers-source")) {

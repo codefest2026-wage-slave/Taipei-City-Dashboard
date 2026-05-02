@@ -25,11 +25,11 @@
         供應商
       </div>
       <div class="legend-row">
-        <span class="ring-wrap"><span class="ring-outer ring-cyan" /><span class="ring-dot ring-dot-cyan" /></span>
+        <span class="truck truck-cyan" />
         <span>無事件</span>
       </div>
       <div class="legend-row">
-        <span class="ring-wrap"><span class="ring-outer ring-red" /><span class="ring-dot ring-dot-red" /></span>
+        <span class="truck truck-red" />
         <span>有事件</span>
       </div>
     </div>
@@ -110,4 +110,20 @@
 }
 .ring-dot.ring-dot-cyan { background: #00E5FF; }
 .ring-dot.ring-dot-red { background: #FF1744; }
+.truck {
+	width: 18px;
+	height: 14px;
+	flex-shrink: 0;
+	display: inline-block;
+	-webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='2' y='12' width='8' height='10'/><rect x='11' y='8' width='17' height='14'/><circle cx='7' cy='25' r='2.5'/><circle cx='22' cy='25' r='2.5'/></svg>") center/contain no-repeat;
+	mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='2' y='12' width='8' height='10'/><rect x='11' y='8' width='17' height='14'/><circle cx='7' cy='25' r='2.5'/><circle cx='22' cy='25' r='2.5'/></svg>") center/contain no-repeat;
+}
+.truck-cyan {
+	background: #00E5FF;
+	filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.7));
+}
+.truck-red {
+	background: #FF1744;
+	filter: drop-shadow(0 0 4px rgba(255, 23, 68, 0.7));
+}
 </style>
