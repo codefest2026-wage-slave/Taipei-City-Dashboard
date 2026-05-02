@@ -1,0 +1,107 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2 (v2): 通勤族「天氣懲罰圖」— 雨天酷暑誰被懲罰最重
+
+**v1 對照**: 全新提案。v1 沒有此案, 也沒有跨「交通 × 環境」局處整合。
+
+**Pitch (一句話)**: 同樣是雨天上班, 騎機車的三重族被懲罰 1 小時、捷運族多花 5 分鐘 — 我們把雙北 41 區的「天氣通勤懲罰指數」算給你看, 並告訴你今天該換什麼運具、政府哪裡該補遮蔭。
+
+**核心受眾 (Persona)**:
+- **主受眾 (大眾極大)**: 雙北每日通勤 250 萬人, **凡是會看天氣決定運具的都是受眾** — 機車族 (110 萬)、公車族、捷運族、步行族、YouBike 族。
+- **具體 persona**: 32 歲設計師大華, 住中和、上班松山。下雨天從捷運古亭轉松山要走 350 m 沒遮蔭, 公車誤點機率 +40%。他每天早上 7:30 滑手機決定「今天騎車還是搭捷運」。
+- **次受眾**: 工務局 (人行道遮蔭/騎樓政策)、環保局 (空污 × 通勤暴露)、衛生局 (極端天氣健康影響)。
+
+**雙北痛點**:
+1. 既有 dashboard 把「空氣品質」「降雨」「行道樹」「YouBike」「公車」**全切成獨立 widget**, 沒人問「這 5 個資料合在一起 → 我今天通勤的痛苦值是多少」。
+2. **真實大眾痛點**: 同樣下雨, 騎機車的人比捷運族慘 10 倍, 但既有政府工具假裝公平。「天氣通勤不平等」是雙北最被忽視的議題。
+3. 雙北落差: 台北行道樹 92,989 棵 (inventory 7 行) + 騎樓覆蓋率高; 新北邊緣行政區行道樹密度 < 台北 1/3, 加上機車通勤比例更高 — **新北通勤族被天氣懲罰加倍**, 政府從沒這視角。
+4. 政府盲點: 行道樹/遮蔭政策投資**從沒對齊真實通勤路徑** — 工務局種樹是按公園/路寬決定, 不是按「哪段步行通勤需要」。
+
+**核心價值 (看完能做什麼)**:
+- 早上 7:30 打開 → 輸入家/公司 → 看到「今日天氣懲罰指數」: 騎機車 ★★★★ (大雨+逆風)、捷運 ★★ (轉乘段 350m 無遮蔭)、YouBike ★★★★★ (雨大+空污 PM2.5 75)。
+- AI 一句話: 「建議你今天搭捷運, 比平時多走 7 分鐘, 但比騎車省 28 分鐘 + 不會濕透。古亭→松山轉乘段 350m 帶傘」。
+- 政府版: 「工務局該補遮蔭的 Top 20 步行段」清單 — 結合 (a) 通勤人流 (b) 現有行道樹密度 (c) 雨天頻率, 直接列政策投放優先序。
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00-0:20] Hook** — 大螢幕雙北地圖, 雨點動畫從天而降 (CWA 即時雨量), 41 區開始「染色」(被懲罰深度)。文字「同樣下雨, 你被懲罰的時間是別人的 10 倍 — 看你住哪」。
+2. **[0:20-1:00] 組件展示** — 點選「中和區機車族」persona → 顯示今日: 雨量 12mm/hr + 空污 PM2.5 75 + 行道樹密度 28% + 公車誤點率 +40%。對比同一時間「大安區捷運族」persona 痛苦值。雙北切換, 邊緣行政區紅得最深。
+3. **[1:00-1:40] 跨資料整合 insight** — 顯示「政府盲點地圖」: 行道樹密度 × 步行通勤人流的散布圖, 找出「人很多但樹很少」的步行段 (例: 板橋火車站東出口, 信義商圈 → 市府站轉乘段)。AI: 「投資 1,000 棵行道樹於這 20 段可服務 38 萬通勤族」。
+4. **[1:40-2:00] 行動入口** — 一鍵切運具建議 + LINE 訂閱「明日天氣懲罰預警」+ 政府匯出「遮蔭補強優先序」CSV。
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 跨局處整合)**:
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|---|---|---|---|---|
+| 1 | 雙北「天氣懲罰指數」41 區 Choropleth (主圖) | CWA 雨量站 (氣象署) + 空品 (台北/新北環保局) + 行道樹 (台北/新北工務局) + 通勤模式 (主計處人口/通勤普查) | Choropleth + 動態雨點 | ✅ | ✅ Mapbox 主層 |
+| 2 | 個人運具建議 (3 種比較) | TDX 公車 ETA + 捷運 LiveBoard + YouBike Availability + CWA + AQI | 卡片+折線 | ✅ | ❌ Apexcharts |
+| 3 | **「遮蔭補強優先序」步行段地圖** (政府盲點) | 行道樹分布 (工務局) + 人行道分布 (新工處) + 通勤人流 (捷運站乘客流動量, 主計處+捷運公司) + CWA | 線段 + 熱度 | ✅ | ✅ 主圖第 2 圖層 |
+| 4 | 雙北「機車族 vs 捷運族」雨天懲罰落差時序 | 公車誤點 (TDX) + 捷運誤點 (TDX) + 機車事故 (台北/新北警察局, 雨天比例) + CWA 歷史 30 天 | 雙折線 | ✅ | ❌ Apexcharts |
+| 5 | 空污 × 通勤暴露指數 (PM2.5 × 通勤時間) | 空品微型感測 (台北/新北環保局) + 通勤普查 | 雙北行政區排行 | ✅ | ❌ Apexcharts (橫條) |
+
+**跨局處資料整合說明 (本案核心加分)**:
+**首次整合的 5 個局處資料**:
+1. 中央氣象署 CWA (雨量、雨型、未來 6 hr 預報)
+2. 台北環保局 + 新北環保局 (空品微感+測站)
+3. 台北工務局 + 新北工務局 (行道樹 + 人行道)
+4. 台北交通局 + 新北交通局 + 公路總局 (公車誤點 + 捷運誤點 + YouBike)
+5. 主計處 (通勤普查 + 人口分布)
+
+**雙北對比角度**: 「邊緣行政區雨天通勤懲罰加成」— 新北機車比例高 + 行道樹密度低 + 公車班次稀疏, 三重打擊。具體數字: 雨天平溪通勤多花 47 min, 大安多花 6 min。
+
+**AI 應用**: 自然語言「我住中和搭捷運上班松山」+ 即時 CWA + 空品 → llama3.3 給出 (a) 今日運具排行 (b) 痛苦點段 (c) 是否該帶傘/口罩 (d) 替代運具差異。每段附「為什麼」(可解釋性硬要求)。
+
+**可解釋性 (本案靈魂)**:
+- 懲罰指數公式公開: `天氣懲罰 = 雨量 z-score × 1.5 + 風速 × 0.3 + 體感溫度偏離舒適區 × 1.0`; `通勤懲罰 = 天氣懲罰 × 運具暴露係數 (機車 1.0, 步行 0.7, 公車 0.4, 捷運 0.1) × 路徑遮蔭缺口`。
+- AI 永遠回答「為什麼今天 ★★★★」: 「因為 (a) 雨量 12mm/hr 比歷史同期高 + (b) 你的轉乘段 350m 行道樹覆蓋率 28% + (c) 空品 PM2.5 75 達紅色」。
+- 公式參數有 backtest: 過去 30 天的「使用者實際運具切換決策」可作為驗證 (mock)。
+
+**行動入口**:
+1. 一鍵深連結 Google Maps 對應運具導航。
+2. LINE 訂閱「7:00 天氣懲罰早報」(極簡每日推播)。
+3. **政府版**: 「遮蔭補強優先序 Top 20」CSV 給工務局, 含「投資 1 棵樹服務 X 通勤人次」ROI 估算 — closed-loop 政府用。
+4. 「投票補綠陰」公民參與: 使用者可在地圖上標「這段需要遮蔭」, 累計給工務局做民意參考。
+
+**與既有 dashboard 差異**:
+- 既有有「空氣品質」「行道樹」「YouBike」「捷運人流」獨立 widget, **完全沒有「個人通勤痛苦值」這個整合視圖**。
+- 既有沒有「行道樹政策投放優先序」derived metric, 工務局也沒這視角 (政府盲點)。
+- 既有的「天氣」「通勤」是兩個主題, 從未跨主題串接。
+
+**更新頻率 vs 使用情境**:
+- 早上 7:00-9:00 + 下午 5:00-7:00 是回訪尖峰 (兩次/天)。
+- 雨季 (5-9 月) 回訪率自然高, 雙北雨季 = 黑客松後 5-9 月正好是高使用期。
+- LINE 早報推播是真正的回訪驅動, 不需要使用者主動打開。
+
+**資料品質風險**:
+- CWA 雨量站雙北密度高 ✅ (inventory 主題 03 已驗證)。
+- 通勤普查為主計處 5 年大型調查, 即時粒度不足 → 用「平日 7-9 點捷運站乘客流動量」作為 proxy。
+- 行道樹資料台北 ✅, 新北資料完整度待驗證 (Day 0 P0 樣本)。
+
+**技術可行性 (32 hr)**:
+- **Day 1 MVP (16 hr)**: 懲罰指數 41 區 choropleth + CWA 雨點動畫地圖 + 運具比較卡片 + 個人 persona 切換。
+- **Day 2 polish (16 hr)**: 遮蔭補強優先序圖 + AI 解釋 + LINE Bot mock + 政府匯出 CSV。
+- 風險: 「個人懲罰指數」需路徑解析 (家→站→公司), Day 2 用「行政區→行政區」粗粒度先做, 避免 routing 黑洞。
+
+**亮點 scoring (1-5)**:
+- 受眾廣度: 5 (250 萬通勤族, 最大眾)
+- 雙北獨特: 5 (邊緣行政區雨天加倍懲罰)
+- Demo 衝擊: 5 (雨點動畫 + 41 區染色 + persona 對比)
+- Story 完整: 5 (大華 persona + 不平等敘事)
+- 應用價值: 5 (個人切運具 + 政府補遮蔭 ROI)
+- 技術整合: 4 (CWA + 環保 + 工務 + 交通)
+- 創意突破: 5 (「天氣懲罰不平等」是新框架)
+- **跨資料整合度: 5/5 (5 局處 + CWA)**
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

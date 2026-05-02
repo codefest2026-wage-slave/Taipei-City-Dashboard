@@ -1,0 +1,114 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2: 「我家附近能不能睡覺」雙北噪音夜間殺手地圖
+
+**Pitch (一句話)**: 民眾關心「房子值不值得買」、「夜班能不能睡」，但沒人把營建噪音、夜店噪音、道路車流、公害陳情四層疊起來給市民看 — 我們做雙北第一張**夜間睡眠殺手地圖**，AI 給每個地址打「安睡分數」並解釋為什麼。
+
+**核心受眾 (Persona)**:
+- **第一**：買房/租房族（雙北每年 ~50 萬租房遷徙人口、~10 萬購屋族）— 不知道這條路晚上會不會吵
+- **第二**：夜班族 / 嬰幼兒家庭 / 病後休養者 / 高齡淺眠者 — 對白天指標無感、痛點集中夜間
+- **第三**：政府盲點受害者（被營建噪音困擾投訴卻得不到回應的住戶）— 給他們「我家不孤單」的證據
+
+**v1 對照**: 全新提案。v1 #1/2/3 都偏白天/政策/河岸場景，**夜間噪音是雙北數十萬投訴卻被低估的盲點**。噪音不是新議題，但「跨四層噪音來源整合 × 房地產決策入口」是新切角。
+
+**雙北痛點**:
+- **2024 年雙北噪音陳情破 8 萬件**（環保局公害陳情 #1 大宗），但市民找不到「我家這條路被陳情幾次」
+- **營建噪音是政府盲點**：台北市營建工程噪音告發案件公開（資料集 inventory 1629），但**沒疊在地圖上給租房族看**；新北林口、淡水、三峽重劃區大量工地，租屋族踩雷後才知道
+- **夜店/卡拉OK 噪音雙北分布兩極**：台北信義/西門/中山有夜店熱區，新北板橋/三重/中和有違規卡拉OK，inventory 都有資料但散落
+- **道路噪音 NOX_P_02 公開但市民不會用**：環境部年度道路噪音資料庫雙北可篩，但呈現給專家看
+- **航空噪音管制區圖**雙北都有（松山機場 + 桃園/松山雙北涵蓋），租房族踩雷率高
+- **政府盲點**：噪音陳情件數高居公害陳情榜首卻沒整合面板 — 環保局自己都看不出「哪條路被反覆陳情」
+
+**核心價值**:
+1. 看：Mapbox 雙北疊四層噪音熱力 — 道路噪音 + 營建告發點 + 夜店點 + 公害陳情密度
+2. 用：輸入「板橋區文化路 XX 號」 → AI 給「夜間安睡分數 38/100」+「主因：周邊 200m 內過去 12 個月 17 件營建陳情、文化路日均車流 28000 輛」
+3. 自動：每月更新「雙北十大失眠路段」榜單
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00–0:20] Hook**：兩張對比卡 — 「同樣是 30 坪兩房一廳，板橋 A 路 vs 板橋 B 路，房價差 5%；安睡分數差 47 分」+ 字幕「房仲不會告訴你的事。」
+2. **[0:20–1:00] 組件**：Mapbox 雙北切換，地圖鋪上四層 — 道路噪音熱力 + 營建告發點（icon: 紅色工程帽）+ 夜店點（紫色音符）+ 公害陳情密度（黃色泡泡大小）。點任一址 → 4 層拆解柱狀圖。
+3. **[1:00–1:40] AI Insight**：使用者輸入新搬家地址 → AI 回：「該址夜間（22:00-06:00）安睡分數 42/100。主因：① 距文化路 80m，日均車流 3.2 萬輛；② 過去 12 個月周邊 200m 17 件營建陳情；③ 200m 內 1 家卡拉OK 12 次告發。建議：朝向後棟 / 雙層氣密窗 / 看 3 樓以上。」
+4. **[1:40–2:00] 行動**：「下載這個地址完整噪音報告」(PDF, 給房仲看) / 「我家也這麼吵 → 加入投訴熱區」 (送 1999) / 「我是房東 → 看我房子安睡評分」
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 須跨局處)**:
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|------|----------------|------|------|------|
+| 1 | 雙北道路交通噪音地圖 | 環境部 `NOX_P_02` 道路交通噪音 + 台北 `1999 噪音陳情` + 新北 `8D44... 環境及交通噪音監測站` + 新北 `自動交通噪音監測站` | 線狀 + 熱力 | ✅ | ✅ Mapbox |
+| 2 | 雙北營建工程噪音告發點位 (政府盲點) | 台北環保局 `臺北市營建工程噪音告發案件點位資訊` + 新北環保局公害陳情（含營建類別） | 點位 + 12 個月時序 | ✅ | ✅ |
+| 3 | 雙北娛樂/卡拉OK 噪音告發點 | 台北 `娛樂營業場所噪音告發` + `非營業用卡拉OK噪音告發` + 新北環保局類比資料集 | 點位 | ✅ | ✅ |
+| 4 | 雙北公害噪音陳情密度 (12 個月滾動) | 台北 `臺北市環境清潔及公害污染陳情按月別` + 新北環保局陳情統計 | 行政區 choropleth + 時序 | ✅ | ✅ |
+| 5 | 雙北航空噪音管制區圖 | 台北 `航空噪音防制區圖` + 新北 `航空噪音管制區劃定範圍` | 多邊形 | ✅ | ✅（疊圖） |
+| 6 | 雙北噪音陳情成案率對比 (政府績效) | 台北環保局處分概況 + 新北環保局處分概況 | 並排柱狀 | ✅ | ❌ Apexcharts |
+| 7 | 個人安睡分數計算組件 | 上述全部聚合至地址 200m 緩衝圈 | 雷達圖 + 數字 | ✅ | ❌ Apexcharts |
+
+**跨局處資料整合**:
+- **環保局**：噪音陳情、營建告發、娛樂告發、處分（雙北各自有）
+- **交通局/環境部**：道路交通噪音 NOX_P_02
+- **民航局**：航空噪音管制區
+- **市府公害陳情系統 1999**：陳情案件密度
+
+**雙北對比角度**: 台北「老市區密集 + 夜店商業 + 松山機場航線」vs 新北「重劃區工地海量 + 桃園機場航線 + 道路車流密度兩極」。**同一張地圖立刻看出兩市的「失眠主因不同」**。
+
+**AI 應用 (安睡分數解釋官)**:
+- **地址輸入 → 安睡分數 + 解釋**：模型輸入該址 200m 緩衝圈內四層數據聚合 → 輸出分數 (0-100) + 三大主因 + 緩解建議 (朝向/樓層/雙層窗)
+- **降級安全設計**：分數計算為**規則式**（透明公式），AI 只負責「翻譯成中文 + 給建議」，避免 LLM 給數值幻覺
+- **快取**：雙北切成 ~10000 個 100m 格網，預先計算每格分數 + 主因，AI 敘事按格生成（30 RPM 下夜間批次跑 6 小時可完成 3000 條熱門格）
+- **個人化**：使用者輸入後找最近格 → 分數即時顯示 + 取出該格快取敘事 + 個人因素微調 (如「您怕夜店 → 額外 -5 分」)
+
+**可解釋性**: 公式公開 — 「安睡分數 = 100 - 道路噪音分位數 × 0.35 - 營建告發次數分位數 × 0.30 - 夜店告發 × 0.20 - 陳情密度 × 0.15」。每個地址點出現「為何扣分」明細。AI 說明文字下方列「資料更新日期 + 樣本數 + 信心」。
+
+**行動入口**:
+1. 「下載這地址噪音報告 PDF」（給房仲/房東看）
+2. 「我家也這麼吵 → 一鍵投訴」（送 1999 + 經緯度，並同步顯示在地圖加入熱區）
+3. 「訂閱我家路段噪音週報」（LINE）
+4. 「我是房東 → 我房子安睡幾分？」（B 端入口）
+
+**與既有 dashboard 差異**:
+- 既有北市/新北 dashboard **都沒有噪音主軸組件**（永續環境分頁只有空氣品質、公園、行道樹）
+- 房仲 App (591/樂屋) 不會給噪音資訊（會嚇跑租客）
+- 我們是**雙北第一個把四層噪音來源串起來給市民決策用**，且整合「個人地址查詢」這個房仲 App 永遠不會做的功能
+
+**更新頻率 vs 使用情境**:
+- 道路噪音年更（環境部 NOX_P_02）→ 結構性指標
+- 營建/娛樂告發案月更 → 趨勢
+- 公害陳情月更 → 趨勢
+- **使用情境**：買房/租房族「決策時」查一次（年度更新 OK，不必即時）；既有住戶「訂閱週報」追蹤 → 完美對齊
+
+**資料品質風險**:
+- 新北的營建告發點位資料集是否與台北對等需驗證 → 若缺，UI 上**承認為雙北資料治理盲點**並補陳情統計
+- 道路噪音 NOX_P_02 是測站，非全路段 → 用空間內插或路網延伸，UI 標精度
+- 「個人地址 200m 緩衝」是工具，不是責任認定 → UI 強調「參考非結論」
+
+**技術可行性 (32hr)**:
+- Mapbox 4 圖層 + 點聚合 + 個人地址查詢 = 12hr
+- Apexcharts 雷達 + 並排柱 + 趨勢線 = 6hr
+- 安睡分數公式 + 格網預計算 ETL = 8hr
+- AI 敘事預生成 + 個人化微調 = 4hr
+- UI/Demo 整合 = 2hr
+- **合計 32hr 緊但可行**
+
+**亮點 scoring (1-5)**:
+- 受眾廣度：5（買房/租房 + 夜班族 + 嬰幼兒家庭 ≈ 雙北一半人口）
+- 雙北獨特：5（兩市失眠主因完全不同，重劃區 vs 老商圈）
+- Demo 衝擊：5（房價差 5% / 安睡差 47 分 hook 強）
+- Story：5（具體地址 + 房仲不會講的真話）
+- 應用：5（一輩子搬家會用好幾次）
+- 技術：4（4 層圖層整合中等）
+- 創意：5（噪音不是新議題，但「政府盲點 + 房地產決策」是新切角）
+- 跨資料整合：5（5 局處）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

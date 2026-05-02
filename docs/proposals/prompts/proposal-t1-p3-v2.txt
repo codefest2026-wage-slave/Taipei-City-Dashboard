@@ -1,0 +1,111 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3 (v2): 雙北公車路網覆蓋盲區地圖 — 政府的盲點, 30 萬人的日常
+
+**v1 對照**: 全新提案, 走「政府盲點」路線。v1 完全沒有此案。
+
+**Pitch (一句話)**: 雙北 2,494 個里, 我們算出 X 個里的居民走出家門 500m 內沒有任何公車站 — 這是政府宣稱的「公共運輸覆蓋率 95%」沒告訴你的另一面。
+
+**核心受眾 (Persona)**:
+- **主受眾**: 雙北 2,494 里中的「公車盲區里」居民 (預估 30-50 萬人), 加上**政府自己** (這是政府盲點, 政府需要這視圖做政策)。
+- **具體 persona**: 65 歲新莊區頭前里阿嬤, 走出家門 700m 才有第一個公車站, 沒有捷運。她每天看醫生靠兒子接送, 兒子上班接不到。
+- **次受眾**: 雙北交通局 (路網規劃)、社會局 (高齡公共運輸荒漠)、地方議員 (選區政策論述)。
+
+**雙北痛點**:
+1. **政府從沒這視角**: 既有官方 dashboard 有「公車站」「捷運站」「自行車道路網」**獨立圖層**, 沒人做「家門 500m 內公共運輸盲區」分析。交通局講的是「路線覆蓋」, 不是「居民可達」。
+2. **30 萬人的日常**: 雙北邊緣行政區 (新北山區、台北外環) 約 30-50 萬居民住在「公車荒漠」, 政府宣稱 95% 覆蓋率時, 這群人是被分母稀釋的 5%。
+3. 雙北落差最赤裸: 台北 12 區公車站密度約每 km² 35 站, 新北邊緣 (平溪、坪林、雙溪、貢寮、烏來、石碇) < 5 站/km², 但這些區域**老年人口比例高 20-30%**, 公共運輸需求反而更高 — 結構性不公平。
+4. 跨資料才能看出: 公車站 (交通局) × 里界 + 人口 + 老年比例 (主計處) × 高齡長照據點 (社會局) — 三組局處合在一起, 才看出「需要公車最多的人住在最荒漠的地方」。
+
+**核心價值 (看完能做什麼)**:
+- 市民版: 「我家是不是公車盲區?」輸入地址 → 顯示家門 500m 內公車站數量、最近距離、班次密度、+ 同里其他人也是盲區的比例。
+- **政府版 (核心)**: 雙北 2,494 里的「公共運輸覆蓋盲區」排行 + 「需要 vs 供給落差」(老年人口高但公車少的里) + 政策投放建議 (這 50 個里加 1 條路線可服務 X 人)。
+- 議員版: 選區「公車盲區里」清單 + 民意論述材料。
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00-0:20] Hook** — 大螢幕雙北地圖, 2,494 里灰色底, 公車站綠點, 然後 500m 緩衝區「染色」。剩餘的紅色區塊 = 公車盲區里。文字「這些紅色裡, 住著 30 萬人」。
+2. **[0:20-1:00] 組件展示** — 點選「新莊區頭前里」→ 阿嬤 persona 出現, 顯示家門 500m 內 0 個公車站、最近公車站 712 m、班次間隔 25 min。對比「大安區大學里」: 5 個站、最近 80 m、班次 3 min。雙北切換, 不公平具象。
+3. **[1:00-1:40] 跨資料整合 insight** — 切「需供落差圖」: x 軸老年人口比例, y 軸公車站密度, 紅色象限 = 高老人 + 低公車 = 政策最該投資的里。AI: 「Top 10 政策最需要里, 投放 3 條接駁路線可服務 8.4 萬高齡居民」。
+4. **[1:40-2:00] 行動入口** — 三鍵: 「我家是盲區嗎」(市民版搜尋)、「政府版排行 CSV 匯出」、「議員選區報表」。
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 跨局處整合)**:
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|---|---|---|---|---|
+| 1 | 雙北「公車盲區里」主地圖 (500m 緩衝 + 紅色盲區) | 公車站位置 (台北/新北交通局, TDX `/Bus/StopOfRoute`) + 里界 (主計處) | 多圖層 | ✅ 雙北 2,494 里 | ✅ Mapbox |
+| 2 | 「需供落差」散布圖 (老人比例 × 公車密度) | 主計處各行政區年齡層人口分布 + 公車站密度 + 長照據點 (社會局) | 散布圖 | ✅ | ❌ Apexcharts |
+| 3 | 雙北 41 區「公車服務不足分數」排行榜 | 公車路線軌跡 (交通局) + 班次密度 (TDX Bus Schedule) + 里人口 (主計處) | 橫條 | ✅ | ❌ Apexcharts |
+| 4 | 「政策投放優先序」清單 (Top 50 里 + 建議路線) | 上述全部 + 道路圖層 (新工處/工務局) | 表格 + 地圖 | ✅ | ✅ 主圖第 2 圖層 |
+| 5 | 「我家是盲區嗎」個人查詢 | 地址 → 里 + 公車站 buffer + 即時 ETA | 卡片 | ✅ | ✅ 主圖第 3 圖層 |
+| 6 | 雙北捷運+YouBike 補強圖層 (整合視角) | 捷運路網 (TDX Rail) + YouBike (TDX Cycling) | 圖層 toggle | ✅ | ✅ |
+
+**跨局處資料整合說明 (本案核心加分)**:
+**首次整合的 5 個局處資料**:
+1. 台北交通局 + 新北交通局 + 公路總局 (公車站 + 路線 + 班次)
+2. 主計處 (里界圖層 + 人口 + 老年比例)
+3. 台北社會局 + 新北社會局 (長照據點 — 高齡需求 proxy)
+4. 台北工務局新工處 + 新北工務局 (道路圖層, 評估「能不能加路線」)
+5. 台北市政府捷運公司 + TDX (捷運 + YouBike, 整合運具補強視角)
+
+**雙北對比角度**: 雙北「公車服務不平等指數」 — 山區/偏遠 vs 市中心相差 10-30 倍, 比「橋」題材更普世、更政策有感 (比 v1 #1 跨橋的話題刺骨)。
+
+**AI 應用**:
+- 政策模擬器: 自然語言「假設我在新莊頭前路加一條公車線」→ AI 計算可服務里 + 可服務人口 + 估算成本 (路線里程 × 班次密度 × 公車營運單價)。llama3.3 多 tool calling: `simulate_route(...)` + `count_residents_covered(...)` + `compare_to_baseline(...)`。
+- 給議員/政府用, 是真正的「決策中樞」對齊 2026 願景。
+
+**可解釋性 (政府最在意)**:
+- 「公車服務不足分數」公式: `0.4 × (1 - 500m 內站點覆蓋率) + 0.3 × (老年人口比 - 雙北平均) + 0.2 × 班次稀疏度 + 0.1 × 替代運具缺乏度 (捷運/YouBike)`。
+- 為什麼? 因為 (a) 站點可達是基礎 (b) 老年/長照需求是真痛點 (c) 班次決定實用性 (d) 替代運具補強。
+- 公式公開, 政府可挑戰可調整 — 這比「黑箱政策」可信 100 倍。
+
+**行動入口 (政府盲點價值最高)**:
+1. **政府版 CSV 匯出**: 雙北 41 區「公共運輸服務不足里」Top 100 + 建議補強路線 — 直接給交通局做明年預算編列。
+2. **議員版**: 選區公車盲區里清單 + 高齡人口疊加 + 民意論述材料模板。
+3. **市民版**: 「我家是盲區嗎」一鍵查詢 + 「在你的選區盲區排第幾」分享圖。
+4. **長期 closed-loop**: 政策實施後 6 個月可回測「補一條路線後, 該里盲區率下降多少」。
+
+**與既有 dashboard 差異**:
+- 既有有「公車站」「捷運站」「人口分布」**獨立圖層**, **沒有「家門 500m 公車盲區」這種空間 join 計算**。
+- 既有沒有「需供落差」(老人 × 公車稀疏) 跨主題分析。
+- 既有沒有「政策模擬器」(假設加一條路線)。
+- 這是雙北 41 區政府都沒做的視圖 — **真正的政府盲點**, 不是裝飾。
+
+**更新頻率 vs 使用情境**:
+- 主圖偏靜態 (路網年更), 但**這是優點**: 不用每天看, 但每年政府預算編列前看一次, 是政策決策入口。
+- 即時組件 (公車 ETA) 確保有「動態」感, 但本案核心是政策視角, 不需要使用者每天打開。
+- **回訪驅動**: 議會質詢期、預算編列期、選舉前 — 政府/議員/媒體會主動使用 (這是本案 DAU 弱但價值高的特點, 誠實面對)。
+
+**資料品質風險**:
+- 雙北里界主計處 ✅ (inventory 含)。
+- 新北山區公車路線資料完整度 (TDX `/Bus/StopOfRoute/City/NewTaipei` 對山區尾站需驗證) — Day 0 P0 樣本 1 hr 驗證。
+- 老年人口里粒度 vs 行政區粒度: 主計處可能里粒度不全, 用行政區 fallback。
+
+**技術可行性 (32 hr)**:
+- **Day 1 MVP (14 hr)**: 雙北公車站 + 里界 + 500m buffer 空間運算 (PostGIS 或 Turf.js) + 紅色盲區 choropleth。**核心算法 5-6 hr, 是本案技術深度所在**。
+- **Day 2 polish (18 hr)**: 需供落差散布 + 「我家是盲區嗎」查詢 + 政策模擬器 AI tool calling (這是工程黑洞, 8-10 hr) + 政府匯出。
+- **scope 削減 plan B**: 政策模擬器若做不完, 改為靜態「Top 50 建議路線」表格, 省 6 hr。
+
+**亮點 scoring (1-5)**:
+- 受眾廣度: 4 (盲區居民 30-50 萬 + 政府/議員 — 大眾 + 政府雙線)
+- 雙北獨特: 5 (山區/邊緣 vs 市中心結構性不平等)
+- Demo 衝擊: 5 (紅色盲區地圖 + 阿嬤 persona)
+- Story 完整: 5 (政府盲點 + 30 萬人 + 結構性不公)
+- 應用價值: 5 (政策決策入口, 對齊 2026「決策中樞」最強)
+- 技術整合: 5 (空間 join + 多源 + AI 模擬器)
+- 創意突破: 5 (政府盲點視角是真創意)
+- **跨資料整合度: 5/5 (5 局處 + 空間運算)**
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

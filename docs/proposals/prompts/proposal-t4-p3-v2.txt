@@ -1,0 +1,116 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3：「我家附近的醫療資源圈」— 雙北平日就醫可及性地圖 (非急救版)
+
+**Pitch (一句話)**：不是 OHCA 救命圖, 是**平時生病就醫**的醫療資源可及性 — 用步行 / 騎車等時圈疊「家用」(慢性病門診/小兒夜診/24hr 藥局) + 「特殊」(失智門診/長照特約/發展遲緩評估/孕產) + 「應急」(急救責任醫院/兒童急診)三層, 讓雙北 600 萬市民看見「我家半徑 15 分鐘內看小兒科要等到禮拜幾, 領慢箋要走多遠」, 揭露**新北邊緣行政區醫療沙漠**這個政府盲點。
+
+**核心受眾 (Persona)**：
+- **主受眾 (大眾)**: 慢性病患者 (高血壓/糖尿病領慢箋族 ~100 萬)、雙薪父母 (孩子發燒夜診)、長者照顧者 (失智/長照特約)、孕婦 (產前檢查機構)
+- **次受眾**: 新住民 (孕前/產前檢查、新住民未納保產前)、發展遲緩兒家庭、視障按摩師、HIV 篩檢需求者
+- **政府盲點**: 衛生局醫政科、區公所「醫療沙漠」量化指標、新北山區/海岸資源調度
+
+**v1 對照**：**取代 v1 #2 OHCA 救活地圖** (v1 已被認定「假議題, 市民實際靠 119, 不會打開地圖救命」), 改為**平時就醫**這個 100% 真實大眾痛點:
+1. **不再用「黃金 4 分鐘救命」誇大敘事** → 改「平日門診 / 慢箋 / 夜診 / 兒科」可及性
+2. **不再宣稱「活下來機率差 8 倍」未驗證統計** → 改「新北 X 區步行 15 分內小兒科 0 家」可從等時圈直接驗證的事實
+3. **OHCA 資料新北無對等問題消失** → 平日醫療點位資料雙北都豐富 (TPE 衛生局公開 + NTPC 20+ 個 UUID)
+4. **AED isochrone 山區 polygon QC 風險** → 改「步行 / 機車 15 分鐘」短距離等時圈, 山區也合理 (本來就該長)
+5. **加入「政府盲點」維度**: 民眾 1999 陳情「附近沒診所」vs 實際醫療點位密度的對齊度 (跨陳情系統 + 衛生局)
+
+**雙北痛點**：
+1. **慢性病領慢箋族**雙北超過 100 萬, 但「家附近哪間診所有同一科 + 哪間藥局領慢箋」民眾要 google 半天
+2. **雙薪父母週六孩子發燒**: 北市夜診 / 假日門診是熱門資訊, 新北山區 (烏來/瑞芳) 整區無夜診兒科
+3. **長者失智 / 長照**: 新北失智門診 (`CA171D91-B049-48E9-B60E-D5EBB82613C5`)、長照特約 (`3405C89E`)、日照中心 (`3C61017B`)、藥癮維持治療 (`EFDB8DF6`) 散在 5+ 個資料集, 家屬找不到
+4. **新住民孕婦**: 新北「新住民未納保產前檢查」(`9ECC2478-82DC-477D-B2B9-050738E928F3`) 是專屬制度, 但目前無視覺化
+5. **政府盲點**: 北市 12 區醫療點位密集到無感知; 新北 29 區「邊緣行政區醫療沙漠」(平溪/雙溪/坪林/石碇/烏來/貢寮) 缺乏可視化證據, 預算分配缺基礎事實
+
+**核心價值**：把「打 119 救命」誤區換成「平日生病就醫」這個更真實、更高頻、更廣大的市民痛點, 並用「等時圈」量化雙北資源沙漠, 給政府看見、給市民決策。
+
+**Demo 衝擊力 (2 分鐘)**：
+1. **Hook (0:00-0:25)**: 雙北步行 15 分鐘等時圈疊「兒科診所 + 24hr 藥局 + 急救責任醫院」覆蓋率 — 北市 95%+, 新北 58%, **東北角 / 山區整片白色「醫療沙漠」**。標題: 「你家小孩晚上發燒, 走路 15 分鐘有兒科嗎?」
+2. **三層切換 (0:25-1:00)**: 切「家用」(慢箋/夜診/小兒/婦產) → 北市密、新北沙漠化; 切「特殊」(失智/長照特約/發展遲緩/孕產/新住民未納保產檢) → 新北制度更完整 (5 個專屬資料集), 但分布偏中和板橋, 山區仍空; 切「應急」(急救責任/兒童急診/腦中風處置) → 北市萬華/大安最密
+3. **政府盲點 (1:00-1:35)**: 切「陳情 vs 點位」對比 — 北市 1999 陳情系統「醫療不便」陳情件數 / 行政區人口比 vs 醫療點位密度, 出現「陳情多但點位少 = 政策盲區」幾個熱區。AI template 摘要: 「貢寮區步行 15 分內 0 家兒科、僅 1 家衛生所, 對應同期 1999 陳情 X 件, 為雙北最大盲區」
+4. **行動入口 (1:35-2:00)**: 「我家附近 15 分鐘醫療清單」(三層下拉) / 「申請新北市第 3 胎掛號費減免」深連結 / 「衛生所預約系統」/ 「健保快易通」
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 跨局處)**：
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|------|----------------|------|------|------|
+| 1 | **三層醫療資源等時圈疊圖 (Mapbox)** | TPE 衛生局: 醫院 37 + 診所 1858 + 各行政區流感醫院 + 哺集乳室 + 婦產科診所 (官方既有) ／ NTPC 衛生局: `C2F23210` (急救責任醫院) + `0B8B06A2` (腦中風處置) + `713F49A4` (緊急醫療能力分級) + `467CB02F` (一般護理之家) + `06DF32F9` (居家護理) + `0469D46D` (呼吸照護) | 步行/機車 15min isochrone polygon + 三層點位 (家用/特殊/應急) | ✅ | ✅ isochrone + 點位 |
+| 2 | **特殊照護資源密度 (Apex Heatmap)** | NTPC: `CA171D91` (失智門診) + `3405C89E` (長照特約) + `3C61017B` (日照中心) + `EFDB8DF6` (藥癮治療) + `8254A8E7` (發展遲緩兒童評估) + `9ECC2478` (新住民未納保產檢) + `68894F74` (婚後孕前檢查機構) + `2C3904E0` (愛滋指定醫事) ／ TPE: 對等資源彙總 | 三維熱力 (區×類型×家數) | ✅ 並列 | ✗ |
+| 3 | **慢箋 / 夜診 / 假日就醫密度 (Apex 雙軸柱+折線)** | TPE: 醫院診所病床數 (`100c445e`) + 藥商家數含藥局 ／ NTPC 衛生所門診時間 (`781ED216`, 6-8 區人工結構化) + 居家護理 + 母嬰親善 (`6477C583`) | 區 × 家數 + 假日營業比例 | ✅ | ✗ |
+| 4 | **陳情 vs 醫療點位對齊度 (Apex Bubble + KPI)** | TPE 研考會: 1999 陳情系統 (按陳情類別 — 醫療相關) ／ NTPC: 1999 陳情統計 (有則用; 無則用衛生局陳情代理) ／ 對應行政區人口 (民政局) | 散布圖 (人口 × 陳情率 × 點位密度) | ✅ | ✗ |
+| 5 | **醫療沙漠 AI template 解讀卡** | 對 #1-#4 預跑 41 區 × 3 類別 = 123 條摘要 | 文字 + 來源連結 | ✅ | ✗ |
+
+**跨局處資料整合**：雙北衛生局 (醫療點位 / 長照 / 婦幼 / 新住民) + 民政局 (人口分母) + 研考會 (1999 陳情) + 教育/社會 (發展遲緩) + 健保署 (慢箋制度說明連結) — **5 個局處**, 加上「政府盲點」陳情×點位是雙北獨家視角。
+
+**法律/倫理避雷**：
+- 不釘特定診所「品質好壞」, 只做**密度與可及性**統計, 不評論個別院所
+- **不做醫療諮詢**: 不告訴使用者「該掛哪一科」「該看哪間」, 只回傳「半徑內清單 + 健保署科別說明連結 + 衛生所諮詢電話」
+- AI 摘要僅做空間分布描述 (「X 區 15 分內有 Y 家」), 不做品質排序
+- 「醫療沙漠」用詞需註明: 指**步行/機車短距離可及性**, 不否定既有救護車與遠程資源
+
+**雙北對比角度**：
+- 北市 12 區密集 vs 新北 29 區覆蓋落差 (山區 / 海岸 vs 雙和板橋)
+- 北市無「新住民未納保產檢」「第 3 胎掛號費減免」對等制度 — **新北制度反而更完整, 但分布不均** (這是真實雙北獨特發現, 不是「北市好新北差」的刻板印象)
+- 雙北失智 / 長照特約密度 → 揭露高齡化區域對應落差
+- 1999 陳情 vs 點位密度的「政策盲區」雙北各 3-5 區
+
+**AI 應用 (限資訊指引)**：
+- 41 區 × 3 類別 (家用/特殊/應急) = 123 條 template 摘要批次預跑
+- 多語: 中英二語 (新住民越南文 roadmap)
+- **絕對禁止**: 評論個別院所、給就醫建議、判斷是否需要看醫生
+- 限「描述 + 資源 + 制度連結」三段式
+
+**可解釋性**：
+- 等時圈用 Mapbox isochrone API, 短距離 (步行 15min ≈ 1.2km / 機車 15min ≈ 5km) 山區誤差小
+- 「醫療沙漠」定義公開: 步行 15 分內目標類別 0 家
+- 點位資料每筆可追溯資料集 ID + 更新日
+
+**行動入口**：
+- 「我家附近 15 分鐘醫療清單」三層下拉
+- 「衛生所預約 / 健保快易通」深連結
+- 「新北專屬制度查詢」(第 3 胎減免、新住民未納保產檢、長照特約)
+- 「1999 陳情無醫療資源」一鍵
+- 「我家社區想設特殊門診」連衛生局申請頁
+
+**與既有 dashboard 差異**：
+- 既有「醫療院所分布」是純點圖, **沒有等時圈可及性、沒有三層分類、沒有醫療沙漠視覺化**
+- 既有「各行政區流感疫苗接種醫院數量統計」是柱狀, **沒有與長照/特殊照護疊圖**
+- 「陳情 vs 點位對齊度」在任何官方儀表板皆未呈現
+- 新北 7-8 個專屬制度 (新住民 / 第 3 胎 / 長照特約 / 失智門診) 從未集中視覺化
+
+**更新頻率 vs 使用情境**：
+- 醫療點位 (年更) → 年度檢視, 配合衛福部評鑑週期
+- 1999 陳情 (月更 / 季更) → 季度盲區檢視
+- 衛生所門診時間 (半年更) → 半年檢視
+- 全 dashboard 預設「最新一年」+ 政策盲區 KPI 卡
+
+**資料品質風險**：
+- TPE AED / 醫療點位部分資料集 UUID 需 D-2 試打確認 — 既有官方儀表板已用代表 API 穩定
+- 新北衛生所門診時間 PDF → 6-8 區人工整理樣本, 誠實標註
+- Isochrone 山區 polygon: 短距離誤差小, 但烏來/貢寮 OSM 路網稀疏需 D-2 視覺 QC, 必要時改用「直線 buffer」並標註
+- 1999 陳情類別需先過濾「醫療相關」子類別, 北市 vs 新北類別代碼不同需手動對應
+
+**技術可行性 (32hr)**：
+- D-1: 雙北 25+ 個醫療資料集 API 健檢 + 三層分類整理 (6hr)
+- D-2: Mapbox isochrone 預跑 (北市 12 區 + 新北 29 區短距離 polygon) + UI (10hr)
+- D-3: 4 ApexCharts + 陳情×點位散布圖 (6hr)
+- D-4: AI template 預跑 + UI 整合 + demo 排練 (8hr)
+- Buffer: 2hr — 整體 30-32hr, 風險集中在新北山區 polygon QC
+
+**亮點 scoring (1-5)**：受眾廣度 5 / 雙北獨特 5 / Demo 4 / Story 5 / 應用 4 / 技術 3 / 創意 5 / 跨資料整合度 5
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

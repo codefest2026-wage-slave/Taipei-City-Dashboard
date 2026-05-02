@@ -1,0 +1,116 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #2：「兒童傳染病雷達 + 學區提醒」— 雙北家長預警雷達
+
+**Pitch (一句話)**：把疾管署 4 大兒童常見傳染病 (腸病毒 / 類流感 / 手足口病 / 急性腹瀉) 雙北每週監測, 與雙北學校學區、衛生所疫苗點、托嬰中心分布疊圖, 配 AI 給「預防生活建議」(洗手、通風、疫苗時程提醒) — **完全不做症狀問診、不給藥物建議、不判斷是否就醫**, 只回答「我家學區本週是否升溫 / 我該做什麼預防動作」。
+
+**核心受眾 (Persona)**：
+- **主受眾 (大眾)**: 雙北學齡前 (0-6 歲) + 國小 (7-12 歲) 家長, 約 **120 萬戶**; 托嬰中心、幼兒園、國小教師
+- **次受眾**: 孕婦 (登革熱季)、長者照顧者 (流感)、新住民媽媽 (語言友善)
+- **政府盲點**: 衛生局疾管科週報「自然語言推播給家長」缺口、教育局學校健康中心對接
+
+**v1 對照**：**由 v1 #3 健康 Concierge 重構**, 修了 5 個 critique 致命問題:
+1. **AI 不再做醫療諮詢** → 全 hard rail: 任何症狀問診 (例: 「我兒子發燒該怎麼辦」) 一律不回應, 只導向 1922 + 衛生所門診時間 + 兒童急診責任醫院清單。AI 限三類動作: (a) 學區疫情趨勢摘要, (b) 預防生活建議 (洗手/通風/疫苗時程), (c) 多語資訊翻譯
+2. **多語降級為中英二語 (越南文 roadmap)** → 32hr 內可驗證品質, 越南文僅展示路徑 mockup
+3. **「擴散方向」改畫面化呈現**, 不做 AI 因果推論 — 鄰近行政區疫情上升箭頭僅作描述, 不宣稱新莊→士林等具體推論
+4. **疾病組合改聚焦春末夏初季節**: 腸病毒 (春夏起步) + 類流感 (春末尾聲) + 手足口病 + 急性腹瀉 (取代登革熱, 該時節雙北無 demo case)
+5. **新北衛生所結構化採樣本人工整理**: 32hr 內人工整理 6-8 個樣本鄉鎮 (含烏來、瑞芳、平溪、淡水、板橋、新莊), 誠實標註「demo 用, 未來擴大全 29 區」
+
+**雙北痛點**：
+1. 家長手機要查疫情, 切換疾管署網站 + 衛生局網站 + 健保快易通 + 學校群組 4 個入口
+2. 新北 29 區衛生所**疫苗種類差異大且資訊散落 PDF**, 偏鄉門診時間不固定
+3. 雙北通勤生活圈 (新莊+板橋+三重+萬華+士林) 疫情擴散邊界不重合行政區, 學區家長無「跨市風險」感知
+4. 新住民媽媽看不懂中文公文, 疾病預防資訊覆蓋斷層
+5. 政府盲點: 既有北市「腸病毒流行情形警示」**僅單一疾病單一文字警示**, 完全無空間視覺化、無學區對應、無多疾病比較
+
+**核心價值**：把疾管署冷冰冰 CSV 變成**家長能 30 秒看懂的學區雷達**, 守住「不做醫療建議」紅線, 用「資訊 + 預防 + 資源指引」三段式回應建立可信賴的政府工具。
+
+**Demo 衝擊力 (2 分鐘)**：
+1. **Hook (0:00-0:25)**: 雙北鄉鎮級疫情熱力 — 切 4 種疾病, 預設腸病毒。動畫顯示「近 4 週」週次推進, 板橋 / 新莊 / 萬華 / 中和升溫亮紅, 標題: 「你家學區本週升溫了嗎?」
+2. **跨資料疊圖 (0:25-1:00)**: 切到「學區 + 衛生所 + 疫苗點」圖層 — 北市 12 區流感疫苗合約醫院密集 (官方既有資料), 新北山區 (烏來/瑞芳/平溪) 衛生所疫苗種類稀疏 → 旁邊 Apex 雷達圖顯示雙北疫苗覆蓋率與全國差距
+3. **AI 預防建議 (1:00-1:35)**: Demo 一個 query — 家長輸入「我家在中和, 小孩 4 歲, 腸病毒升溫該注意什麼」→ AI 三段式回應: (a) 中和區本週腸病毒就診人次 +X% (引疾管署 rods-enterovirus 第 N 週, 連結), (b) **預防動作**: 勤洗手、漂白水稀釋擦拭、群聚通風 (引衛福部官方教材), (c) **資源**: 中和區衛生所地址 / 1922 / 兒童急診責任醫院清單。**完全不做「該不該就醫」判斷**, 螢幕底部固定 disclaimer
+4. **行動入口 (1:35-2:00)**: 「加入學區疫情推播」「查衛生所門診時間」「查兒科急診責任醫院」「衛福部疾病預防教材深連結」
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 跨局處)**：
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|------|----------------|------|------|------|
+| 1 | **雙北 4 大兒童傳染病鄉鎮級熱力圖 (Mapbox)** | 疾管署: `aagsdctable-weekly-enterovirus-infection-with-severe-complications` (腸病毒重症週統計, 含縣市/鄉鎮代碼) + `rods-influenza` (類流感急診) + `rods-hand-foot-mouth-disease` (手足口病) + `rods-acute-diarrhea` (急性腹瀉) | 鄉鎮 polygon × 病例數 + 4 週時間軸 | ✅ 縣市代碼 63000 / 65000 | ✅ choropleth + 動畫 |
+| 2 | **學校 / 衛生所 / 疫苗點疊圖 (Mapbox 點位)** | TPE 衛生局: 各行政區流感疫苗接種醫院 (官方既有資料集 376 家) + 教育局學校位置 ／ NTPC 衛生局: `FB62AEDB-79E6-4EA6-B013-C23291AEF5F7` (公費流感合約院所) + `2553BB1A-BCBB-4284-8B24-ACFEFE966F1E` (29 區衛生所) + `781ED216-BE0D-4A31-A3E3-BC8F6FE2B221` (衛生所門診時間+疫苗種類, 6-8 區人工結構化) ／ 教育部: 雙北幼兒園/國小位置 | 點位 + tooltip | ✅ | ✅ 疊在 #1 上 |
+| 3 | **預防接種完成率雙北 vs 全國 (Apex 雷達)** | 疾管署: `immunization-coverage` (麻疹/水痘/B 肝/A 肝/結合型肺鏈/日本腦炎多劑種) | 多維百分比 (疫苗種類 × 地區) | ✅ | ✗ |
+| 4 | **健保門診就診率 — 流感/肺炎週時序 (Apex 折線)** | 疾管署: `hi-outpatient-emergency-visit-influenza` (含縣市代碼週統計) | 二維時序 | ✅ | ✗ |
+| 5 | **學區雷達 + AI 預防建議卡 (側欄)** | 對 #1-#4 + 衛福部疾病預防教材 RAG, llama3.3-ffm hard rail | 三段式: 趨勢 / 預防動作 / 資源 | ✅ | ✗ |
+
+**跨局處資料整合**：疾管署 (4 個傳染病週統計 + 接種覆蓋率) + 雙北衛生局 (疫苗點/衛生所/門診時間) + 教育部 (學校學區位置) + 衛福部 (預防教材) — **4 個來源**, 學區×疫情是雙北獨家視角。
+
+**法律/倫理避雷**：
+- AI hard rail (寫死 system prompt + 後處理 regex): 任何包含「我/我家/小孩+症狀+怎麼辦/該不該/吃什麼藥/疫苗該打嗎」一律拒答, 只回三段式預防 + 資源
+- 螢幕底部固定 disclaimer: 「本服務不構成醫療建議, 症狀請洽 1922 / 兒科急診」
+- AI 回應強制掛資料來源 (疾管署資料集 ID + 週次), 否則 reject
+- 教材內容**只引用衛福部/疾管署官方教材原文**, 不自行生成醫學結論
+- demo 對話不開放現場觀眾自由輸入 (或開放但有 prompt filter)
+
+**雙北對比角度**：
+- 雙北通勤生活圈疫情同步度 (描述性 r 值, 不做因果)
+- 北市疫苗覆蓋率 vs 新北 29 區 (尤其偏鄉)
+- 北市流感合約醫院密度 (376 家) vs 新北山區衛生所疫苗種類差異 — 揭露「同樣繳健保, 醫療資源樣態不同」
+- 學齡前 vs 國小不同學區疫情季節差異
+
+**AI 應用 (限資訊+預防+資源)**：
+- 三段式回應 template: 趨勢 (數字 + 來源) / 預防 (官方教材原文) / 資源 (衛生所/急診清單地圖 pin)
+- 中英二語切換 (越南文展示 roadmap)
+- 41 區 × 4 疾病 = 164 條趨勢摘要批次預跑, cache Redis
+- **絕對禁止**: 個別症狀問診、用藥建議、是否打疫苗判斷、是否就醫判斷
+
+**可解釋性**：
+- 疫情趨勢用簡單一階差分 + 描述統計, 不做 SIR / 因果推論
+- AI 回應每段強制掛資料集 ID + 週次 + 衛福部教材連結
+- 所有預防建議文字為衛福部官方原文, 標明出處頁碼
+
+**行動入口**：
+- 「加入學區疫情推播」(localStorage / line notify MVP)
+- 「查衛生所門診時間」(週末過濾)
+- 「查兒科急診責任醫院」(深連結雙北衛生局)
+- 「衛福部疾病預防教材」(中英官方原文)
+- 「1922 防疫專線」一鍵撥號
+
+**與既有 dashboard 差異**：
+- 北市既有「腸病毒流行情形警示」**僅單一疾病單文字警示**, 無空間熱力、無多疾病
+- 雙北「鄉鎮級」兒童傳染病熱力圖目前無任何官方儀表板做出
+- 「學區 + 疫情 + 疫苗點」三層疊圖是雙北首例
+- AI 限資訊檢索層 (有 hard rail) 是政府 AI 應用的安全示範
+
+**更新頻率 vs 使用情境**：
+- 疾管署 4 大傳染病週更 (cron 每週日早 9 點 fetch) → 家長週日晚規劃下週生活
+- 接種覆蓋率年更 → 年度檢視
+- 衛生所門診時間半年更 → 半年檢視
+- 全 dashboard 預設「近 4 週 + 同期去年」對比, 強化季節性閱讀
+
+**資料品質風險**：
+- 鄉鎮級覆蓋: 腸病毒/手足口病/急性腹瀉縣市級, 部分週次有鄉鎮 — demo 主要用縣市級 + 北市 12 區/新北 29 區拆分; 鄉鎮級僅在資料完整時開啟
+- 新北衛生所門診時間 PDF → OCR / 人工整理 6-8 樣本鄉鎮, 誠實標註
+- AI hard rail regex 漏接風險 → demo 採預先腳本對話 + 1 個現場 query (有 filter)
+
+**技術可行性 (32hr)**：
+- D-1: 疾管署 CKAN API 抓取 + 鄉鎮代碼對應 (4hr)
+- D-2: Mapbox 雙圖層 + 4 ApexCharts (10hr)
+- D-3: AI hard rail + 三段式 template + 預跑 cache (8hr)
+- D-4: 6-8 區衛生所人工整理 + UI 整合 (4hr)
+- Buffer: 6hr — 整體 28-32hr 可完成, hard rail 設計是核心風險
+
+**亮點 scoring (1-5)**：受眾廣度 5 / 雙北獨特 5 / Demo 5 / Story 5 / 應用 5 / 技術 4 / 創意 5 / 跨資料整合度 5
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

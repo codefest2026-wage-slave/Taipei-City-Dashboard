@@ -1,0 +1,112 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1: 「夏天會熱死人」雙北熱島 × 弱勢風險地圖
+
+**Pitch (一句話)**: 把雙北氣溫熱島、行道樹/公園綠覆、獨居老人/幼兒分布、涼適避難點四層疊起來，第一次讓家屬看見「我爸/我媽住在雙北最熱、最沒蔭、最沒避難點的里」，AI 自動寫出一句話風險警報。
+
+**核心受眾 (Persona)**:
+- **第一**：家中有獨居長者的子女（雙北約 6 萬獨居老人 + 數十萬與長者分居子女）、家有幼兒家長
+- **第二**：里長/社會局公衛護士/長照機構（看自己負責里熱風險）
+- **第三**：所有夏天怕熱的市民（雙北 600 萬人 7-9 月人人有感）
+
+**v1 對照**: 全新提案。修正 v1 #1 PM2.5 過時老議題 — 改打**近年熱浪這個新戰線**（2024 年雙北 38°C 以上日數創 30 年新高），而且把弱勢者實際分布疊上來，受眾從「過敏兒家長」(窄) 擴大到「所有家中有老人/小孩的家屬」(極廣)。
+
+**雙北痛點**:
+- **熱島強度差 6°C 是真的**：台北盆地 + 大量水泥化（信義/萬華）vs 新北郊區（淡水、新店、八里）夜間溫差，2024 年最高紀錄 7-8 月深夜萬華 33°C、淡水 27°C — 同一個雙北兩個世界
+- **獨居老人分布與熱島重疊**：萬華、大同、中和、永和、三重高齡 + 老舊公寓 + 無冷氣的獨居老人最多，正好是熱島最紅的區
+- **涼適避難點資源傾斜**：台北的捷運站冷氣、圖書館、市民活動中心可達；新北郊區（瑞芳、平溪、雙溪、汐止）缺乏室內公共冷氣空間
+- **政府盲點**：熱浪預警全國一張嘴（CWA 高溫資訊發雙北），但沒人在乎「我家這個里多少獨居老人 + 距離涼適點多遠」這種微觀視角
+
+**核心價值**:
+1. 看：地圖按行政里上色 — 紅色 = 高溫 × 弱勢密度高 × 涼適點稀疏
+2. 用：輸入「我爸住萬華區 XX 里」→ 顯示該里熱風險分數、最近 3 個涼適避難點、過去 5 年該里高齡熱傷害案件
+3. 自動：AI 每天 11:00 推「今天台北 36°C，您父親所在的西門里風險紅色，最近避難點是 XX 區公所大廳，建議下午 2-4 點過去」
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00–0:20] Hook**：螢幕上一張新聞剪報「2024/7 萬華獨居 78 歲翁家中熱中暑亡」+ 字幕：「當天他家門口 36.8°C。最近的冷氣公共空間在 1.2 公里外。」
+2. **[0:20–1:00] 組件**：Mapbox 雙北 choropleth（熱島強度 × 65 歲以上人口密度），切「台北/雙北」立刻看到熱島熱區與獨居老人重疊。點萬華某里 → 浮出該里獨居老人數、行道樹密度、最近涼適點距離。
+3. **[1:00–1:40] AI Insight**：點「為何這里最危險」→ AI 回：「西門里 65 歲以上佔 24%（雙北平均 18%），夏季白天平均 35.2°C（雙北平均 32.4°C），行道樹覆蓋僅 8%（雙北平均 22%），最近涼適避難點 1.2km — 對行動不便長者過遠。」
+4. **[1:40–2:00] 行動**：「訂閱我家長輩所在里熱警報」(LINE) / 「申請社會局送涼計畫」 / 「通報這里需加裝噴霧/遮陽棚」(送 1999 + 民政局)
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 須跨局處)**:
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|------|----------------|------|------|------|
+| 1 | 雙北熱島強度 × 弱勢人口密度 choropleth | CWA `O-A0001-001`（雙北氣象站日均高溫）+ 內政部戶政（雙北 65 歲以上 / 0-6 歲人口）+ 台北社會局 `臺北市獨居老人緊急救援系統` + 新北社會局獨居長者 | 三維 + 圖例 | ✅ | ✅ Mapbox |
+| 2 | 雙北行道樹/公園綠覆密度（遮蔭資源） | 台北工務局 `行道樹` 92,989 棵 + `公園綠地 1913.88 公頃` + 新北 `57F99AFB-94E2-4E67-9DE7-961F5E9A9E18` 行道樹 + 新北 `5FE3A136-29CC-4695-A17E-6636A32C3342` 公園 | 點位聚合 + polygon | ✅ | ✅ |
+| 3 | 雙北涼適避難點分布（區公所/活動中心/捷運站/圖書館） | 民政局區公所點位 + 教育局圖書館 + 捷運局站點 + 新北市民活動中心 | 點位 + 5min 步行緩衝圈 | ✅ | ✅ |
+| 4 | 過去 5 年雙北熱傷害急診案件趨勢 | 衛生局 `市立醫療院所急診類別` + 疾管署熱傷害監測週報 | 時間序列 + 折線 | ✅ | ❌ Apexcharts |
+| 5 | 雙北各里夏季最高溫 vs 平均（極端熱日數） | CWA + 環境部熱島監測（測站疏，需空間內插） | 時間序列 | ✅ | ❌ Apexcharts |
+| 6 | 雙北各區獨居老人 / 學齡前幼兒 / 身障人口分布 | 台北社會局獨居老人 + 內政部戶政 + 台北 `身障就業資源地圖` | 堆疊柱狀 | ✅ | ❌ Apexcharts |
+
+**跨局處資料整合 (殺手鐧)**:
+- **環保局 / CWA**：氣溫、熱島
+- **工務局**：行道樹、公園綠地（遮蔭資源）
+- **社會局**：獨居老人系統、長照機構分布
+- **民政局**：區公所/活動中心（涼適避難點）
+- **衛生局**：急診熱傷害案件（受害結果）
+- **戶政**：里級人口結構（暴露人口）
+
+**雙北對比角度**: 台北「熱島強 + 弱勢集中 + 避難點密」vs 新北「熱島弱但綠覆兩極（淡水有 / 三重缺）+ 弱勢分散 + 避難點稀」。同一張地圖切「台北/雙北」看出**兩種完全不同的熱風險治理問題**。
+
+**AI 應用 (llama3.3-ffm-70b-16k-chat, 30 RPM)**:
+- **里級風險敘事**：輸入行政里 → 模型聚合該里溫度、綠覆、弱勢人口、避難點距離 → 輸出 100 字白話風險摘要
+- **快取策略**：雙北 ~600 個行政里 × 1 條敘事 = 600 條，按里夜間批次預生成；夏季每週更新一次（受眾使用情境是「決策」非「即時」）
+- **30 RPM 不打架**：里級敘事是預生成，使用者點即得；只有「個人化推 LINE」走即時佇列
+
+**可解釋性**: AI 輸出附「資料來源 + 計算公式」（熱風險分 = 溫度分位數 × 0.4 + 弱勢密度分位數 × 0.3 + 避難點距離分位數 × 0.3，公開於 UI）。信心分數依測站距離 < 500m 高 / 500m-2km 中 / >2km 低。
+
+**行動入口**:
+1. 「訂閱我家長輩所在里熱警報」(LINE Notify, 高溫日推播)
+2. 「申請社會局送涼計畫 / 老人共餐有冷氣場所」(連社會局表單)
+3. 「通報這里該加裝遮陽棚/噴霧」(送 1999 + 工務局)
+4. 「下載我里熱風險報告 PDF」(給里長/議員質詢素材)
+
+**與既有 dashboard 差異**:
+- 既有北市永續環境 dashboard 有「公園綠地 / 行道樹 / 空氣品質」三張獨立圖卡，**沒人把溫度 × 老人 × 綠覆 × 避難點疊起來**
+- 既有「熱浪預警」全國一張嘴 (CWA)，沒里級
+- 我們第一次把**環保 + 社會 + 民政 + 工務四局處資料拼成「人在受害」視角**，雙北可比
+
+**更新頻率 vs 使用情境**:
+- 溫度即時 (CWA hourly) → 個人 LINE 推播用
+- 行道樹/公園/獨居老人/避難點 = 月或季更 → 「決策面板」用 (家屬選哪間長照、議員問哪里該加綠化)
+- 急診熱傷害 = 週報 → 趨勢圖表
+- **對齊**：Demo 主視覺是月更的「里級風險地圖」，加上即時溫度 hover 點綴，不假裝即時個人化
+
+**資料品質風險**:
+- 氣象站雙北約 30 站，里級 (~600 里) 必須空間內插 → UI 標「插值精度 ±1.5°C」
+- 獨居老人系統台北明、新北須整合多來源 → 新北缺口部分以「65 歲以上獨居比例」（戶政推算）補
+- 「涼適避難點」尚無公部門官方定義 → 自行定義（符合「免費 + 室內冷氣 + 對外開放 + 步行 5min 內」），UI 公開規則
+
+**技術可行性 (32hr 預算)**:
+- Mapbox choropleth + 點位 + 緩衝圈 = 8hr
+- Apexcharts 3 張 = 6hr
+- 資料 ETL（6 個資料源 join 至里級）= 8hr
+- AI 預生成腳本 + Prompt 工程 = 5hr
+- UI/Demo 整合 = 5hr
+- **合計 32hr**，無爆預算 — 但里級資料 join 是最大變數，須先做 8hr spike
+
+**亮點 scoring (1-5)**:
+- 受眾廣度：5（家中有老人/小孩的所有市民）
+- 雙北獨特：4（熱島形態完全不同）
+- Demo 衝擊：5（獨居翁熱中暑亡是真新聞、有情感）
+- Story：5（家屬視角錨定具體）
+- 應用：5（夏季每週可用 + 議員/里長 B-end）
+- 技術：4（資料 join 中等難度）
+- 創意：4（環境 × 弱勢 × 空間是新組合）
+- 跨資料整合：5（4-5 個局處）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

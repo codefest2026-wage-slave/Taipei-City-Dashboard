@@ -258,11 +258,15 @@ nav a.gold-pin::before {
     <p>城市儀表板提案總覽 · 18 提案 · 7 階段審查</p>
   </div>
 
-  <div class="nav-section-title">總覽 / Summary</div>
+  <div class="nav-section-title">v2 總覽 (5/2 競賽用)</div>
   <nav id="navSummary"></nav>
 
-  <div class="nav-section-title">六大主題 / Themes</div>
-  <nav id="navThemes"></nav>
+  <div class="nav-section-title">v2 主題 (今日可選)</div>
+  <nav id="navV2Themes"></nav>
+
+  <div class="nav-section-title">v1 (備查)</div>
+  <nav id="navV1Summary"></nav>
+  <nav id="navV1Themes"></nav>
 </aside>
 
 <main id="main">
@@ -277,25 +281,37 @@ nav a.gold-pin::before {
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
 <script>
 const docs = [
-  { id: 'final_review',          file: 'final_review.md',          title: '🏆 最終終審報告',     badge: '4 persona',   group: 'summary', highlight: true },
-  { id: 'triage_ranking',        file: 'triage_ranking.md',        title: '📊 18 提案 Triage',  badge: '排序',         group: 'summary' },
-  { id: 'theme_01_smart_commute',file: 'theme_01_smart_commute.md',title: '01 智慧通勤',         badge: '82',          group: 'themes', accent: 'gold' },
-  { id: 'theme_02_disaster',     file: 'theme_02_disaster.md',     title: '02 韌性防災',         badge: '78',          group: 'themes' },
-  { id: 'theme_03_environment',  file: 'theme_03_environment.md',  title: '03 永續環境',         badge: '80',          group: 'themes' },
-  { id: 'theme_04_food_health',  file: 'theme_04_food_health.md',  title: '04 食安健康',         badge: '75',          group: 'themes' },
-  { id: 'theme_05_labor',        file: 'theme_05_labor.md',        title: '05 勞動福祉',         badge: '76',          group: 'themes' },
-  { id: 'theme_06_culture',      file: 'theme_06_culture.md',      title: '06 文化共融',         badge: '80',          group: 'themes' },
+  // v2 (current — hackathon 5/2)
+  { id: 'final_review_v2',         file: 'final_review_v2.md',         title: '🏆 v2 最終終審',       badge: '4 persona',   group: 'summary', highlight: true },
+  { id: 'triage_ranking_v2',       file: 'triage_ranking_v2.md',       title: '📊 v2 9 提案 Triage', badge: '排序',         group: 'summary' },
+  { id: 'theme_01_smart_commute_v2', file: 'theme_01_smart_commute_v2.md', title: '01 智慧通勤 v2',  badge: '84',  group: 'v2_themes', accent: 'gold' },
+  { id: 'theme_03_environment_v2',   file: 'theme_03_environment_v2.md',   title: '03 永續環境 v2',  badge: '84',  group: 'v2_themes' },
+  { id: 'theme_04_food_health_v2',   file: 'theme_04_food_health_v2.md',   title: '04 食安健康 v2',  badge: '86',  group: 'v2_themes' },
+  // v1 (preserved for reference)
+  { id: 'final_review',          file: 'final_review.md',          title: 'v1 最終終審',         badge: '4 persona',   group: 'v1_summary' },
+  { id: 'triage_ranking',        file: 'triage_ranking.md',        title: 'v1 18 提案 Triage',  badge: '排序',         group: 'v1_summary' },
+  { id: 'theme_01_smart_commute',file: 'theme_01_smart_commute.md',title: '01 智慧通勤 v1',     badge: '82',          group: 'v1_themes' },
+  { id: 'theme_02_disaster',     file: 'theme_02_disaster.md',     title: '02 韌性防災 v1',     badge: '78',          group: 'v1_themes' },
+  { id: 'theme_03_environment',  file: 'theme_03_environment.md',  title: '03 永續環境 v1',     badge: '80',          group: 'v1_themes' },
+  { id: 'theme_04_food_health',  file: 'theme_04_food_health.md',  title: '04 食安健康 v1',     badge: '75',          group: 'v1_themes' },
+  { id: 'theme_05_labor',        file: 'theme_05_labor.md',        title: '05 勞動福祉 v1',     badge: '76',          group: 'v1_themes' },
+  { id: 'theme_06_culture',      file: 'theme_06_culture.md',      title: '06 文化共融 v1',     badge: '80',          group: 'v1_themes' },
 ];
 
 const docMetas = {
-  final_review: '<strong>內容</strong>: 4 persona 多視角終審 · <span class="gold">🏆 最終推薦: T1#2 末班車回家路 (87.5/100)</span>',
-  triage_ranking: '<strong>內容</strong>: 18 提案 state machine 排序 · ready-for-team / needs-pivot / wontfix 三層分類',
-  theme_01_smart_commute: '<strong>主題</strong>: 智慧通勤 · 3 提案 + 內審 · <span class="gold">🏆 提案 #2 末班車回家路 為總冠軍候選</span>',
-  theme_02_disaster: '<strong>主題</strong>: 韌性防災 · 3 提案 + 內審 · 推薦 #2 弱勢盲區雷達',
-  theme_03_environment: '<strong>主題</strong>: 永續環境 · 3 提案 + 內審 · 推薦 #3 淡水河污染溯源',
-  theme_04_food_health: '<strong>主題</strong>: 食安健康 · 3 提案 + 內審 · 推薦 #1 食安透視鏡 (條件式)',
-  theme_05_labor: '<strong>主題</strong>: 勞動福祉 · 3 提案 + 內審 · 推薦 #2 補助雷達',
-  theme_06_culture: '<strong>主題</strong>: 文化共融 · 3 提案 + 內審 · 推薦 #3 共融藝文導航',
+  final_review_v2: '<strong>內容</strong>: v2 重構後 4 persona 終審 · <span class="gold">🏆 最終推薦: T1#2 天氣懲罰圖 (4 persona 平均 79.0)</span>',
+  triage_ranking_v2: '<strong>內容</strong>: v2 9 提案 state machine 排序 · 內審冠軍 T4#2 兒童傳染病 86 分',
+  theme_01_smart_commute_v2: '<strong>主題</strong>: 智慧通勤 v2 · 3 重構提案 · <span class="gold">🏆 提案 #2 天氣懲罰圖 4 persona 冠軍</span>',
+  theme_03_environment_v2: '<strong>主題</strong>: 永續環境 v2 · 3 重構提案 · 推薦 #2 噪音夜間殺手 (Demo 89 最炸)',
+  theme_04_food_health_v2: '<strong>主題</strong>: 食安健康 v2 · 3 重構提案 · 推薦 #2 兒童傳染病雷達 (內審 86 最高)',
+  final_review: '<strong>v1 (備查)</strong>: 4 persona 多視角終審 · 最終推薦: T1#2 末班車回家路 (87.5/100)',
+  triage_ranking: '<strong>v1 (備查)</strong>: 18 提案 state machine 排序',
+  theme_01_smart_commute: '<strong>v1 (備查)</strong>: 智慧通勤 · 3 提案 + 內審',
+  theme_02_disaster: '<strong>v1 (備查)</strong>: 韌性防災 · 3 提案 + 內審 (5/2 不選)',
+  theme_03_environment: '<strong>v1 (備查)</strong>: 永續環境 · 3 提案 + 內審',
+  theme_04_food_health: '<strong>v1 (備查)</strong>: 食安健康 · 3 提案 + 內審',
+  theme_05_labor: '<strong>v1 (備查)</strong>: 勞動福祉 · 3 提案 + 內審 (5/2 不選)',
+  theme_06_culture: '<strong>v1 (備查)</strong>: 文化共融 · 3 提案 + 內審 (5/2 不選)',
 };
 
 // configure marked
@@ -312,15 +328,20 @@ marked.setOptions({
 
 // build nav
 function buildNav() {
-  const summary = document.getElementById('navSummary');
-  const themes = document.getElementById('navThemes');
+  const groups = {
+    summary: document.getElementById('navSummary'),
+    v2_themes: document.getElementById('navV2Themes'),
+    v1_summary: document.getElementById('navV1Summary'),
+    v1_themes: document.getElementById('navV1Themes'),
+  };
   docs.forEach(d => {
     const a = document.createElement('a');
     a.href = '#' + d.id;
     a.dataset.id = d.id;
     a.innerHTML = `${d.title}${d.badge ? `<span class="badge">${d.badge}</span>` : ''}`;
     if (d.highlight) a.classList.add('gold-pin');
-    (d.group === 'summary' ? summary : themes).appendChild(a);
+    const target = groups[d.group] || groups.summary;
+    target.appendChild(a);
   });
 }
 

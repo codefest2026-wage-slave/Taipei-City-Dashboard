@@ -1,0 +1,112 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1：「我家附近的食安雷達」— 雙北違規類別熱區 × 食材源頭信任地圖
+
+**Pitch (一句話)**：把雙北食安拆成「我家門口買得到的東西」— 用 500m 格網 / 行政區彙總顯示「這區近 24 個月最常違規的是哪 3 類食品」(熟食調味料 / 蔬果農藥 / 水產冷凍 / 蜜餞糖果...), 疊上飲用水/泳池水質與市場稽查密度, 讓家庭採買者在出門前 10 秒看懂「今天去這個市場 / 商圈買菜要小心什麼」, 完全不出現任何單一店名。
+
+**核心受眾 (Persona)**：
+- **主受眾 (大眾)**: 家庭採買者 (週間菜市場 / 週末好市多家樂福)、雙薪父母線上訂便當族、長者買傳統市場、外食族 — **雙北超過 600 萬日常採買人口**
+- **次受眾**: 食物過敏家庭、孕婦、新住民媽媽 (中越泰菜常用食材抽驗熱點)
+- **政府盲點**: 衛生局食安科稽查資源調度、市場處攤位輪稽優先級、消保處跨局處整合
+
+**v1 對照**：**由 v1 #1 食安透視鏡重構**, 修了 4 個 critique 致命問題:
+1. **不再釘特定店家** → 違規 pin 改 500m hex grid 與「鄉鎮+類別」聚合, 點擊只展開「該熱區 24 個月內各類別違規次數 + 主要違規原因 (例: 二氧化硫超標)」, **完全不出現業者名稱與地址**, 規避個資法/食安法/名譽權三重風險
+2. **資料新鮮度誠實揭露** → 每張組件右上角強制 `dataAsOf` 徽章 + 灰階降級顯示 >24 個月資料, demo hook 改為「過去 2 年違規類別熱區」, 不再用「上週你吃過的店」
+3. **AI 改 template-based 不做醫學斷言** → AI 僅做「類別違規原因摘要 + 採買預防建議」(例: 「這區近年蔬果農藥殘留違規佔 35%, 建議浸泡流水 5 分鐘」), 不對個別劑量做健康危害推論
+4. **跨局處整合補強雙北資料對稱性** → 不再只用衛生局單一來源, 加環保局飲用水質、市場處公有市場攤位數、觀光局商圈/夜市區位 → 故事從「違規黑名單」升級為「食材生態鏈信任度」
+
+**雙北痛點**：
+1. 家庭採買者每週做幾十個微決策, 但官方資料分散在 7 個入口 (衛生局食安、食藥署違規食品標示、食材登錄、環保局水質、市場處、觀光局商圈、消保處陳情) — 真實採買時根本查不到
+2. 北市餐飲衛生分級評核 (A/B/C 級) 只覆蓋餐飲業, 傳統市場攤商沒有對等機制; 新北 29 區 + 公有市場攤商流動率高, 抽驗合格率僅季更
+3. 新北山區 / 海岸 (烏來、瑞芳、平溪、貢寮) 食材源頭離養殖/魚塭近, 但稽查家次與北市差距大 — 雙北民眾繳一樣的健保但採買風險不對等
+4. 新住民家庭常用的東南亞食材 (例: 椰漿、泰式調味、越南河粉米線) 抽驗紀錄分散, 家長看不懂中文公告
+
+**核心價值**：把零散在 5 個局處的食安資料**用「我家門口」視角重新拼裝**, 由「店家黑名單」改為「類別風險熱區 + 食材生態鏈信任度」, 守住法律線同時擴大受眾。
+
+**Demo 衝擊力 (2 分鐘)**：
+1. **Hook (0:00-0:25)**: 雙北 500m hex 格網熱力圖 — 顏色深淺 = 過去 24 個月違規件數累積, 切「類別」下拉: 蔬果農藥 / 水產冷凍 / 熟食微生物 / 蜜餞糖果二氧化硫 / 茶飲冰品。標題: 「你家半徑 500m 近 2 年最常被驗出超標的是 ___」
+2. **跨局處 insight (0:25-1:00)**: 切到士林夜市熱區 → 同時亮起「商圈人流 (觀光局)」「公有市場攤位數 (市場處)」「飲用水抽驗合格率 (環保局)」「稽查家次 vs 違規率 (衛生局)」, 切到新北樂華 → 對比顯示「同樣夜市等級, 新北稽查家次/攤商比僅北市 1/3, 但違規類別前 3 名相同」
+3. **跨資料故事 (1:00-1:30)**: 點「水產冷凍」類別 → 自動疊上新北漁港、台北漁市、雙北飲用水質 → AI template 摘要: 「過去 24 個月雙北水產違規 78% 集中在大腸桿菌與重金屬, 與河川下游溶氧量呈中度相關」(資料來源連結強制顯示)
+4. **行動入口 (1:30-2:00)**: 「我家半徑 500m 風險類別」(輸入地址或定位) → 回傳前 3 類風險 + 食藥署「採買 5 招」固定教育卡 + 「1999 / 1922 通報異常食品」一鍵深連結
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 跨局處)**：
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|------|----------------|------|------|------|
+| 1 | **違規類別 500m 熱區圖 (Mapbox hex grid)** | TPE 衛生局: `09a917a0-0fb5-47e1-957c-5f1268fba517` (食品抽驗不合格清冊, 含分類欄位) + `40900e11-3002-4c9b-9e23-aa3b72e3d46e` (食材登錄密度) ／ NTPC 衛生局: `078CB722-15AC-4E1E-B541-E75BFE0AA440` (食品抽驗) + `D2D69F7E-E283-406E-859B-E9E5DC98AC50` (市售抽驗合格率) ／ 食藥署: 違規食品標示 (含縣市座標) | hex polygon + 違規件數 + 類別下拉 | ✅ | ✅ heatmap |
+| 2 | **跨局處食材生態鏈面板 (Apex Treemap + KPI)** | 觀光局: 商圈/夜市區位 ／ 市場處: TPE `846a8022-f909-442e-a723-23046bd3e8c0` (公有傳統零售市場攤位數含家禽家畜/果菜分項) ／ 環保局: TPE 飲用水水質 + NTPC 泳池/溫泉水質 `2998ECED-9493-4428-92DE-2128E045D23D` ／ 衛生局: 餐飲衛生管理工作 `7d50657f-b35b-496e-b83f-5713893b9a9e` | Treemap (區×類別) + 4 KPI 卡 | ✅ | ✗ |
+| 3 | **稽查密度 vs 違規類別熱度 (Apex 雙軸)** | TPE: `7d50657f-b35b-496e-b83f-5713893b9a9e` (稽查家次依餐飲店/夜市攤販/傳統市場/超市分項) ／ NTPC: 食品抽驗資料月聚合 | 月時序 + 雙軸 | ✅ 切換 | ✗ |
+| 4 | **餐飲衛生分級覆蓋 vs 市售合格率 (Apex 圓餅 + 趨勢)** | TPE: `59579c19-a561-4564-8c0f-545bfb32c0f6` (A/B/C 級評核家數, 行政區彙總) ／ NTPC: `D2D69F7E` 季合格率 (避免直接對齊, 並列呈現以承認資料對等性差) | 百分比 + 季趨勢 | ✅ 並列 | ✗ |
+| 5 | **AI template 採買建議卡** | 對 #1-#4 的固定模板填值 (llama3.3-ffm 僅潤飾語氣, 不做醫學斷言) | 文字 + 來源連結 | ✅ | ✗ |
+
+**跨局處資料整合**：衛生局 (食安/分級) + 環保局 (水質) + 市場處 (傳統市場) + 觀光局 (商圈/夜市區位) + 食藥署 (違規食品) — **共 5 個來源**, 是本提案最大差異化。
+
+**法律/倫理避雷**：
+- **不顯示業者名稱、地址、登記字號** — 所有資料聚合到 hex grid 或行政區 / 鄉鎮; 即使原始開放資料含店名, UI 層不展示
+- 排除已複驗合格資料 (拉 food.taipei API 確認當前狀態, 拉不到則不顯示)
+- 違規類別建議文字採食藥署「食品安全教育」固定教材, AI 僅做潤飾 + 多語切換
+- 每個組件附「資料來源 + 採購狀態 + 申訴管道」三欄位, 揭露資料時效
+
+**雙北對比角度**：
+- 北市觀光夜市 vs 新北在地夜市違規類別**結構**比較 (不比個別店)
+- 北市公有傳統市場 vs 新北 29 區市場攤位數 / 稽查家次比例
+- 北市食材登錄平台覆蓋率 (有自治條例強制) vs 新北市售抽驗合格率 (季更) — 資料制度差距本身是發現
+- 雙北水產違規 × 河川下游水質的相關性 (跨局處最大亮點)
+
+**AI 應用**：限「資訊摘要 + 預防生活建議」, **不做醫療諮詢**:
+- 類別違規原因摘要 (template + LLM 潤飾): 「這區水產違規以 X 為主, 建議採購時注意 Y, 烹煮達 Z 度可滅活」
+- 中英越泰四語切換 (新住民友善, 但僅切採買通用建議, 不切醫學詞彙)
+- 預先批次跑完 41 區 × 5 類別 = 205 條 cache, 避開 30 RPM 限制
+
+**可解釋性**：
+- hex 違規分數公式公開: `近 24 月不合格件數 × 嚴重度權重 (固定表)`, 點擊 hex 顯示原始公文
+- 嚴重度權重表寫死在 UI, 不藏黑盒
+- AI 回應強制掛資料集 ID + 抽驗日期
+
+**行動入口**：
+- 「我家附近 500m 風險類別」(地址 / 定位輸入)
+- 「採買 5 招」食藥署固定教育卡 (深連結原網)
+- 「通報異常食品」一鍵 1999 / 1922 / food.taipei
+- 「加入類別風險推播」(localStorage MVP, 例: 「下次蜜餞違規警示」)
+
+**與既有 dashboard 差異**：
+- 北市儀表板有「腸病毒流行情形警示」「AED 設置」但**完全沒有食安違規地圖**
+- food.taipei 食材登錄是清單頁, **無空間視覺化、無類別熱區、無跨局處整合**
+- 既有「各行政區流感疫苗接種醫院數量統計」純柱狀, **無與食安違規或環境水質疊圖**
+
+**更新頻率 vs 使用情境**：
+- 食品抽驗不合格 (TPE 月更, NTPC 月更) → 民眾月更檢視「家附近本月新增違規類別」
+- 市售合格率 (NTPC 季更) → 季度趨勢
+- 飲用水/泳池水 (季更) → 季度
+- 餐飲衛生分級 (年更) → 年度結構參考
+- 全 dashboard 預設展示「近 24 個月」, 切換器可改 6/12/24 月
+
+**資料品質風險**：
+- TPE `09a917a0` 最後更新 2020-11 → 改打 food.taipei API 取近期; 拉不到時於 demo 揭露 data gap, 改用「2018-2020 歷史結構」demo
+- NTPC 食品抽驗欄位需先 API 試打 — D-2 必做
+- Geocoding hex 聚合: 不對個別地址精度敏感, 鄉鎮 / 郵遞區號層級即可, 風險遠低於 v1
+- 跨局處資料更新頻率不一致 → UI 統一以「最近一筆」+「該資料集週期」雙標籤呈現
+
+**技術可行性 (32hr)**：
+- D-1: API 健檢 + hex 聚合 (4hr)
+- D-2: 4 組件 ApexCharts + Mapbox hex layer (10hr)
+- D-3: AI template 預跑 + cache (4hr)
+- D-4: 跨局處整合 + UI + demo flow 排練 (8hr)
+- Buffer: 6hr — 整體 26-32hr 可完成, 風險低於 v1 (因為不需 8000 家精確 geocoding)
+
+**亮點 scoring (1-5)**：受眾廣度 5 / 雙北獨特 5 / Demo 5 / Story 5 / 應用 4 / 技術 4 / 創意 5 / 跨資料整合度 5
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

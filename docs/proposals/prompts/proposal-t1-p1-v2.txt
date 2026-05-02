@@ -1,0 +1,108 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #1 (v2): 雙北夜歸安全圈 — 末班車 × 24hr 商家 × 治安網
+
+**v1 對照**: 由 v1 #2 重構升級。**改了什麼**: (a) 主敘事從「能不能趕上末班」升級為「下車後到家這 800m 安不安全」, 把跨局處資料 (交通+商業+治安+衛生) 全縫起來; (b) 受眾擴大: 不只夜班族, **任何 22:00 後在外的雙北市民**都是受眾 (聚餐、晚自習、看展、加班、夜市); (c) 加入「24hr 便利店 + 友善店家 + 派出所 + AED」做為「夜間庇護點」圖層, 把「資料」變「安全網」。
+
+**Pitch (一句話)**: 22:00 後的雙北是兩個世界 — 我們把末班車、24hr 商家、派出所、AED 縫成一張「下車到家的 800m 安全圈」, 讓任何夜歸的人都看到「我這條路, 每 200m 有 X 個庇護點」。
+
+**核心受眾 (Persona)**:
+- **主受眾 (大眾)**: 任何 22:00 後在外的雙北市民 (估雙北每日 50-80 萬人) — 加班族、聚餐族、晚自習學生、看展看展演、夜市/酒吧族、夜班勞工。
+- **具體 persona**: 26 歲女性 Amy, 信義區聚餐到 23:30, 住板橋。她不只想知道「趕得上末班嗎」, 更想知道「板橋下車那 1.2 km 沿路安全嗎? 有什麼地方可以躲?」
+- **次受眾**: 社會局 (夜歸女性安全政策)、警察局 (夜間巡邏熱區優化)、產業局 (友善店家政策有效性評估)。
+
+**雙北痛點 (真實 + 雙北落差)**:
+1. 既有 dashboard 各局處資料**完全分散**: 末班車在交通局、24hr 便利店在產業局、派出所在警察局、AED 在衛生局 — 沒人把「夜歸的 1 公里」當主軸串起來。
+2. 雙北落差最赤裸: 台北 12 區夜間庇護點 (24hr 商家+派出所+AED) 平均密度 28 個/km², 新北邊緣 (平溪、坪林、雙溪、烏來、石碇) 平均 < 2 個/km² — **同樣是夜歸 800m, 台北一路有店有燈, 新北有些路只有路燈和狗叫**。
+3. 友善店家 (產業局已有資料 2,555 個) 是政府花錢推的政策, 但**從來沒人把它跟「夜間動線」連結驗證有效性** — 政府盲點。
+4. 既有官方 dashboard 把 AED、友善店家、偷竊統計做成獨立圖層, 但**沒有路徑視角** (我這條路上有幾個 AED 不是切片問題, 是線問題)。
+
+**核心價值 (看完能做什麼)**:
+- 23:00 後在公司打開 → 輸入家裡地址 → 一張地圖呈現: 末班車路線 + 下車後 800m 步行路徑 + 沿路 24hr 商家/派出所/AED + 「庇護點密度分數」。
+- 行動入口: (a) 一鍵叫車 (Uber 深連結) (b) 加入 LINE 提醒 (末班 30 min 前推播) (c) **社會局可一鍵匯出「夜間庇護點荒漠里」清單**做政策改善。
+- 政策回饋: 友善店家政策 ROI 量化 — 「投資 X 元設置 N 家友善店家, 真實夜間動線覆蓋率提升 Y%」。
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00-0:20] Hook** — 大螢幕黑底, 倒數時鐘 23:42:00, 雙北地圖 41 行政區開始「熄燈」(末班過站變暗)。文字「平均每日 50 萬雙北人在這條黑暗線上回家」。
+2. **[0:20-1:00] 組件展示** — 點選「板橋區」, 顯示 (a) 末班板南線 23:48 倒數、(b) 下車後 1.2 km 步行路徑自動繪製、(c) 沿路 24hr 商家 (icon: 7-11/全家)、派出所、AED 自動疊加, 形成「庇護點珠鏈」。下拉切「台北 ↔ 新北」, 同樣半徑下密度差距視覺化爆表。
+3. **[1:00-1:40] 跨資料整合 insight** — 切「夜歸庇護指數」choropleth: 雙北 41 區紅綠色階。AI 一句話: 「平溪區 23:00 後 1km 平均庇護點 1.3 個, 是大安區的 1/22。但平溪友善店家政策投放 0 家」 — 政策盲點立刻浮出。
+4. **[1:40-2:00] 行動入口** — 三鍵: 一鍵叫車、訂閱末班提醒、政府版「匯出庇護點荒漠里清單給社會局」。
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 跨局處整合)**:
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|---|---|---|---|---|
+| 1 | 「夜歸庇護圈」主地圖 (末班路線+800m步行+商家+派出所+AED 多圖層) | TDX `/Rail/Metro/FirstLastTripInfo/TRTC` (捷運) + `/Bus/Schedule/City/Taipei`+`/NewTaipei` (交通局/公路總局) + 友善店家 (台北產業局, 新北類比 data.ntpc) + 警察相關設施 (台北/新北警察局) + AED (台北/新北衛生局) | 多圖層 | ✅ 雙北 41 區 | ✅ Mapbox 5 圖層 |
+| 2 | 末班車倒數即時看板 | TDX `/Rail/Metro/LiveBoard/TRTC` + `/Bus/EstimatedTimeOfArrival/City/Taipei`+`/NewTaipei` (交通局/公路總局) | 倒數+時序 | ✅ | ❌ Apexcharts |
+| 3 | **「夜歸庇護指數」雙北 41 區 Choropleth** (跨局處整合主指標) | 上述 5 局處資料聚合 + 主計處里界圖層 | Choropleth | ✅ | ✅ 同主圖第 6 圖層 |
+| 4 | YouBike 夜間還車空位率 + 偷竊熱點 (避騎) | TDX `/Cycling/Station/Availability/City/Taipei`+`/NewTaipei` + 偷竊統計 (台北/新北警察局) | 百分比+二維 | ✅ | ✅ 同主圖第 7 圖層 |
+| 5 | 「友善店家政策 ROI」對比圖 (政策有效性) | 友善店家分布 (產業局) × 夜間庇護指數 | 散布圖 | ✅ | ❌ Apexcharts |
+
+**跨局處資料整合說明 (本案核心加分)**:
+**首次整合的 6 個局處資料**:
+1. 台北交通局 + 新北交通局 + 公路總局 (末班車 + 公車班表)
+2. 台北產業局 + 新北類比資料 (友善店家)
+3. 台北警察局 + 新北警察局 (派出所 + 偷竊統計)
+4. 台北衛生局 + 新北衛生局 (AED)
+5. CWA (天氣 — 雨夜加成扣分, 進階)
+6. 主計處 (里界圖層 + 夜間人口)
+
+**雙北對比角度**: 41 區夜歸庇護指數 choropleth — 台北蛋黃 (大安、信義、中山) vs 新北蛋白 (平溪、坪林、雙溪、烏來、石碇) **密度差距 20-30 倍**, 政策落差具象化。
+
+**AI 應用 (對齊 2026 願景)**: 自然語言輸入「我從信義 A4 到板橋, 23:30 出發」→ llama3.3 多 tool calling: `get_metro_last(...)` + `get_walk_path(...)` + `get_shelters_along(path, radius=200m)` + `get_safety_score(...)` → 輸出 80 字評估 + 3 個替代方案 (末班/計程車/夜間 YouBike+步行)。每個方案附「庇護點密度」分數 + 失敗 fallback。
+
+**可解釋性 (簡單模型 + 為什麼)**:
+- 庇護指數公式公開: `0.4 × 24hr 商家密度 + 0.3 × 派出所密度 + 0.2 × 末班可達 + 0.1 × AED 密度`。
+- 為什麼? 因為夜歸的真實風險樣態是 (a) 沒店家 = 沒人 + 沒監視 + 沒求助點, 所以權重最高 (b) 派出所是直接救援 (c) 末班可達決定是否會被困 (d) AED 是極端情況。
+- AI 每段回應旁顯示「依據資料時間戳 + 各組件貢獻分數」(可展開 JSON)。
+
+**行動入口 (closed-loop)**:
+1. 一鍵叫車 (Uber/LINE Taxi 深連結) — closed-loop。
+2. LINE Bot 訂閱: 末班前 30 min 主動推播「今晚還趕得上嗎 + 沿路庇護圖」。
+3. **政府版**: 一鍵匯出「夜間庇護點荒漠里 Top 30」CSV 給社會局/警察局做巡邏資源配置 — closed-loop 政府用。
+4. 友善店家補強建議: 顯示「這 5 個里值得新增 1 家友善店家」給產業局。
+
+**與既有 dashboard 差異**:
+- 既有有「友善店家」「AED」「偷竊統計」「警察相關設施」**獨立圖層**, 但**沒有「路徑視角」**, 也沒有「夜歸庇護指數」這種跨局處 derived metric。
+- 既有沒有「末班車 ↔ 夜間庇護資源」的時間軸聯動。
+- 既有沒有「友善店家政策 ROI 評估」回饋政策。
+
+**更新頻率 vs 使用情境 (用戶會回訪嗎?)**:
+- 即時組件 (末班倒數、YouBike 空位、Live 路況) — 每次夜歸打開都不同, 高回訪。
+- 庇護指數 choropleth — 月更, 政府用看政策成效。
+- LINE Bot 推播是真正的回訪驅動 (政府不期待你每天主動打開, 而是它主動找你)。
+
+**資料品質風險**:
+- 友善店家新北側資料完整度待驗證 (Day 0 P0 樣本驗證 1 hr, 目標 ≥70%)。
+- AED 資料台北 (2,728 個) + 新北 (跨局處主題 04 確認有 2,927 行段) 雙北合計 4,523 個 (inventory 18 行) ✅。
+- 偷竊統計雙北 (inventory 17 行已合併) ✅。
+
+**技術可行性 (32 hr)**:
+- **Day 1 MVP (16 hr)**: 主地圖 5 圖層 + 末班倒數 + 庇護指數 baseline (簡單加權, 不調)。
+- **Day 2 polish (16 hr)**: AI tool calling (2-3 個 tool 跑通) + LINE Bot mock + 政府匯出 + 雙北動畫切換。
+- **scope 削減 plan B**: 若 32 hr 緊, 砍 AED 圖層 (改為 toggle on/off, 不進指數公式), 省 3 hr。
+
+**亮點 scoring (1-5)**:
+- 受眾廣度: 5 (任何 22:00 後在外的雙北市民, 不限夜班)
+- 雙北獨特: 5 (邊緣行政區夜歸庇護密度差 20-30 倍)
+- Demo 衝擊: 5 (熄燈動畫 + 庇護珠鏈視覺爆表)
+- Story 完整: 5 (Amy persona + 50 萬人受眾)
+- 應用價值: 5 (個人決策 + 政府政策 ROI)
+- 技術整合: 5 (6 局處跨資料 + AI tool calling)
+- 創意突破: 4 (「庇護圈」隱喻新, 但路徑規劃本質傳統)
+- **跨資料整合度: 5/5 (6 個局處)**
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.

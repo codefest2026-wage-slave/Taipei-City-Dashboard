@@ -1,0 +1,114 @@
+TASK: Render a HIGH-FIDELITY, photo-realistic 16:9 web dashboard mockup screenshot that visualizes the civic-data hackathon proposal below. Treat the output as if you were taking a screenshot of an actual working production dashboard built with Vue 3 + ApexCharts + Mapbox GL JS. NOT abstract art. NOT illustration. NOT sci-fi. A real product screenshot.
+
+GENERAL VISUAL GUIDANCE:
+- Single 16:9 dashboard canvas integrating ONE prominent Mapbox-style dark vector map view of Greater Taipei (Taipei City + New Taipei City, 41 administrative districts) + FOUR ApexCharts-style data visualization panels.
+- Top header: product title (use the proposal name in Traditional Chinese) + Taipei/雙北 city dropdown filter + nav icons.
+- Layout: read the proposal carefully and decide the panel mix yourself based on the components and AI features the proposal lists. Map should occupy 40-55% of the canvas. Each panel should clearly show its title in Traditional Chinese matching the proposal's component names.
+- Visual style: modern dark civic SaaS, navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. ApexCharts visual language for charts (smooth gradient fills, donut/area/bar/radial/heatmap/treemap styles). Mapbox dark theme tiles, glowing routes, subtle building extrusions, district boundaries visible. Inter / Noto Sans TC typography. Subtle radial bloom in lower-right. Faint film grain.
+- Render UI labels in Traditional Chinese clean and readable; numbers/legends accurate-looking; do NOT generate gibberish — keep labels concise and meaningful.
+
+PROPOSAL CONTENT TO VISUALIZE (please reflect the components, map, dashboard panels, and AI feature this proposal describes):
+---
+## 提案 #3: 「我家門前這條河」淡水河流域居民生活體檢 v2
+
+**Pitch (一句話)**: v1 #3 河岸跑者太窄；**淡水河流域涵蓋雙北 80% 人口（萬華、大同、士林、北投、板橋、新莊、三重、蘆洲、新店、汐止）— 河水質、河濱餐車、土壤列管、上游工廠、雨後沖刷、河岸公園 — 整合給「住流域裡的所有人」看自家門前這條河，AI 一句話講完今天能不能去河邊。**
+
+**核心受眾 (Persona)**:
+- **第一**：淡水河流域居民（雙北約 480 萬人，涵蓋萬華/大同/士林/北投/板橋/新莊/三重/蘆洲/新店/汐止/淡水/八里）
+- **第二**：河濱公園週末家庭（騎車/野餐/遛小孩，雙北每週末 ~5 萬人次河濱）
+- **第三**：流域內店家（河濱餐車、淡水老街餐廳、河鮮店）— 看「上游有沒有事件」做食安決策
+
+**v1 對照**: 由 v1 #3「淡水河污染溯源」**重構受眾**。v1 用戶 critique「議題好但受眾窄（只河岸跑者）」 → v2 修正：把「跑者」換成「流域居民」(48 倍受眾)，把「AI 偵探溯源」（法律風險高）降級為「居民每週生活面板」+「流域上下游連動敘事」（合法、好懂、用得到）。
+
+**雙北痛點 (擴大版)**:
+- **流域跨市但治理各自為政**：上游新店、三峽、新莊污染影響下游萬華、大同、士林居民 — 但兩市稽查、宣導、河濱管理各做各
+- **河濱不只跑者用**：週末河濱有 5 萬+ 家庭遛小孩、騎 YouBike、吃餐車 — 但沒人告訴他們「今天上游有事件」
+- **流域內食材安全鏈**：淡水老街海鮮店、河鮮餐廳 — 上游污染事件當下沒人通知下游店家
+- **政府盲點（八里焚化廠 / 新北河濱餐車 / 上游列管場址）跨市帳目灰色** — 雙北居民共擔風險卻無單一可看面板
+
+**核心價值**:
+1. 看：Mapbox 淡水河流域全景，疊水質測站 RPI 顏色 + 河濱公園 + 上游 CEMS + 列管場址 + 河濱餐車 + 河岸公園遊客分布
+2. 用：輸入「我住板橋 / 我這週日想去大稻埕碼頭」→ AI 回「本週水質 RPI 中度、過去 7 天上游無重大事件、河濱餐車營運中、建議避開 X 段」
+3. 自動：每週一推「流域週報」LINE — 給訂閱戶整週上下游動態 (≠ 即時告警，是生活節奏)
+
+**Demo 衝擊力 (2 分鐘腳本)**:
+1. **[0:00–0:20] Hook**：地圖縮放展開淡水河流域 — 字幕「住在這條河邊的雙北人有 480 萬。」「這條河流經 12 個行政區。」「但沒人告訴你昨晚上游發生什麼。」
+2. **[0:20–1:00] 組件**：Mapbox 流域全景，沿河顯示水質測站（顏色 = RPI）、河濱公園 polygon、上游 CEMS icon、列管場址、河濱餐車。切「台北/雙北」立即看出「上游 = 新北 / 下游 = 台北」流域必跨市。
+3. **[1:00–1:40] AI Insight (重設計)**：點「我家在三重」 → AI 回：「您所在三重段水質 RPI 3 (中度)，上週新北新莊段觀測 BOD 升 18%（雨後沖刷），下游萬華段次日連動。本週末華江雁鴨自然公園仍開放，但建議避免接觸河水。」(**敘事而非溯源指認，避法律風險**)
+4. **[1:40–2:00] 行動**：「訂閱我家流域週報」(LINE) / 「我看到河面有油 → 通報」(1999) / 「我是河濱餐車 / 河鮮店主 → 看上游事件」(B 端) / 「邀學校來這做環境教育」
+
+**關鍵雙北組件 (≥4, ≥1 地圖層, 須跨局處)**:
+
+| # | 組件 | 資料源 (含局處) | 格式 | 雙北 | 地圖 |
+|---|------|----------------|------|------|------|
+| 1 | 淡水河流域水質測站 RPI 地圖 (含基隆河/新店溪/大漢溪) | 環境部 `WQX_P_01` + 台北環保局 `759db528... 河川水質檢測` + 新北環保局河川水質 | 點位 + 月時序 | ✅ | ✅ Mapbox |
+| 2 | 雙北上游固定污染源 CEMS 即時 | 新北環保局 `D7330AE1... CEMS` + 環境部 `AQX_P_19` (含新北工廠) | 點位 + 24h 時序 | ✅ | ✅ |
+| 3 | 雙北土壤地下水列管場址 (含已解除) | 新北 `9987DC63... 列管` + 新北 `198E688E... 已解除` + 台北 `臺北市土壤及地下水污染控制場址` | 點位 + 緩衝圈 | ✅ | ✅ |
+| 4 | 雙北河濱公園 + 設施 + 河濱餐車 (使用人流) | 新北高灘地處 `8D44... 河濱公園設施` + `河濱公園行動餐車` + 台北河濱公園 + 台北 YouBike2.0 河濱站借還 | 點位 + 線 | ✅ | ✅ |
+| 5 | 沿河 24-72h 雨量 (沖刷成因) | CWA `O-A0002-001` 雙北雨量站 | 時序 + 點位 | ✅ | ❌ Apexcharts |
+| 6 | 流域居民人口 + 流域內社經結構 | 內政部戶政（流域涵蓋的 12 行政區）+ 台北/新北社會局獨居老人 | 堆疊柱狀 | ✅ | ✅（區 polygon） |
+| 7 | 流域上下游連動時序 (上游 BOD vs 下游 BOD 滯後關係) | WQX_P_01 多測站時間對齊 | 雙軸時序 | ✅ | ❌ Apexcharts |
+
+**跨局處資料整合**:
+- **環保局** (台北/新北/環境部)：河川水質、CEMS、列管場址
+- **工務局/水利局** (台北/新北)：河濱公園、河濱設施
+- **戶政/民政**：流域人口
+- **CWA**：雨量
+- **交通局**：河濱 YouBike
+
+**雙北對比角度**: **流域天然跨市** — 上游（新北新店、三峽、新莊）行為 → 下游（台北萬華、大同、士林）後果。**沒雙北就無此題**（v1 強項保留）。新增「流域居民人口分布」讓雙北重要性更直觀（48 萬 vs 480 萬不是同一個故事）。
+
+**AI 應用 (流域生活敘事，去溯源化)**:
+- **避開 v1 的法律地雷**：v1 critique 指出「溯源指認工廠 = 法律風險」 — v2 改為「上下游連動描述」，**不指認污染源**，只描述「上游監測站 X 觀測 Y 升高」「下游次日連動 Z」這種事實。
+- **個人化生活敘事**：輸入流域行政區 → 模型聚合該段水質 + 上游 7 天監測 + 雨量 + 河濱開放狀態 → 輸出 100 字本週生活建議
+- **快取**：流域分 ~30 段 × 1 條/週 = 30 條，每週一夜間批次生成；30 RPM 完全 hold
+- **降級安全**：完全不出現具體公司/工廠名稱；UI 標「監測異常 ≠ 違法」
+
+**可解釋性**: 每段敘事下方列「資料源 + 採樣日期 + 信心」（採樣 < 7 天高 / 7-30 天中 / >30 天低）。流域連動時序圖直接展示「上游升 → 下游 N 日後升」的相關性，讓 AI 不必做因果推論。
+
+**行動入口**:
+1. 「訂閱我家流域週報」(LINE)
+2. 「我看到河面異常 → 一鍵通報」(送 1999 + 經緯度)
+3. B 端：「我是河濱餐車 / 河鮮店 → 看上游 7 天事件」
+4. 「邀學校來做環境教育」(連 inventory 環境教育設施場所)
+5. 「下載我里流域生活報告 PDF」
+
+**與既有 dashboard 差異**:
+- 既有北市永續環境 dashboard **完全沒有河川水質組件**
+- 既有 dashboard 沒有「流域跨市視角」（行政區為單位）
+- v1 提案是「污染偵探」(B 端稽查員) → v2 是「**生活面板**」(C 端 480 萬流域居民)，受眾擴大 48 倍
+
+**更新頻率 vs 使用情境 (對齊 critique 教訓)**:
+- WQX_P_01 月更 → 不假裝即時，定位為「**本週生活建議**」(週節奏)
+- CEMS 即時 → 「上游監測動感」(視覺呈現非個人決策)
+- 雨量小時級 → 「沖刷風險敘事」(72h 內事件描述)
+- **誠實切角**：不再喊「今天能不能跑」(v1 critique 戳破水質月更答不了當天)，改喊「**本週末能不能去**」(週節奏配對月更)
+
+**資料品質風險**:
+- WQX_P_01 月更是硬傷，但對「週末規劃」夠用 → UI 顯示採樣日期
+- 列管場址多為點位無 polygon → 用 500m 緩衝圈，UI 公開
+- 上下游連動是相關非因果 → 敘事用詞嚴守「觀測 / 連動」非「導致」
+
+**技術可行性 (32hr)**:
+- Mapbox 流域多層 (線 + 點 + polygon + 緩衝圈) = 10hr
+- Apexcharts 多軸時序 = 4hr
+- 流域分段 ETL (沿河測站索引 + 上下游關係建模) = 8hr
+- AI 敘事預生成 + 個人化 = 6hr
+- UI/Demo 整合 = 4hr
+- **合計 32hr 緊**，但 v1 已驗證技術骨架 → v2 主要是受眾與敘事重構
+
+**亮點 scoring (1-5)**:
+- 受眾廣度：5（v1 從 3 升到 5，480 萬流域居民 + 餐車店家 + 學校）
+- 雙北獨特：5（流域天然跨市，無可取代）
+- Demo 衝擊：5（流域全景縮放 + 480 萬人口錨定）
+- Story：5（家門前這條河 — 普世情感）
+- 應用：4（每週可用 + B 端店家）
+- 技術：4（多層整合中等）
+- 創意：4（去溯源化降級換來合法可上線，比 v1 #3 80 分更穩）
+- 跨資料整合：5（4 局處 + CWA）
+
+---
+
+---
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All rendered text must be meaningful Traditional Chinese or English numerals — never random characters.
