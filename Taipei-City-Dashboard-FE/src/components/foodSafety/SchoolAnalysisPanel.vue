@@ -1,31 +1,57 @@
-<!-- Right-side analysis panel. Shows a single covering view based on
-     foodSafetyStore.analysisFocus.type:
-       - 'school'   → school details + history + AI summary
-       - 'supplier' → supplier details + 危害等級 + served schools list
-       - 'incident' → incident card + casualties + AI summary + news links -->
+<!-- Right-side analysis panel (校內 mode). Three covering views:
+     - 'school'   → school name + supplier audit summary + latest nutrition
+     - 'supplier' → supplier name + audit status + served schools list
+     - 'incident' → incident card (kept from prior iteration) -->
 <script setup>
 import { computed } from "vue";
 import { useFoodSafetyStore } from "../../store/foodSafetyStore";
 
 const fs = useFoodSafetyStore();
-
 const f = computed(() => fs.analysisFocus);
 
-// Helpers for school view
-const schoolHistory = computed(() => {
+// School view: connected suppliers (via supply chain) with their latest FAIL audit
+const connectedSuppliers = computed(() => {
 	if (f.value?.type !== "school") return [];
-	const {id} = f.value.payload.properties;
-	return fs.incidents.filter((i) => i.school_id === id || i.affected_school_ids.includes(id));
+	const schoolId = f.value.payload.properties.id;
+	const arcs = fs.supplyChain.filter((a) => a.properties.school_id === schoolId);
+	const ids = new Set(arcs.map((a) => a.properties.supplier_id));
+	return fs.suppliers
+		.filter((s) => ids.has(s.properties.id))
+		.map((s) => {
+			const audits = fs.supplierAudits[s.properties.id] || [];
+			const latestFail = audits.find((r) => r.status === "FAIL");
+			return {
+				id: s.properties.id,
+				name: s.properties.name,
+				feature: s,
+				latestFail,
+			};
+		});
 });
 
-// Helpers for supplier view
+// School view: latest nutrition record
+const latestNutrition = computed(() => {
+	if (f.value?.type !== "school") return null;
+	const records = fs.schoolNutrition[f.value.payload.properties.id] || [];
+	return records[0] || null;
+});
+
+// Supplier view: latest FAIL audit for this supplier
+const supplierLatestFail = computed(() => {
+	if (f.value?.type !== "supplier") return null;
+	const audits = fs.supplierAudits[f.value.payload.properties.id] || [];
+	return audits.find((r) => r.status === "FAIL") || null;
+});
+
+// Supplier view: served schools list (already implemented logic)
 const supplierServedSchools = computed(() => {
 	if (f.value?.type !== "supplier") return [];
 	const ids = f.value.payload.properties.served_school_ids || [];
 	return fs.schools.filter((s) => ids.includes(s.properties.id));
 });
 
-function pickSchool(school) { fs.selectSchool(school); }
+function pickSupplier(supplierFeature) { fs.selectSupplier(supplierFeature); }
+function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 </script>
 
 <template>
@@ -34,7 +60,7 @@ function pickSchool(school) { fs.selectSchool(school); }
       v-if="!f"
       class="fsm-empty"
     >
-      請點選地圖上的學校或事件卡以檢視詳情
+      請點選地圖上的學校、供應商或事件
     </div>
 
     <!-- School view -->
@@ -43,36 +69,73 @@ function pickSchool(school) { fs.selectSchool(school); }
       class="fsm-view"
     >
       <h3>{{ f.payload.properties.name }}</h3>
-      <p>
+      <p class="meta">
         {{ f.payload.properties.city }} · {{ f.payload.properties.district }} · {{
-          f.payload.properties.type === 'elementary' ? '國小' : '國中'
+          f.payload.properties.type === "elementary" ? "國小" : "國中"
         }}
       </p>
-      <div
-        class="badge"
-        :class="`badge-${f.payload.properties.incident_status}`"
+
+      <h4>食材供應商稽核狀況</h4>
+      <ul
+        v-if="connectedSuppliers.length"
+        class="audit-list"
       >
-        {{ f.payload.properties.incident_status === 'red' ? 'Critical'
-          : f.payload.properties.incident_status === 'yellow' ? 'Medium' : 'Low' }}
-      </div>
-      <h4>歷史食安事件 ({{ schoolHistory.length }})</h4>
-      <ul class="history">
         <li
-          v-for="i in schoolHistory"
-          :key="i.id"
-          @click="fs.selectIncident(i)"
+          v-for="s in connectedSuppliers"
+          :key="s.id"
+          @click="pickSupplier(s.feature)"
         >
-          <span class="date">{{ i.occurred_at }}</span>
-          <span class="title">{{ i.title }}</span>
-          <span
-            class="severity"
-            :class="`sev-${i.severity.toLowerCase()}`"
-          >{{ i.severity }}</span>
+          <div class="audit-row">
+            <span class="supplier-name">{{ s.name }}</span>
+            <span
+              v-if="s.latestFail"
+              class="status-badge status-fail"
+            >{{ s.latestFail.severity }}</span>
+            <span
+              v-else
+              class="status-badge status-ok"
+            >正常</span>
+          </div>
+          <div
+            v-if="s.latestFail"
+            class="audit-detail"
+          >
+            <span>{{ s.latestFail.date }}</span>
+            <span>{{ s.latestFail.issue }}</span>
+          </div>
         </li>
       </ul>
-      <h4>AI 摘要</h4>
-      <p class="summary">
-        {{ schoolHistory[0]?.ai_summary || '尚無相關 AI 摘要。' }}
+      <p
+        v-else
+        class="hint"
+      >
+        無串接的食材供應商資料
+      </p>
+
+      <h4>營養評分</h4>
+      <div
+        v-if="latestNutrition"
+        class="nutrition-card"
+      >
+        <div class="nutrition-head">
+          <span class="nutrition-date">{{ latestNutrition.date }}</span>
+          <span class="nutrition-score">{{ latestNutrition.score }}</span>
+        </div>
+        <div class="nutrition-menu">
+          {{ latestNutrition.menu }}
+        </div>
+        <div class="nutrition-stats">
+          <span><label>熱量</label>{{ latestNutrition.calories }} kcal</span>
+          <span><label>蛋白質</label>{{ latestNutrition.protein }} g</span>
+          <span><label>醣類</label>{{ latestNutrition.carbs }} g</span>
+          <span><label>脂肪</label>{{ latestNutrition.fat }} g</span>
+        </div>
+      </div>
+      <p
+        v-else
+        class="hint"
+      >
+        無營養評分資料
       </p>
     </div>
 
@@ -82,16 +145,32 @@ function pickSchool(school) { fs.selectSchool(school); }
       class="fsm-view"
     >
       <h3>{{ f.payload.properties.name }}</h3>
-      <p>{{ f.payload.properties.address }}</p>
+      <p class="meta">
+        {{ f.payload.properties.address }}
+      </p>
+
+      <h4>稽核狀況</h4>
       <div
-        class="badge"
-        :class="`badge-${f.payload.properties.hazard_level.toLowerCase()}`"
+        v-if="supplierLatestFail"
+        class="audit-detail-block status-fail-block"
       >
-        {{ f.payload.properties.hazard_level }}
+        <div class="audit-row">
+          <span class="audit-date">{{ supplierLatestFail.date }}</span>
+          <span class="status-badge status-fail">{{ supplierLatestFail.severity }}</span>
+        </div>
+        <div class="audit-issue">
+          {{ supplierLatestFail.issue }}
+        </div>
       </div>
-      <h4>稽查記錄</h4>
-      <p>最近稽查：{{ f.payload.properties.last_inspection }} · {{ f.payload.properties.last_status }}</p>
-      <h4>供應給以下學校 ({{ supplierServedSchools.length }})</h4>
+      <div
+        v-else
+        class="audit-detail-block status-ok-block"
+      >
+        <span class="status-badge status-ok">正常</span>
+        <span class="audit-issue">無事件記錄</span>
+      </div>
+
+      <h4>供應學校清單 ({{ supplierServedSchools.length }})</h4>
       <ul class="served">
         <li
           v-for="s in supplierServedSchools"
@@ -103,16 +182,18 @@ function pickSchool(school) { fs.selectSchool(school); }
       </ul>
     </div>
 
-    <!-- Incident view -->
+    <!-- Incident view (kept as-is from prior iteration) -->
     <div
       v-else-if="f.type === 'incident'"
       class="fsm-view"
     >
       <h3>{{ f.payload.title }}</h3>
-      <p>{{ f.payload.occurred_at }} · {{ f.payload.school_name }}</p>
+      <p class="meta">
+        {{ f.payload.occurred_at }} · {{ f.payload.school_name }}
+      </p>
       <div
-        class="badge"
-        :class="`badge-${f.payload.severity.toLowerCase()}`"
+        class="status-badge"
+        :class="`sev-${f.payload.severity.toLowerCase()}`"
       >
         {{ f.payload.severity }}
       </div>
@@ -149,74 +230,167 @@ function pickSchool(school) { fs.selectSchool(school); }
 <style scoped>
 .fsm-analysis {
 	pointer-events: auto;
-	position: absolute; top: 16px; right: 16px; width: 380px;
-	max-height: calc(100vh - 200px); overflow-y: auto;
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	width: 380px;
+	max-height: calc(100vh - 200px);
+	overflow-y: auto;
 	padding: 14px;
+	color: var(--fsm-text, #d7e3f4);
 }
-.fsm-empty { color: #8FA3C6; font-size: 13px; }
+.fsm-empty {
+	color: #8fa3c6;
+	font-size: 13px;
+}
 .fsm-view h3 {
-	margin: 0 0 4px; font-size: 18px;
+	margin: 0 0 4px;
+	font-size: 16px;
 	color: #00E5FF;
 	letter-spacing: 1px;
-	text-shadow: 0 0 8px rgba(0,229,255,0.4);
 }
 .fsm-view h4 {
-	margin: 12px 0 4px; font-size: 11px;
-	color: #00E5FF; opacity: 0.85;
-	text-transform: uppercase; letter-spacing: 2px;
+	margin: 14px 0 6px;
+	font-size: 11px;
+	color: #00E5FF;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+.fsm-view p {
+	margin: 4px 0;
+	font-size: 13px;
+}
+.meta { color: #8fa3c6; font-size: 12px; }
+.summary { font-style: italic; color: #b9c9e0; }
+.hint { color: #8fa3c6; font-size: 12px; }
+
+.status-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-size: 11px;
 	font-weight: 600;
 }
-.fsm-view p { margin: 4px 0; font-size: 13px; color: #D7E3F4; }
-.summary {
-	font-style: italic; color: #8FA3C6;
-	background: rgba(0,229,255,0.04);
-	border-left: 2px solid rgba(0,229,255,0.4);
-	padding: 6px 10px;
+.status-ok {
+	background: rgba(0, 230, 118, 0.15);
+	color: #00E676;
+	border: 1px solid rgba(0, 230, 118, 0.5);
 }
-.badge {
-	display: inline-block; padding: 3px 10px; border-radius: 2px;
-	font-size: 11px; font-weight: 600; margin: 4px 0;
-	letter-spacing: 1px; text-transform: uppercase;
-	font-family: 'JetBrains Mono', 'Courier New', monospace;
+.status-fail {
+	background: rgba(255, 23, 68, 0.15);
+	color: #FF6B85;
+	border: 1px solid rgba(255, 23, 68, 0.5);
 }
-.badge-red, .badge-critical { background: #FF1744; color: #fff; box-shadow: 0 0 10px rgba(255,23,68,0.5); }
-.badge-yellow, .badge-high  { background: #FF6D00; color: #fff; box-shadow: 0 0 10px rgba(255,109,0,0.5); }
-.badge-medium               { background: #FFC107; color: #0A1228; box-shadow: 0 0 10px rgba(255,193,7,0.5); }
-.badge-green, .badge-low    { background: #00E676; color: #0A1228; box-shadow: 0 0 10px rgba(0,230,118,0.5); }
-.history, .served, .news { list-style: none; padding: 0; margin: 0; }
-.history li, .served li {
-	padding: 6px 0; border-bottom: 1px solid rgba(0,229,255,0.1); cursor: pointer;
-	font-size: 12px; display: flex; gap: 8px; align-items: center;
-	color: #D7E3F4;
+.sev-critical { background: rgba(255, 23, 68, 0.2); color: #FF6B85; border: 1px solid #FF1744; }
+.sev-high     { background: rgba(255, 109, 0, 0.2); color: #FFB180; border: 1px solid #FF6D00; }
+.sev-medium   { background: rgba(255, 193, 7, 0.2); color: #FFE082; border: 1px solid #FFC107; }
+.sev-low      { background: rgba(0, 230, 118, 0.2); color: #69F0AE; border: 1px solid #00E676; }
+
+.audit-list, .served, .news {
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
-.history li:hover, .served li:hover {
-	background: rgba(0,229,255,0.06);
+.audit-list li, .served li {
+	padding: 6px 0;
+	border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+	cursor: pointer;
+	font-size: 12px;
+}
+.audit-list li:hover, .served li:hover {
+	background: rgba(0, 229, 255, 0.05);
+}
+.audit-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+}
+.supplier-name {
+	flex: 1;
+	color: var(--fsm-text);
+}
+.audit-detail {
+	display: flex;
+	gap: 8px;
+	margin-top: 4px;
+	font-size: 11px;
+	color: #8fa3c6;
+}
+.audit-detail-block {
+	padding: 8px 10px;
+	border-radius: 4px;
+	margin-bottom: 4px;
+}
+.status-fail-block {
+	background: rgba(255, 23, 68, 0.06);
+	border: 1px solid rgba(255, 23, 68, 0.25);
+}
+.status-ok-block {
+	background: rgba(0, 230, 118, 0.06);
+	border: 1px solid rgba(0, 230, 118, 0.25);
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+.audit-issue {
+	font-size: 12px;
+	color: var(--fsm-text);
+	margin-top: 4px;
+}
+.status-ok-block .audit-issue { margin: 0; color: #8fa3c6; }
+.audit-date { font-size: 12px; color: #8fa3c6; }
+
+.nutrition-card {
+	background: rgba(0, 229, 255, 0.05);
+	border: 1px solid rgba(0, 229, 255, 0.2);
+	border-radius: 4px;
+	padding: 10px;
+}
+.nutrition-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	margin-bottom: 6px;
+}
+.nutrition-date { font-size: 11px; color: #8fa3c6; }
+.nutrition-score {
+	font-family: var(--fsm-mono, monospace);
+	font-size: 24px;
+	color: #00E5FF;
+	font-weight: 700;
+	text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+.nutrition-menu {
+	font-size: 12px;
+	color: var(--fsm-text);
+	margin: 4px 0 8px;
+}
+.nutrition-stats {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 4px 12px;
+	font-size: 11px;
+	color: #8fa3c6;
+	font-family: var(--fsm-mono, monospace);
+}
+.nutrition-stats label {
+	display: inline-block;
+	width: 36px;
 	color: #00E5FF;
 }
-.history .date {
-	color: #8FA3C6; flex-shrink: 0;
-	font-family: 'JetBrains Mono', 'Courier New', monospace;
+
+.casualties {
+	display: flex;
+	gap: 14px;
+	padding: 8px 0;
 }
-.history .title { flex: 1; }
-.severity {
-	font-weight: 600; font-size: 11px;
-	font-family: 'JetBrains Mono', 'Courier New', monospace;
-	letter-spacing: 1px;
-}
-.sev-critical { color: #FF1744; text-shadow: 0 0 6px rgba(255,23,68,0.6); }
-.sev-high     { color: #FF6D00; text-shadow: 0 0 6px rgba(255,109,0,0.6); }
-.sev-medium   { color: #FFC107; text-shadow: 0 0 6px rgba(255,193,7,0.6); }
-.sev-low      { color: #00E676; text-shadow: 0 0 6px rgba(0,230,118,0.6); }
-.casualties { display: flex; gap: 14px; padding: 8px 0; }
 .casualties strong {
-	font-size: 22px; color: #00E5FF; display: block;
-	font-family: 'JetBrains Mono', 'Courier New', monospace;
-	text-shadow: 0 0 8px rgba(0,229,255,0.5);
+	font-size: 18px;
+	color: var(--fsm-text);
+	display: block;
+	font-family: var(--fsm-mono, monospace);
 }
-.casualties div {
-	font-size: 11px; color: #8FA3C6;
-	text-transform: uppercase; letter-spacing: 1px;
-}
-.news a { color: #00E5FF; text-decoration: none; }
-.news a:hover { text-decoration: underline; text-shadow: 0 0 6px rgba(0,229,255,0.5); }
+.news a { color: #4FC3F7; text-decoration: none; }
+.news a:hover { text-decoration: underline; }
 </style>
