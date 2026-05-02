@@ -35,13 +35,15 @@ INSERT INTO component_charts (index, color, types, unit) VALUES
 -- ── 3. component_maps ──────────────────────────────────────────
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
   ('fsm_schools',       '學校節點',       'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","incident_status"],"red","#E53935","yellow","#FFA000","#43A047"],"circle-radius":6,"circle-opacity":0.85}'::json),
+    '{"circle-color":["match",["get","incident_status"],"red","#FF1744","yellow","#FFC107","#00E5FF"],"circle-radius":["match",["get","incident_status"],"red",8,"yellow",6,5],"circle-opacity":0.9,"circle-stroke-width":2,"circle-stroke-color":["match",["get","incident_status"],"red","#FF1744","yellow","#FFC107","#00E5FF"],"circle-stroke-opacity":0.4}'::json),
   ('fsm_supply_chain',  '供應鏈連線',     'arc',    'geojson', 'big',
-    '{"arc-color":["#FFA000","#E53935"],"arc-width":2,"arc-opacity":0.6,"arc-animate":true}'::json),
+    '{"arc-color":["#00E5FF","#FF1744"],"arc-width":2,"arc-opacity":0.8,"arc-animate":true}'::json),
+  ('fsm_suppliers',     '供應商節點',     'circle', 'geojson', 'big',
+    '{"circle-color":["match",["get","hazard_level"],"Critical","#FF1744","High","#FF6D00","Medium","#FFC107","#FFD54F"],"circle-radius":7,"circle-opacity":0.9,"circle-stroke-width":2,"circle-stroke-color":"#FFD54F","circle-stroke-opacity":0.5}'::json),
   ('fsm_restaurants',   '餐廳稽查點',     'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","grade"],"優","#43A047","良","#FFA000","#E53935"],"circle-radius":4,"circle-opacity":0.8}'::json),
+    '{"circle-color":["match",["get","grade"],"優","#00E676","良","#FFC107","#FF1744"],"circle-radius":4,"circle-opacity":0.85,"circle-stroke-width":1,"circle-stroke-color":"#00E5FF","circle-stroke-opacity":0.4}'::json),
   ('fsm_district_heat', '行政區違規密度', 'fill',   'geojson', 'big',
-    '{"fill-color":["interpolate",["linear"],["get","density"],0,"#43A047",50,"#FFA000",100,"#E53935"],"fill-opacity":0.5}'::json);
+    '{"fill-color":["interpolate",["linear"],["get","density"],0,"#003344",50,"#0088AA",100,"#00E5FF"],"fill-opacity":0.35,"fill-outline-color":"#00E5FF"}'::json);
 
 -- ── 4. query_charts (5 components × 2 cities = 10) ─────────────
 
@@ -58,7 +60,7 @@ VALUES (
   '以學校節點呈現臺北市國中小，紅色標示曾發生食安事件學校，黃色標示供應商有疑慮學校。點擊節點展開供應鏈連線。',
   '家長挑學校；衛生局追蹤校園食安；研究者分析供應鏈風險。',
   'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_supply_chain') ORDER BY id),
+  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_supply_chain','fsm_suppliers') ORDER BY id),
   '{}', '{}', '{mock}', NOW(), NOW()
 );
 
@@ -75,7 +77,7 @@ VALUES (
   '雙城國中小節點疊加，紅黃綠三色標示風險等級，點擊學校展開供應鏈連線（deck.gl ArcLayer）。',
   '家長跨城挑學校；衛生局聯合追蹤；研究者分析雙北供應鏈交織。',
   'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_supply_chain') ORDER BY id),
+  ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_schools','fsm_supply_chain','fsm_suppliers') ORDER BY id),
   '{}', '{}', '{mock}', NOW(), NOW()
 );
 
