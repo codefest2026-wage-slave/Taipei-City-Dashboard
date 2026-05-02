@@ -41,6 +41,9 @@ import hashlib
 import json
 import re
 import subprocess
+import time
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 import psycopg2
@@ -52,6 +55,69 @@ DST_MAP = ROOT / "Taipei-City-Dashboard-FE/public/mapData"
 TOWN_GEOJSON = DST_MAP / "metrotaipei_town.geojson"
 MEAL_CSV = ROOT / "scripts/food_safety_monitor/snapshots/meal_scores.csv"
 DISH_CSV = ROOT / "scripts/food_safety_monitor/snapshots/dish_scores.csv"
+GEOCODE_CACHE = Path(__file__).parent / ".geocode_cache.json"
+ARCGIS_URL = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates"
+
+
+# ── Geocoding helper ──────────────────────────────────────────
+class Geocoder:
+    """ArcGIS World geocoder with persistent JSON cache.
+
+    Cache schema: {query_string: [lng, lat] | None}. None means we tried and
+    got no usable hit — don't retry, fall back to district centroid.
+    """
+
+    def __init__(self, cache_path=GEOCODE_CACHE, min_score=70):
+        self.path = cache_path
+        self.min_score = min_score
+        self.cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
+        self.dirty = False
+        self.calls = 0
+
+    def lookup(self, query):
+        if not query or not query.strip():
+            return None
+        q = query.strip()
+        if q in self.cache:
+            return self.cache[q]
+        # Hit the API
+        params = {
+            "SingleLine": q, "f": "json",
+            "outSR": '{"wkid":4326}',
+            "outFields": "Addr_type,Match_addr,StAddr,City",
+            "maxLocations": 1,
+        }
+        url = ARCGIS_URL + "?" + urllib.parse.urlencode(params)
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json, text/plain, */*",
+            "Referer": "https://littlehorseboy.github.io/",
+            "Origin": "https://littlehorseboy.github.io",
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=10) as r:
+                data = json.load(r)
+        except Exception as e:
+            print(f"  geocode error for {q!r}: {e}")
+            self.cache[q] = None
+            self.dirty = True
+            return None
+        self.calls += 1
+        time.sleep(0.05)  # be polite to the free service
+
+        cands = data.get("candidates") or []
+        if cands and cands[0].get("score", 0) >= self.min_score:
+            loc = cands[0]["location"]
+            self.cache[q] = [loc["x"], loc["y"]]
+        else:
+            self.cache[q] = None
+        self.dirty = True
+        return self.cache[q]
+
+    def flush(self):
+        if self.dirty:
+            self.path.write_text(json.dumps(self.cache, ensure_ascii=False, indent=0))
+            self.dirty = False
 
 
 def get_db():
@@ -208,6 +274,20 @@ def main():
     """)
     audits_raw = cur.fetchall()
     print(f"  audits (商業業者): {len(audits_raw)}")
+
+    # ── 4b. Caterer address registry (school_meal_caterers, 全國月度快照) ────
+    cur.execute("""
+        SELECT tax_id, county, address
+        FROM school_meal_caterers
+        WHERE tax_id IS NOT NULL AND address IS NOT NULL
+    """)
+    caterer_addr = {}  # tax_id (cleaned) → {county, address}
+    for tax_raw, county, addr in cur.fetchall():
+        tid = clean_tax_id(tax_raw)
+        if tid and tid not in caterer_addr:
+            caterer_addr[tid] = {"county": county, "address": addr}
+    print(f"  caterer addresses (school_meal_caterers): {len(caterer_addr)}")
+
     cur.close()
     conn.close()
 
@@ -267,19 +347,27 @@ def main():
         related = school_caterers.get(sn, set())
         school_alert[sn] = "red" if any(caterer_alert.get(t) == "red" for t in related) else "normal"
 
-    # ── 8. Coordinates ───────────────────────────────────────
+    # ── 8. Coordinates (ArcGIS geocoder + district centroid fallback) ─
     centroids = district_centroids()
+    geocoder = Geocoder()
 
-    def fallback_centroid(city):
+    def fallback_centroid(city, district=None):
+        if district and (city, district) in centroids:
+            return centroids[(city, district)]
         return (121.50, 25.04) if city == "臺北市" else (121.49, 25.01)
 
-    # School features
+    # ── School features (geocode by school_name) ────────────
+    print("  geocoding schools (cached + ArcGIS)...")
     school_features = []
     school_coords = {}
-    for c, d, s in schools_rows:
-        cx, cy = centroids.get((c, d), fallback_centroid(c))
-        jx, jy = jitter(s)
-        coord = [cx + jx, cy + jy]
+    for i, (c, d, s) in enumerate(schools_rows):
+        loc = geocoder.lookup(s)
+        if loc:
+            coord = list(loc)
+        else:
+            cx, cy = fallback_centroid(c, d)
+            jx, jy = jitter(s)
+            coord = [cx + jx, cy + jy]
         school_coords[s] = coord
         sup_ids = sorted(school_caterers.get(s, set()))
         school_features.append({
@@ -292,27 +380,50 @@ def main():
                 "type": school_type(s),
                 "supplier_ids": sup_ids,
                 "recent_alert": school_alert.get(s, "normal"),
+                "geocoded": loc is not None,
             },
             "geometry": {"type": "Point", "coordinates": coord},
         })
+        if (i + 1) % 50 == 0:
+            geocoder.flush()
+            print(f"    geocoded {i + 1}/{len(schools_rows)} (api calls so far: {geocoder.calls})")
+    geocoder.flush()
 
-    # Caterer features (use audit address district when available)
+    # ── Caterer features (geocode address; multi-source fallback) ─
+    # Address-source priority:
+    #   1. school_meal_caterers.address (authoritative business registry)
+    #   2. food_safety_inspection_metrotaipei.address (inspection record)
+    #   3. canonical caterer name (geocoder may know the firm by name)
+    #   4. district centroid + jitter (last resort)
+    print("  geocoding caterers...")
     sup_features = []
     sup_coords = {}
     for tid, c in caterers.items():
-        addr_audits = audits_by_caterer.get(tid, [])
         addr = ""
         cd = None
-        for a in addr_audits:
-            if a.get("address"):
-                addr = a["address"]
-                cd = address_district(addr) or (a.get("city"), a.get("district"))
-                break
-        if cd is None:
-            cd = ("臺北市", "中正區")  # last resort
-        cx, cy = centroids.get(cd, fallback_centroid(cd[0]))
-        jx, jy = jitter(tid)
-        coord = [cx + jx, cy + jy]
+        # 1) school_meal_caterers
+        if tid in caterer_addr:
+            addr = caterer_addr[tid]["address"] or ""
+            ad = address_district(addr)
+            cd = ad or (caterer_addr[tid]["county"], None)
+        # 2) audit fallback
+        if not addr:
+            for a in audits_by_caterer.get(tid, []):
+                if a.get("address"):
+                    addr = a["address"]
+                    cd = address_district(addr) or (a.get("city"), a.get("district"))
+                    break
+        if cd is None or cd[0] is None:
+            cd = ("臺北市", "中正區")
+        loc = geocoder.lookup(addr) if addr else None
+        if loc is None and c["name"]:
+            loc = geocoder.lookup(c["name"])
+        if loc:
+            coord = list(loc)
+        else:
+            cx, cy = fallback_centroid(cd[0], cd[1])
+            jx, jy = jitter(tid)
+            coord = [cx + jx, cy + jy]
         sup_coords[tid] = coord
         served = sorted({sn for sn, t in edges if t == tid})
         sup_features.append({
@@ -326,9 +437,14 @@ def main():
                 "address": addr,
                 "served_school_ids": served,
                 "recent_alert": caterer_alert.get(tid, "normal"),
+                "geocoded": loc is not None,
             },
             "geometry": {"type": "Point", "coordinates": coord},
         })
+    geocoder.flush()
+    print(f"  geocode summary: {sum(1 for v in geocoder.cache.values() if v)} hits / "
+          f"{sum(1 for v in geocoder.cache.values() if v is None)} misses / "
+          f"{geocoder.calls} new API calls")
 
     # Supply-chain LineStrings
     chain_features = []
