@@ -23,7 +23,7 @@ python3 scripts/school_meal_ingredients/etl/snapshot_apis.py
 # 2. Backup before applying (idempotent migration, but be safe)
 ./scripts/school_meal_ingredients/backup_db.sh
 
-# 3. Apply: migrations + dedupe loader + verify
+# 3. Apply: migrations + raw loader + dedupe loader + verify
 ./scripts/school_meal_ingredients/apply.sh
 
 # 4. Rollback (drops the table)
@@ -44,11 +44,14 @@ scripts/school_meal_ingredients/
 ├── etl/
 │   ├── _db.py                   # psycopg2 kwargs + FATRACE creds resolver
 │   ├── snapshot_apis.py         # resumable API crawler (manual run)
-│   └── load_ingredient_names.py # CSV → dedupe → DB (called by apply.sh)
+│   ├── load_raw_records.py      # CSV → 6 typed raw tables (apply.sh step 2/4)
+│   └── load_ingredient_names.py # CSV → dedupe → DB (apply.sh step 3/4)
 ├── snapshots/                   # committed CSVs + manifest.json
 └── migrations/
     ├── 001_create_ingredient_names.up.sql
-    └── 001_create_ingredient_names.down.sql
+    ├── 001_create_ingredient_names.down.sql
+    ├── 002_create_raw_tables.up.sql
+    └── 002_create_raw_tables.down.sql
 ```
 
 ## Data flow
@@ -58,11 +61,18 @@ scripts/school_meal_ingredients/
 fatraceschool API ─────► snapshot_apis.py ─► snapshots/*.csv + manifest.json
                                                        │
                                           (apply.sh)   │
-                                                       ▼
-                                       load_ingredient_names.py
-                                                       │
-                                                       ▼
-                                  dashboard.school_meal_ingredient_names
+                                              ┌────────┴────────┐
+                                              ▼                 ▼
+                                  load_raw_records.py   load_ingredient_names.py
+                                              │                 │
+                                              ▼                 ▼
+                                  dashboard.school_meal_     dashboard.school_meal_
+                                  {food_dictionary,          ingredient_names
+                                   caterers,
+                                   seasoning_records_nation,
+                                   ingredient_records,
+                                   dish_records,
+                                   dish_ingredient_records}
 ```
 
 `apply.sh` reads only committed CSVs; it does **not** call the live API.
