@@ -24,6 +24,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		schoolSearchQuery: "",
 
 		// Restaurant map UX
+		restaurantSearchQuery: "",
 		restaurantFilters: {
 			district: "all",
 			severity: "all",
@@ -58,6 +59,15 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			if (!q) return [];
 			return state.schools.filter(
 				(f) => f.properties.name.includes(q),
+			).slice(0, 8);
+		},
+		// Filtered restaurants matching current search query
+		restaurantSearchResults(state) {
+			const q = state.restaurantSearchQuery.trim();
+			if (!q) return [];
+			return state.restaurants.filter(
+				(f) => (f.properties.name || "").includes(q)
+					|| (f.properties.address || "").includes(q),
 			).slice(0, 8);
 		},
 		// Recent N incidents sorted by date desc (RecentIncidentsStrip)
@@ -338,6 +348,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 
 		selectRestaurant(restaurant) {
 			this.selectedRestaurant = restaurant;
+			const mapStore = useMapStore();
+			const coord = restaurant?.geometry?.coordinates;
+			if (mapStore.map && coord) {
+				mapStore.easeToLocation([coord, 15, 0, 0]);
+			}
 		},
 
 		// ── ArcLayer redraw (R2) ────────────────────────────────

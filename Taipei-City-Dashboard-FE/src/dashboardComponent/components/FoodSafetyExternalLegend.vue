@@ -1,6 +1,8 @@
-<!-- Dashboard chart for fsm_restaurant_map: legend showing the 5-tier
-     hazard_level color palette used by fsm_restaurants Mapbox layer. -->
+<!-- Dashboard chart for fsm_restaurant_map: business search bar + 5-tier
+     hazard_level legend matching the fsm_restaurants Mapbox layer. -->
 <script setup>
+import RestaurantSearchBar from "../../components/foodSafety/RestaurantSearchBar.vue";
+
 defineProps([
 	"chart_config", "activeChart", "series", "map_config", "map_filter", "map_filter_on",
 ]);
@@ -19,6 +21,7 @@ const rows = [
     v-if="activeChart === 'FoodSafetyExternalLegend'"
     class="fsm-ext-legend"
   >
+    <RestaurantSearchBar />
     <div class="fsm-ext-legend-title">
       危害等級
     </div>
