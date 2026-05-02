@@ -330,7 +330,7 @@ function returnChartComponent(name, svg) {
         </button>
       </div>
       <div
-        v-else-if="mode.includes('map') && config.chart_config.types[0] !== 'FoodSafetyControls'"
+        v-else-if="mode.includes('map')"
         class="dashboardcomponent-header-toggle"
       >
         <label class="toggleswitch">

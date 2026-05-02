@@ -12,7 +12,7 @@ BEGIN;
 DELETE FROM query_charts   WHERE index LIKE 'fsm_%';
 DELETE FROM component_maps WHERE index LIKE 'fsm_%';
 DELETE FROM component_charts WHERE index LIKE 'fsm_%';
-DELETE FROM components WHERE id BETWEEN 1020 AND 1026;
+DELETE FROM components WHERE id BETWEEN 1021 AND 1025;
 DELETE FROM dashboard_groups WHERE dashboard_id = 504;
 DELETE FROM dashboards WHERE id = 504;
 
@@ -22,18 +22,15 @@ INSERT INTO components (id, index, name) VALUES
   (1022, 'fsm_restaurant_map',     '校外食安地圖'),
   (1023, 'fsm_violation_rank',     '違規食品類別排行'),
   (1024, 'fsm_inspection_trend',   '稽查強度趨勢'),
-  (1025, 'fsm_risk_matrix',        '風險矩陣'),
-  (1026, 'fsm_controls',           '圖層與圖例');
+  (1025, 'fsm_risk_matrix',        '風險矩陣');
 
 -- ── 2. component_charts ────────────────────────────────────────
 INSERT INTO component_charts (index, color, types, unit) VALUES
-  ('fsm_school_map',       ARRAY['#00E5FF','#FF1744','#FFC107'], ARRAY['MapLegend'],         '校'),
+  ('fsm_school_map',       ARRAY['#00E5FF','#FF1744','#FFC107'], ARRAY['FoodSafetyControls'], '校'),
   ('fsm_restaurant_map',   ARRAY['#00E676','#FFC107','#FF1744'], ARRAY['MapLegend'],         '家'),
   ('fsm_violation_rank',   ARRAY['#FF1744','#FF6D00','#FFC107','#00E5FF','#9C27B0','#26C6DA','#00E676','#9E9E9E'], ARRAY['BarChart'], '件'),
   ('fsm_inspection_trend', ARRAY['#00E5FF','#FF1744'],            ARRAY['ColumnLineChart'],   '件/%'),
   ('fsm_risk_matrix',      ARRAY['#FF1744','#FF6D00','#00E5FF','#00E676'], ARRAY['RiskMatrixChart'], '家');
-INSERT INTO component_charts (index, color, types, unit) VALUES
-  ('fsm_controls',         ARRAY['#00E5FF','#FF1744'], ARRAY['FoodSafetyControls'], '');
 
 -- ── 3. component_maps ──────────────────────────────────────────
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
@@ -242,44 +239,10 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{mock}', NOW(), NOW()
 );
 
--- 1026 圖層與圖例 — taipei
-INSERT INTO query_charts (index, query_type, query_chart, city, source,
-  short_desc, long_desc, use_case,
-  time_from, time_to, update_freq, update_freq_unit,
-  map_config_ids, map_filter, links, contributors, created_at, updated_at)
-VALUES (
-  'fsm_controls', 'map_legend',
-  $$SELECT 'controls' as name, 'controls' as type$$,
-  'taipei', '系統內建',
-  '校內食安地圖控制面板。',
-  '提供圖層 toggle (學校 / 廠商) 與圖例 (學校無事件/曾事件/已選取；供應商無事件/有事件)。',
-  '校內食安地圖開啟時的視覺說明與圖層選擇。',
-  'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index = 'fsm_schools'),
-  '{}', '{}', '{system}', NOW(), NOW()
-);
-
--- 1026 圖層與圖例 — metrotaipei
-INSERT INTO query_charts (index, query_type, query_chart, city, source,
-  short_desc, long_desc, use_case,
-  time_from, time_to, update_freq, update_freq_unit,
-  map_config_ids, map_filter, links, contributors, created_at, updated_at)
-VALUES (
-  'fsm_controls', 'map_legend',
-  $$SELECT 'controls' as name, 'controls' as type$$,
-  'metrotaipei', '系統內建',
-  '雙北校內食安地圖控制面板。',
-  '提供圖層 toggle (學校 / 廠商) 與圖例。',
-  '校內食安地圖開啟時的視覺說明與圖層選擇。',
-  'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index = 'fsm_schools'),
-  '{}', '{}', '{system}', NOW(), NOW()
-);
-
 -- ── 5. dashboards ──────────────────────────────────────────────
 INSERT INTO dashboards (id, index, name, components, icon, created_at, updated_at) VALUES
   (504, 'food_safety_monitor', '食安監控系統',
-   ARRAY[1026,1021,1022,1023,1024,1025], 'health_and_safety', NOW(), NOW());
+   ARRAY[1021,1022,1023,1024,1025], 'health_and_safety', NOW(), NOW());
 
 -- ── 6. dashboard_groups ────────────────────────────────────────
 INSERT INTO dashboard_groups (dashboard_id, group_id) VALUES
