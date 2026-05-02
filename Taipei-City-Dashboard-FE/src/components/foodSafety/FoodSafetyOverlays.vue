@@ -10,7 +10,7 @@ import { useMapStore } from "../../store/mapStore";
 import SchoolSearchBar          from "./SchoolSearchBar.vue";
 import LayerToggle              from "./LayerToggle.vue";
 import SchoolAnalysisPanel      from "./SchoolAnalysisPanel.vue";
-import RecentIncidentsStrip     from "./RecentIncidentsStrip.vue";
+import MapLegend                from "./MapLegend.vue";
 import RestaurantFilterBar      from "./RestaurantFilterBar.vue";
 import RestaurantInspectionPanel from "./RestaurantInspectionPanel.vue";
 import ExternalStatsStrip       from "./ExternalStatsStrip.vue";
@@ -89,8 +89,8 @@ onBeforeUnmount(() => {
     <template v-if="fs.activeLayer === 'school'">
       <SchoolSearchBar />
       <LayerToggle />
+      <MapLegend />
       <SchoolAnalysisPanel />
-      <RecentIncidentsStrip />
     </template>
 
     <!-- 校外 mode panels -->
@@ -105,8 +105,16 @@ onBeforeUnmount(() => {
 <style scoped>
 .fsm-overlays {
 	position: absolute;
-	inset: 0;
+	left: 360px;
+	right: 0;
+	top: 0;
+	bottom: 0;
 	pointer-events: none;
 	z-index: 10;
+}
+@media (min-width: 1000px) {
+	.fsm-overlays {
+		left: 370px;
+	}
 }
 </style>

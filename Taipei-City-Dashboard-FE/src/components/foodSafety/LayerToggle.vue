@@ -1,6 +1,8 @@
-<!-- Bottom-left sub-toggles for the school map. Two switches:
-     - showSupplyChain: draw ArcLayer for selected school's suppliers.
-     - showIncidentSchools: highlight schools with incident_status === 'red'. -->
+<!-- Top-left layer-visibility controls for the school map.
+     - showSchools: toggle schools layer visibility (default ON)
+     - showSuppliers: toggle ALL suppliers visibility (default OFF)
+     Click on a school always reveals its connected suppliers via arcs,
+     independent of the suppliers toggle. -->
 <script setup>
 import { useFoodSafetyStore } from "../../store/foodSafetyStore";
 const fs = useFoodSafetyStore();
@@ -12,18 +14,20 @@ const fs = useFoodSafetyStore();
     <label>
       <input
         type="checkbox"
-        :checked="fs.layerToggles.showSupplyChain"
-        @change="fs.toggleSubLayer('showSupplyChain')"
+        :checked="fs.layerToggles.showSchools"
+        @change="fs.toggleSubLayer('showSchools')"
       >
-      顯示供應鏈連線
+      <span class="dot dot-school" />
+      顯示學校
     </label>
     <label>
       <input
         type="checkbox"
-        :checked="fs.layerToggles.showIncidentSchools"
-        @change="fs.toggleSubLayer('showIncidentSchools')"
+        :checked="fs.layerToggles.showSuppliers"
+        @change="fs.toggleSubLayer('showSuppliers')"
       >
-      標示曾發生事件學校
+      <span class="dot dot-supplier" />
+      顯示廠商
     </label>
   </div>
 </template>
@@ -31,11 +35,14 @@ const fs = useFoodSafetyStore();
 <style scoped>
 .fsm-toggle {
 	pointer-events: auto;
-	position: absolute; bottom: 16px; left: 16px;
+	position: absolute; top: 16px; left: 16px;
 	background: rgba(20,20,30,0.92); border-radius: 6px;
-	padding: 10px 14px; min-width: 180px; color: #ddd;
+	padding: 10px 14px; min-width: 160px; color: #ddd;
 }
 .fsm-toggle h4 { margin: 0 0 6px; font-size: 13px; color: #aaa; }
 .fsm-toggle label { display: flex; align-items: center; gap: 6px;
 	font-size: 13px; padding: 4px 0; cursor: pointer; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.dot-school   { background: #00E5FF; box-shadow: 0 0 6px #00E5FF; }
+.dot-supplier { background: #FFD54F; box-shadow: 0 0 6px #FFC107; }
 </style>
