@@ -198,18 +198,25 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		},
 
 		applyCityFilter(city) {
-			// city: 'metrotaipei' | 'taipei' | 'ntpc'
+			// city: 'metrotaipei' | 'taipei' | 'ntpc' | '臺北市' | '新北市' | null
 			const mapStore = useMapStore();
-			const cityFilter =
-				city === "taipei" ? ["==", ["get", "city"], "臺北市"] :
-					city === "ntpc"   ? ["==", ["get", "city"], "新北市"] :
-						null;
-			["fsm_schools", "fsm_restaurants"].forEach((idx) => {
-				const layer = mapStore.currentLayers.find((l) => l.startsWith(`${idx}-`));
-				if (!layer || !mapStore.map?.getLayer(layer)) return;
-				if (cityFilter) mapStore.map.setFilter(layer, cityFilter);
-				else            mapStore.map.setFilter(layer, null);
-			});
+			const cityName =
+				city === "taipei" || city === "臺北市" ? "臺北市" :
+					city === "ntpc" || city === "新北市" ? "新北市" : null;
+			// city-keyed layers (schools, restaurants, suppliers, supplier_dots)
+			const cityFilter = cityName ? ["==", ["get", "city"], cityName] : null;
+			["fsm_schools", "fsm_restaurants", "fsm_suppliers", "fsm_supplier_dots"]
+				.forEach((idx) => {
+					const layer = mapStore.currentLayers.find((l) => l.startsWith(`${idx}-`));
+					if (!layer || !mapStore.map?.getLayer(layer)) return;
+					mapStore.map.setFilter(layer, cityFilter);
+				});
+			// district heatmap features use PNAME field instead of city
+			const heatFilter = cityName ? ["==", ["get", "PNAME"], cityName] : null;
+			const heatLayer = mapStore.currentLayers.find((l) => l.startsWith("fsm_district_heat-"));
+			if (heatLayer && mapStore.map?.getLayer(heatLayer)) {
+				mapStore.map.setFilter(heatLayer, heatFilter);
+			}
 		},
 
 		applyRestaurantFilters() {
@@ -251,11 +258,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selection_labels-source")) {
 					mapStore.map.removeSource("fsm_selection_labels-source");
 				}
-				if (mapStore.map.getLayer("fsm_selected_school-layer")) {
-					mapStore.map.removeLayer("fsm_selected_school-layer");
+				if (mapStore.map.getLayer("fsm_selected-layer")) {
+					mapStore.map.removeLayer("fsm_selected-layer");
 				}
-				if (mapStore.map.getSource("fsm_selected_school-source")) {
-					mapStore.map.removeSource("fsm_selected_school-source");
+				if (mapStore.map.getSource("fsm_selected-source")) {
+					mapStore.map.removeSource("fsm_selected-source");
 				}
 				["fsm_connected_suppliers-truck", "fsm_connected_suppliers-halo"].forEach((id) => {
 					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
@@ -300,13 +307,13 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			this._drawConnectedSuppliers(suppliers);
 			const focusFeatures = [school, ...suppliers];
 			this._drawSelectionLabels(focusFeatures);
-			this._drawSelectedSchoolRing(school);
+			this._drawSelectedRing(school);
 			this._fitBoundsTo(focusFeatures);
 		},
 
 		selectSupplier(supplier) {
 			this.setAnalysisFocus("supplier", supplier);
-			this._drawSelectedSchoolRing(null);
+			this._drawSelectedRing(null);
 			const arcs = this.supplyChain.filter(
 				(f) => f.properties.supplier_id === supplier.properties.id,
 			);
@@ -327,7 +334,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			const primarySchool = this.schools.find(
 				(s) => s.properties.id === incident.school_id,
 			);
-			this._drawSelectedSchoolRing(primarySchool || null);
+			this._drawSelectedRing(primarySchool || null);
 			const arcs = this.supplyChain.filter(
 				(f) =>
 					f.properties.supplier_id === incident.supplier_id &&
@@ -436,13 +443,29 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			});
 		},
 
-		// Show an extra outer ring around the currently-selected school feature.
+		// Color hint for a selected feature — matches the dot color so the
+		// outer ring reads as "this point you picked", not a generic highlight.
+		_featureColor(feature) {
+			const p = feature?.properties || {};
+			if (p.recent_alert === "red") return "#FF1744";
+			if (p.recent_alert === "normal") return "#00E5FF";
+			const hl = p.hazard_level;
+			if (hl === "critical") return "#FF1744";
+			if (hl === "high") return "#FF6D00";
+			if (hl === "medium") return "#FFC107";
+			if (hl === "low") return "#00E676";
+			if (hl === "info") return "#00E5FF";
+			return "#00E5FF";
+		},
+
+		// Show an extra outer ring around any selected feature (school /
+		// supplier / restaurant). Stroke color matches the feature's dot color.
 		// Pass null/undefined to clear.
-		_drawSelectedSchoolRing(school) {
+		_drawSelectedRing(feature) {
 			const mapStore = useMapStore();
 			if (!mapStore.map) return;
-			const sourceId = "fsm_selected_school-source";
-			const layerId = "fsm_selected_school-layer";
+			const sourceId = "fsm_selected-source";
+			const layerId = "fsm_selected-layer";
 
 			if (mapStore.map.getLayer(layerId)) {
 				mapStore.map.removeLayer(layerId);
@@ -450,14 +473,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			if (mapStore.map.getSource(sourceId)) {
 				mapStore.map.removeSource(sourceId);
 			}
-			if (!school) return;
+			if (!feature) return;
 
 			mapStore.map.addSource(sourceId, {
 				type: "geojson",
-				data: {
-					type: "FeatureCollection",
-					features: [school],
-				},
+				data: { type: "FeatureCollection", features: [feature] },
 			});
 
 			mapStore.map.addLayer({
@@ -466,10 +486,10 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				source: sourceId,
 				paint: {
 					"circle-color": "rgba(0,0,0,0)",
-					"circle-radius": 16,
+					"circle-radius": 13,
 					"circle-stroke-width": 2.5,
-					"circle-stroke-color": ["match", ["get", "recent_alert"], "red", "#FF1744", "#00E5FF"],
-					"circle-stroke-opacity": 0.85,
+					"circle-stroke-color": this._featureColor(feature),
+					"circle-stroke-opacity": 1,
 				},
 			});
 		},
@@ -578,11 +598,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selection_labels-source")) {
 					mapStore.map.removeSource("fsm_selection_labels-source");
 				}
-				if (mapStore.map.getLayer("fsm_selected_school-layer")) {
-					mapStore.map.removeLayer("fsm_selected_school-layer");
+				if (mapStore.map.getLayer("fsm_selected-layer")) {
+					mapStore.map.removeLayer("fsm_selected-layer");
 				}
-				if (mapStore.map.getSource("fsm_selected_school-source")) {
-					mapStore.map.removeSource("fsm_selected_school-source");
+				if (mapStore.map.getSource("fsm_selected-source")) {
+					mapStore.map.removeSource("fsm_selected-source");
 				}
 				["fsm_connected_suppliers-truck", "fsm_connected_suppliers-halo"].forEach((id) => {
 					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
