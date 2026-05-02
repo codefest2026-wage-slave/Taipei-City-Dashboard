@@ -30,13 +30,19 @@ const mapStore = useMapStore();
 const foodSafetyStore = useFoodSafetyStore();
 const route = useRoute();
 
+// City switching for dashboard 504 happens via the per-component @change-city
+// handler — that adds a new fsm_*-circle-<city> layer (and hides the old one)
+// without changing route.query.city OR currentDashboard.city. So watch the
+// authoritative source: mapStore.currentLayers itself. The applyCityFilter
+// action derives each layer's target city from its own layerId, so it
+// applies the correct filter regardless of which city tab is active.
 watch(
-	() => route.query?.city,
-	(newCity) => {
-		if (contentStore.currentDashboard.index === "food_safety_monitor") {
-			foodSafetyStore.applyCityFilter(newCity || "metrotaipei");
-		}
+	() => [...mapStore.currentLayers],
+	() => {
+		if (contentStore.currentDashboard.index !== "food_safety_monitor") return;
+		setTimeout(() => foodSafetyStore.applyCityFilter(), 400);
 	},
+	{ deep: false },
 );
 
 const toggleOn = ref({

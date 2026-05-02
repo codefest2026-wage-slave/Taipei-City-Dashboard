@@ -4,22 +4,10 @@
 <script setup>
 import { useFoodSafetyStore } from "../../store/foodSafetyStore";
 const fs = useFoodSafetyStore();
-const districts = ['all', '臺北市', '新北市',
-	'信義區','大安區','中正區','中山區','士林區','北投區','內湖區','南港區','文山區','松山區','萬華區','大同區',
-	'板橋區','三重區','中和區','永和區','新莊區','新店區','蘆洲區','土城區','汐止區','樹林區','淡水區','三峽區'];
 </script>
 
 <template>
   <div class="fsm-panel fsm-cyber-panel fsm-filter">
-    <label>區域
-      <select v-model="fs.restaurantFilters.district">
-        <option
-          v-for="d in districts"
-          :key="d"
-          :value="d"
-        >{{ d === 'all' ? '全部' : d }}</option>
-      </select>
-    </label>
     <label>違規程度
       <select v-model="fs.restaurantFilters.severity">
         <option value="all">全部</option>
@@ -42,7 +30,7 @@ const districts = ['all', '臺北市', '新北市',
 <style scoped>
 .fsm-filter {
 	pointer-events: auto;
-	position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+	position: absolute; top: 16px; left: 16px;
 	display: flex; gap: 14px; padding: 10px 16px;
 }
 .fsm-filter label {

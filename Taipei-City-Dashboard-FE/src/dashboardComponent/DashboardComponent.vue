@@ -33,6 +33,7 @@ import SearchableViolationTable from "./components/SearchableViolationTable.vue"
 import RecheckPriorityRanking from "./components/RecheckPriorityRanking.vue";
 import RiskMatrixChart from "./components/RiskMatrixChart.vue";
 import FoodSafetyControls from "./components/FoodSafetyControls.vue";
+import FoodSafetyExternalLegend from "./components/FoodSafetyExternalLegend.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -55,6 +56,7 @@ import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
 import RiskMatrixChartSvg from "./assets/chart/RiskMatrixChart.svg";
 import FoodSafetyControlsSvg from "./assets/chart/FoodSafetyControls.svg";
+import FoodSafetyExternalLegendSvg from "./assets/chart/FoodSafetyExternalLegend.svg";
 
 
 const props = defineProps({
@@ -260,6 +262,8 @@ function returnChartComponent(name, svg) {
 		return svg ? RiskMatrixChartSvg : RiskMatrixChart;
 	case "FoodSafetyControls":
 		return svg ? FoodSafetyControlsSvg : FoodSafetyControls;
+	case "FoodSafetyExternalLegend":
+		return svg ? FoodSafetyExternalLegendSvg : FoodSafetyExternalLegend;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}

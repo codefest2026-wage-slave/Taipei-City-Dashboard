@@ -25,20 +25,20 @@ INSERT INTO components (id, index, name) VALUES
 -- ── 2. component_charts ────────────────────────────────────────
 INSERT INTO component_charts (index, color, types, unit) VALUES
   ('fsm_school_map',       ARRAY['#00E5FF','#FF1744','#FFC107'], ARRAY['FoodSafetyControls'], '校'),
-  ('fsm_restaurant_map',   ARRAY['#00E676','#FFC107','#FF1744'], ARRAY['MapLegend'],         '家');
+  ('fsm_restaurant_map',   ARRAY['#FF1744','#FF6D00','#FFC107','#00E676','#00E5FF'], ARRAY['FoodSafetyExternalLegend'], '家');
 
 -- ── 3. component_maps ──────────────────────────────────────────
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
   ('fsm_schools',       '學校節點',       'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-radius":["match",["get","recent_alert"],"red",7,5],"circle-opacity":1,"circle-stroke-width":["match",["get","recent_alert"],"red",8,6],"circle-stroke-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-stroke-opacity":0.35,"circle-blur":0.3}'::json),
+    '{"circle-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-radius":["match",["get","recent_alert"],"red",6,4],"circle-opacity":1,"circle-stroke-width":["match",["get","recent_alert"],"red",4,3],"circle-stroke-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-stroke-opacity":0.25,"circle-blur":0.18}'::json),
   ('fsm_supply_chain',  '供應鏈連線',     'arc',    'geojson', 'big',
     '{"arc-color":["#00E5FF","#FF1744"],"arc-width":2,"arc-opacity":0.8,"arc-animate":true}'::json),
   ('fsm_suppliers',     '供應商節點',     'circle', 'geojson', 'big',
     '{"circle-color":"rgba(0,0,0,0)","circle-radius":10,"circle-opacity":1,"circle-stroke-width":3,"circle-stroke-color":["case",["any",["==",["get","hazard_level"],"Critical"],["==",["get","hazard_level"],"High"]],"#FF1744","#00E5FF"],"circle-stroke-opacity":0.95}'::json),
   ('fsm_supplier_dots',  '供應商中心點',   'circle', 'geojson', 'big',
     '{"circle-color":["case",["any",["==",["get","hazard_level"],"Critical"],["==",["get","hazard_level"],"High"]],"#FF1744","#00E5FF"],"circle-radius":3.5,"circle-opacity":1,"circle-stroke-width":1,"circle-stroke-color":"#0A1228","circle-stroke-opacity":0.6}'::json),
-  ('fsm_restaurants',   '餐廳稽查點',     'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","grade"],"優","#00E676","良","#FFC107","#FF1744"],"circle-radius":4,"circle-opacity":0.85,"circle-stroke-width":1,"circle-stroke-color":"#00E5FF","circle-stroke-opacity":0.4}'::json),
+  ('fsm_restaurants',   '校外稽查業者',   'circle', 'geojson', 'big',
+    '{"circle-color":["match",["get","hazard_level"],"critical","#FF1744","high","#FF6D00","medium","#FFC107","low","#00E676","#00E5FF"],"circle-radius":["match",["get","hazard_level"],"critical",5,"high",5,"medium",4,"low",4,3],"circle-opacity":1,"circle-stroke-width":["match",["get","hazard_level"],"critical",4,"high",4,"medium",3,"low",3,2],"circle-stroke-color":["match",["get","hazard_level"],"critical","#FF1744","high","#FF6D00","medium","#FFC107","low","#00E676","#00E5FF"],"circle-stroke-opacity":0.25,"circle-blur":0.18}'::json),
   ('fsm_district_heat', '行政區違規密度', 'fill',   'geojson', 'big',
     '{"fill-color":["interpolate",["linear"],["get","density"],0,"#003344",50,"#0088AA",100,"#00E5FF"],"fill-opacity":0.35,"fill-outline-color":"#00E5FF"}'::json);
 
@@ -88,7 +88,7 @@ VALUES (
   $$SELECT unnest(array['行政區違規密度','優等餐廳','良好餐廳','需改善餐廳']) as name, unnest(array['fill','circle','circle','circle']) as type$$,
   'taipei', '臺北市衛生局（mock）',
   '臺北市校外食安地圖 — 區域熱點與餐廳稽查狀態。',
-  '臺北市 12 區違規密度 choropleth + 餐廳節點（grade 三色），點擊餐廳展開稽查歷史。',
+  '臺北市 12 區違規密度 choropleth + 校外業者節點（hazard_level 三色），點擊業者展開稽查歷史。',
   '家長外食前查詢；衛生局調配稽查資源；店家了解所在區域風險評級。',
   'static', '', 1, 'year',
   ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_district_heat','fsm_restaurants') ORDER BY id),

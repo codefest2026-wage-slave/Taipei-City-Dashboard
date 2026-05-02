@@ -265,7 +265,8 @@ def main():
     cur.execute("""
         SELECT business_name, address, city, district, inspection_date,
                inspection_result, hazard_level, fine_amount,
-               violated_law_standardized, note, inspection_item
+               violated_law_standardized, note, inspection_item, hazard_basis,
+               product_name
         FROM food_safety_inspection_metrotaipei
         WHERE business_type = '商業業者'
           AND business_name IS NOT NULL
@@ -297,7 +298,7 @@ def main():
     canonical_names = sorted(canonical_to_tax.keys(), key=lambda s: -len(s))
 
     matched = 0
-    for biz, addr, city, dist, date, result, level, fine, law_std, note, item in audits_raw:
+    for biz, addr, city, dist, date, result, level, fine, law_std, note, item, basis, product in audits_raw:
         biz_str = biz or ""
         for cn in canonical_names:
             if cn and cn in biz_str:
@@ -320,6 +321,8 @@ def main():
                     "district": dist,
                     "result_raw": result,
                     "hazard_level": level,
+                    "hazard_basis": (basis or "").strip(),
+                    "product_name": (product or "").strip(),
                 })
                 matched += 1
                 break

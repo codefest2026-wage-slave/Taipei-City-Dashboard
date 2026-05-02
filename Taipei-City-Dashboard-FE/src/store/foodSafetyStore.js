@@ -24,6 +24,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		schoolSearchQuery: "",
 
 		// Restaurant map UX
+		restaurantSearchQuery: "",
 		restaurantFilters: {
 			district: "all",
 			severity: "all",
@@ -60,26 +61,39 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				(f) => f.properties.name.includes(q),
 			).slice(0, 8);
 		},
+		// Filtered restaurants matching current search query
+		restaurantSearchResults(state) {
+			const q = state.restaurantSearchQuery.trim();
+			if (!q) return [];
+			return state.restaurants.filter(
+				(f) => (f.properties.name || "").includes(q)
+					|| (f.properties.address || "").includes(q),
+			).slice(0, 8);
+		},
 		// Recent N incidents sorted by date desc (RecentIncidentsStrip)
 		recentIncidents(state) {
 			return [...state.incidents].sort(
 				(a, b) => b.occurred_at.localeCompare(a.occurred_at),
 			);
 		},
-		// Stats for ExternalStatsStrip (校外底部 4 張卡)
+		// Stats for ExternalStatsStrip (校外底部 4 張卡).
+		// Real-data shape: every business in restaurants.geojson already has
+		// at least one FAIL inspection; hazard_level = max severity recorded.
 		externalStats(state) {
 			const total = state.restaurants.length;
-			const fail = state.restaurants.filter(
-				(f) => f.properties.risk_quadrant === "high_risk"
-				    || f.properties.risk_quadrant === "emerging",
+			const totalFails = state.restaurants.reduce(
+				(s, f) => s + (f.properties.fail_count || 0), 0,
+			);
+			const critical = state.restaurants.filter(
+				(f) => f.properties.hazard_level === "critical",
 			).length;
-			const failRate = total > 0 ? (fail / total * 100).toFixed(2) : "0.00";
 			const highRiskDistricts = new Set(
 				state.restaurants
-					.filter((f) => f.properties.risk_quadrant === "high_risk")
+					.filter((f) => f.properties.hazard_level === "critical"
+						|| f.properties.hazard_level === "high")
 					.map((f) => f.properties.district),
 			).size;
-			return { total, fail, failRate, highRiskDistricts };
+			return { total, fail: totalFails, critical, highRiskDistricts };
 		},
 	},
 
@@ -183,18 +197,39 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			} catch { /* layer not present yet — no-op */ }
 		},
 
-		applyCityFilter(city) {
-			// city: 'metrotaipei' | 'taipei' | 'ntpc'
+		// Per-layer city filter: derive the layer's city from its own layerId
+		// (`${index}-${type}-${city}` per mapStore convention) and apply the
+		// matching Mapbox setFilter. Self-contained — no external "current
+		// city" state needed. Run this whenever currentLayers changes; it's
+		// safe to call multiple times.
+		applyCityFilter() {
 			const mapStore = useMapStore();
-			const cityFilter =
-				city === "taipei" ? ["==", ["get", "city"], "臺北市"] :
-					city === "ntpc"   ? ["==", ["get", "city"], "新北市"] :
-						null;
-			["fsm_schools", "fsm_restaurants"].forEach((idx) => {
-				const layer = mapStore.currentLayers.find((l) => l.startsWith(`${idx}-`));
-				if (!layer || !mapStore.map?.getLayer(layer)) return;
-				if (cityFilter) mapStore.map.setFilter(layer, cityFilter);
-				else            mapStore.map.setFilter(layer, null);
+			if (!mapStore.map) return;
+			const cityToName = (c) =>
+				c === "taipei" ? "臺北市" :
+					c === "ntpc" ? "新北市" : null;
+			const cityFromLayerId = (l) => {
+				const parts = l.split("-");
+				return parts[parts.length - 1];
+			};
+			const FSM_FIELDS = {
+				fsm_schools: "city",
+				fsm_restaurants: "city",
+				fsm_suppliers: "city",
+				fsm_supplier_dots: "city",
+				fsm_district_heat: "PNAME",
+			};
+			Object.entries(FSM_FIELDS).forEach(([idx, field]) => {
+				mapStore.currentLayers
+					.filter((l) => l.startsWith(`${idx}-`))
+					.forEach((l) => {
+						if (!mapStore.map.getLayer(l)) return;
+						const cityName = cityToName(cityFromLayerId(l));
+						mapStore.map.setFilter(
+							l,
+							cityName ? ["==", ["get", field], cityName] : null,
+						);
+					});
 			});
 		},
 
@@ -210,14 +245,17 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			} else if (f.district !== "all") {
 				conditions.push(["==", ["get", "district"], f.district]);
 			}
-			// Severity: 'all' | 'high' | 'medium' | 'low'
-			if (f.severity !== "all") {
-				conditions.push(["==", ["get", "severity"], f.severity]);
+			// Severity: 'all' | 'high' (critical+high) | 'medium' | 'low' (low+info)
+			if (f.severity === "high") {
+				conditions.push(["match", ["get", "hazard_level"], ["critical", "high"], true, false]);
+			} else if (f.severity === "medium") {
+				conditions.push(["==", ["get", "hazard_level"], "medium"]);
+			} else if (f.severity === "low") {
+				conditions.push(["match", ["get", "hazard_level"], ["low", "info"], true, false]);
 			}
-			// timeRange currently has no per-feature property to filter on — mock data
-			// has no inspection_date per feature; the filter is captured in state for
-			// future use but does not currently constrain the layer. Spec §4.2 has no
-			// such field on restaurants.geojson; would require joining to inspections.
+			// timeRange currently has no per-feature aggregate (we'd have to join
+			// to inspection history), so the filter is captured in state but does
+			// not constrain the Mapbox layer.
 			const expr =
 				conditions.length === 0 ? null :
 					conditions.length === 1 ? conditions[0] :
@@ -234,11 +272,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selection_labels-source")) {
 					mapStore.map.removeSource("fsm_selection_labels-source");
 				}
-				if (mapStore.map.getLayer("fsm_selected_school-layer")) {
-					mapStore.map.removeLayer("fsm_selected_school-layer");
+				if (mapStore.map.getLayer("fsm_selected-layer")) {
+					mapStore.map.removeLayer("fsm_selected-layer");
 				}
-				if (mapStore.map.getSource("fsm_selected_school-source")) {
-					mapStore.map.removeSource("fsm_selected_school-source");
+				if (mapStore.map.getSource("fsm_selected-source")) {
+					mapStore.map.removeSource("fsm_selected-source");
 				}
 				["fsm_connected_suppliers-truck", "fsm_connected_suppliers-halo"].forEach((id) => {
 					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
@@ -283,13 +321,13 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			this._drawConnectedSuppliers(suppliers);
 			const focusFeatures = [school, ...suppliers];
 			this._drawSelectionLabels(focusFeatures);
-			this._drawSelectedSchoolRing(school);
+			this._drawSelectedRing(school);
 			this._fitBoundsTo(focusFeatures);
 		},
 
 		selectSupplier(supplier) {
 			this.setAnalysisFocus("supplier", supplier);
-			this._drawSelectedSchoolRing(null);
+			this._drawSelectedRing(supplier);
 			const arcs = this.supplyChain.filter(
 				(f) => f.properties.supplier_id === supplier.properties.id,
 			);
@@ -310,7 +348,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			const primarySchool = this.schools.find(
 				(s) => s.properties.id === incident.school_id,
 			);
-			this._drawSelectedSchoolRing(primarySchool || null);
+			this._drawSelectedRing(primarySchool || null);
 			const arcs = this.supplyChain.filter(
 				(f) =>
 					f.properties.supplier_id === incident.supplier_id &&
@@ -331,6 +369,12 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 
 		selectRestaurant(restaurant) {
 			this.selectedRestaurant = restaurant;
+			this._drawSelectedRing(restaurant);
+			const mapStore = useMapStore();
+			const coord = restaurant?.geometry?.coordinates;
+			if (mapStore.map && coord) {
+				mapStore.easeToLocation([coord, 15, 0, 0]);
+			}
 		},
 
 		// ── ArcLayer redraw (R2) ────────────────────────────────
@@ -414,13 +458,29 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			});
 		},
 
-		// Show an extra outer ring around the currently-selected school feature.
+		// Color hint for a selected feature — matches the dot color so the
+		// outer ring reads as "this point you picked", not a generic highlight.
+		_featureColor(feature) {
+			const p = feature?.properties || {};
+			if (p.recent_alert === "red") return "#FF1744";
+			if (p.recent_alert === "normal") return "#00E5FF";
+			const hl = p.hazard_level;
+			if (hl === "critical") return "#FF1744";
+			if (hl === "high") return "#FF6D00";
+			if (hl === "medium") return "#FFC107";
+			if (hl === "low") return "#00E676";
+			if (hl === "info") return "#00E5FF";
+			return "#00E5FF";
+		},
+
+		// Show an extra outer ring around any selected feature (school /
+		// supplier / restaurant). Stroke color matches the feature's dot color.
 		// Pass null/undefined to clear.
-		_drawSelectedSchoolRing(school) {
+		_drawSelectedRing(feature) {
 			const mapStore = useMapStore();
 			if (!mapStore.map) return;
-			const sourceId = "fsm_selected_school-source";
-			const layerId = "fsm_selected_school-layer";
+			const sourceId = "fsm_selected-source";
+			const layerId = "fsm_selected-layer";
 
 			if (mapStore.map.getLayer(layerId)) {
 				mapStore.map.removeLayer(layerId);
@@ -428,14 +488,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			if (mapStore.map.getSource(sourceId)) {
 				mapStore.map.removeSource(sourceId);
 			}
-			if (!school) return;
+			if (!feature) return;
 
 			mapStore.map.addSource(sourceId, {
 				type: "geojson",
-				data: {
-					type: "FeatureCollection",
-					features: [school],
-				},
+				data: { type: "FeatureCollection", features: [feature] },
 			});
 
 			mapStore.map.addLayer({
@@ -444,10 +501,10 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				source: sourceId,
 				paint: {
 					"circle-color": "rgba(0,0,0,0)",
-					"circle-radius": 16,
+					"circle-radius": 13,
 					"circle-stroke-width": 2.5,
-					"circle-stroke-color": ["match", ["get", "recent_alert"], "red", "#FF1744", "#00E5FF"],
-					"circle-stroke-opacity": 0.85,
+					"circle-stroke-color": this._featureColor(feature),
+					"circle-stroke-opacity": 1,
 				},
 			});
 		},
@@ -556,11 +613,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selection_labels-source")) {
 					mapStore.map.removeSource("fsm_selection_labels-source");
 				}
-				if (mapStore.map.getLayer("fsm_selected_school-layer")) {
-					mapStore.map.removeLayer("fsm_selected_school-layer");
+				if (mapStore.map.getLayer("fsm_selected-layer")) {
+					mapStore.map.removeLayer("fsm_selected-layer");
 				}
-				if (mapStore.map.getSource("fsm_selected_school-source")) {
-					mapStore.map.removeSource("fsm_selected_school-source");
+				if (mapStore.map.getSource("fsm_selected-source")) {
+					mapStore.map.removeSource("fsm_selected-source");
 				}
 				["fsm_connected_suppliers-truck", "fsm_connected_suppliers-halo"].forEach((id) => {
 					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
