@@ -30,6 +30,7 @@ dist.tar.gz
 !Taipei-City-Dashboard-DE/docker/develop/gitsync.sh
 !Taipei-City-Dashboard-DE/docker/prod/gitsync.sh
 !scripts/labor_safety/*.sh
+!scripts/food_safety/*.sh
 # Binaries for programs and plugins
 *.exe
 *.exe~
