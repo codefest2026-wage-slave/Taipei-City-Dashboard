@@ -29,7 +29,7 @@ function pickSchool(school) { fs.selectSchool(school); }
 </script>
 
 <template>
-  <div class="fsm-panel fsm-analysis">
+  <div class="fsm-panel fsm-cyber-panel fsm-analysis">
     <div
       v-if="!f"
       class="fsm-empty"
@@ -151,34 +151,72 @@ function pickSchool(school) { fs.selectSchool(school); }
 	pointer-events: auto;
 	position: absolute; top: 16px; right: 16px; width: 380px;
 	max-height: calc(100vh - 200px); overflow-y: auto;
-	background: rgba(20,20,30,0.92); border-radius: 6px;
-	padding: 14px; color: #ddd;
+	padding: 14px;
 }
-.fsm-empty { color: #888; font-size: 13px; }
-.fsm-view h3 { margin: 0 0 4px; font-size: 16px; color: #fff; }
-.fsm-view h4 { margin: 12px 0 4px; font-size: 12px; color: #aaa; text-transform: uppercase; }
-.fsm-view p { margin: 4px 0; font-size: 13px; }
-.summary { font-style: italic; color: #bbb; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
-         font-size: 11px; font-weight: 600; margin: 4px 0; }
-.badge-red, .badge-critical { background: #E53935; color: #fff; }
-.badge-yellow, .badge-high  { background: #FFA000; color: #fff; }
-.badge-medium               { background: #1565C0; color: #fff; }
-.badge-green, .badge-low    { background: #43A047; color: #fff; }
+.fsm-empty { color: #8FA3C6; font-size: 13px; }
+.fsm-view h3 {
+	margin: 0 0 4px; font-size: 18px;
+	color: #00E5FF;
+	letter-spacing: 1px;
+	text-shadow: 0 0 8px rgba(0,229,255,0.4);
+}
+.fsm-view h4 {
+	margin: 12px 0 4px; font-size: 11px;
+	color: #00E5FF; opacity: 0.85;
+	text-transform: uppercase; letter-spacing: 2px;
+	font-weight: 600;
+}
+.fsm-view p { margin: 4px 0; font-size: 13px; color: #D7E3F4; }
+.summary {
+	font-style: italic; color: #8FA3C6;
+	background: rgba(0,229,255,0.04);
+	border-left: 2px solid rgba(0,229,255,0.4);
+	padding: 6px 10px;
+}
+.badge {
+	display: inline-block; padding: 3px 10px; border-radius: 2px;
+	font-size: 11px; font-weight: 600; margin: 4px 0;
+	letter-spacing: 1px; text-transform: uppercase;
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+.badge-red, .badge-critical { background: #FF1744; color: #fff; box-shadow: 0 0 10px rgba(255,23,68,0.5); }
+.badge-yellow, .badge-high  { background: #FF6D00; color: #fff; box-shadow: 0 0 10px rgba(255,109,0,0.5); }
+.badge-medium               { background: #FFC107; color: #0A1228; box-shadow: 0 0 10px rgba(255,193,7,0.5); }
+.badge-green, .badge-low    { background: #00E676; color: #0A1228; box-shadow: 0 0 10px rgba(0,230,118,0.5); }
 .history, .served, .news { list-style: none; padding: 0; margin: 0; }
 .history li, .served li {
-	padding: 6px 0; border-bottom: 1px solid #333; cursor: pointer;
+	padding: 6px 0; border-bottom: 1px solid rgba(0,229,255,0.1); cursor: pointer;
 	font-size: 12px; display: flex; gap: 8px; align-items: center;
+	color: #D7E3F4;
 }
-.history li:hover, .served li:hover { background: rgba(60,60,80,0.4); }
-.history .date { color: #888; flex-shrink: 0; }
-.history .title { flex: 1; color: #ddd; }
-.severity { font-weight: 600; font-size: 11px; }
-.sev-critical { color: #E53935; }
-.sev-high     { color: #FF6D00; }
-.sev-medium   { color: #FFA000; }
-.sev-low      { color: #43A047; }
+.history li:hover, .served li:hover {
+	background: rgba(0,229,255,0.06);
+	color: #00E5FF;
+}
+.history .date {
+	color: #8FA3C6; flex-shrink: 0;
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+.history .title { flex: 1; }
+.severity {
+	font-weight: 600; font-size: 11px;
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+	letter-spacing: 1px;
+}
+.sev-critical { color: #FF1744; text-shadow: 0 0 6px rgba(255,23,68,0.6); }
+.sev-high     { color: #FF6D00; text-shadow: 0 0 6px rgba(255,109,0,0.6); }
+.sev-medium   { color: #FFC107; text-shadow: 0 0 6px rgba(255,193,7,0.6); }
+.sev-low      { color: #00E676; text-shadow: 0 0 6px rgba(0,230,118,0.6); }
 .casualties { display: flex; gap: 14px; padding: 8px 0; }
-.casualties strong { font-size: 18px; color: #fff; display: block; }
-.news a { color: #4FC3F7; }
+.casualties strong {
+	font-size: 22px; color: #00E5FF; display: block;
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+	text-shadow: 0 0 8px rgba(0,229,255,0.5);
+}
+.casualties div {
+	font-size: 11px; color: #8FA3C6;
+	text-transform: uppercase; letter-spacing: 1px;
+}
+.news a { color: #00E5FF; text-decoration: none; }
+.news a:hover { text-decoration: underline; text-shadow: 0 0 6px rgba(0,229,255,0.5); }
 </style>

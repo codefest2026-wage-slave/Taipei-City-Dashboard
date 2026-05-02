@@ -14,10 +14,10 @@ const props = defineProps([
 // 4 quadrant centers in chart space (X: -1 to 1, Y: -1 to 1)
 //   X axis = 一年內 violation (right = yes), Y axis = 一年前 violation (top = yes)
 const QUADRANTS = {
-	"高危險店家": { x: 0.5, y: 0.5,   color: "#E53935" },  // 1y有 + 1y前有
-	"新興風險":   { x: 0.5, y: -0.5,  color: "#FF9800" },  // 1y有 + 1y前無
-	"改善中":     { x: -0.5, y: 0.5,  color: "#1565C0" },  // 1y無 + 1y前有
-	"優良店家":   { x: -0.5, y: -0.5, color: "#43A047" },  // 1y無 + 1y前無
+	"高危險店家": { x: 0.5, y: 0.5,   color: "#FF1744" },  // 1y有 + 1y前有
+	"新興風險":   { x: 0.5, y: -0.5,  color: "#FF6D00" },  // 1y有 + 1y前無
+	"改善中":     { x: -0.5, y: 0.5,  color: "#00E5FF" },  // 1y無 + 1y前有
+	"優良店家":   { x: -0.5, y: -0.5, color: "#00E676" },  // 1y無 + 1y前無
 };
 
 function jitter(c, n, spread = 0.35) {
@@ -69,7 +69,7 @@ const chartOptions = computed(() => ({
 		min: -1, max: 1, tickAmount: 2,
 		labels: {
 			formatter: (v) => v < 0 ? "一年內無違規" : v > 0 ? "一年內有違規" : "",
-			style: { colors: "#aaa", fontSize: "11px" },
+			style: { colors: "#8FA3C6", fontSize: "11px" },
 		},
 		axisBorder: { show: false }, axisTicks: { show: false },
 	},
@@ -77,14 +77,14 @@ const chartOptions = computed(() => ({
 		min: -1, max: 1, tickAmount: 2,
 		labels: {
 			formatter: (v) => v < 0 ? "一年前無違規" : v > 0 ? "一年前有違規" : "",
-			style: { colors: "#aaa", fontSize: "11px" },
+			style: { colors: "#8FA3C6", fontSize: "11px" },
 		},
 	},
 	annotations: {
-		yaxis: [{ y: 0, borderColor: "#666", strokeDashArray: 3 }],
-		xaxis: [{ x: 0, borderColor: "#666", strokeDashArray: 3 }],
+		yaxis: [{ y: 0, borderColor: "rgba(0,229,255,0.5)", strokeDashArray: 3 }],
+		xaxis: [{ x: 0, borderColor: "rgba(0,229,255,0.5)", strokeDashArray: 3 }],
 	},
-	legend: { show: true, position: "bottom", labels: { colors: "#ccc" } },
+	legend: { show: true, position: "bottom", labels: { colors: "#D7E3F4" } },
 	tooltip: {
 		custom: ({ seriesIndex, dataPointIndex, w }) => {
 			const point = w.config.series[seriesIndex].data[dataPointIndex];

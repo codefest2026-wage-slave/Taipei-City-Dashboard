@@ -26,11 +26,11 @@ INSERT INTO components (id, index, name) VALUES
 
 -- ── 2. component_charts ────────────────────────────────────────
 INSERT INTO component_charts (index, color, types, unit) VALUES
-  ('fsm_school_map',       ARRAY['#43A047','#E53935','#FFA000'], ARRAY['MapLegend'],         '校'),
-  ('fsm_restaurant_map',   ARRAY['#1565C0','#FFA000','#E53935'], ARRAY['MapLegend'],         '家'),
-  ('fsm_violation_rank',   ARRAY['#E53935','#FFA000','#43A047','#1565C0','#8E24AA','#26C6DA','#9E9E9E'], ARRAY['BarChart'], '件'),
-  ('fsm_inspection_trend', ARRAY['#1565C0','#E53935'],            ARRAY['ColumnLineChart'],   '件/%'),
-  ('fsm_risk_matrix',      ARRAY['#E53935','#FF9800','#1565C0','#43A047'], ARRAY['RiskMatrixChart'], '家');
+  ('fsm_school_map',       ARRAY['#00E5FF','#FF1744','#FFC107'], ARRAY['MapLegend'],         '校'),
+  ('fsm_restaurant_map',   ARRAY['#00E676','#FFC107','#FF1744'], ARRAY['MapLegend'],         '家'),
+  ('fsm_violation_rank',   ARRAY['#FF1744','#FF6D00','#FFC107','#00E5FF','#9C27B0','#26C6DA','#00E676','#9E9E9E'], ARRAY['BarChart'], '件'),
+  ('fsm_inspection_trend', ARRAY['#00E5FF','#FF1744'],            ARRAY['ColumnLineChart'],   '件/%'),
+  ('fsm_risk_matrix',      ARRAY['#FF1744','#FF6D00','#00E5FF','#00E676'], ARRAY['RiskMatrixChart'], '家');
 
 -- ── 3. component_maps ──────────────────────────────────────────
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES

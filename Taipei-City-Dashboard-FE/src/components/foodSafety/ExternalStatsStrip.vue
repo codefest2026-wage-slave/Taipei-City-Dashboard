@@ -31,24 +31,24 @@ const top5Series = computed(() => [{
 	data: top5.value.map((entry) => entry[1]),
 }]);
 const top5Options = computed(() => ({
-	chart: { toolbar: { show: false } },
-	colors: ["#E53935"],
+	chart: { toolbar: { show: false }, background: "transparent" },
+	colors: ["#FF1744"],
 	plotOptions: { bar: { borderRadius: 2, horizontal: true, distributed: false } },
 	dataLabels: { enabled: false },
 	grid: { show: false },
 	xaxis: {
 		categories: top5.value.map(([k]) => k),
-		labels: { style: { colors: "#aaa", fontSize: "10px" } },
+		labels: { style: { colors: "#8FA3C6", fontSize: "10px" } },
 		axisBorder: { show: false }, axisTicks: { show: false },
 	},
-	yaxis: { labels: { style: { colors: "#ccc", fontSize: "11px" } } },
+	yaxis: { labels: { style: { colors: "#D7E3F4", fontSize: "11px" } } },
 	tooltip: { enabled: false },
 	legend: { show: false },
 }));
 </script>
 
 <template>
-  <div class="fsm-panel fsm-stats">
+  <div class="fsm-panel fsm-cyber-panel fsm-stats">
     <div class="cards">
       <div class="card">
         <div class="value">
@@ -108,12 +108,42 @@ const top5Options = computed(() => ({
 	position: absolute; bottom: 16px; left: 50%;
 	transform: translateX(-50%); width: 80%; min-width: 700px; max-width: 1100px;
 	display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-	padding: 12px; background: rgba(20,20,30,0.92); border-radius: 6px;
+	padding: 14px;
 }
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.card { padding: 10px; background: rgba(40,40,55,0.9); border-radius: 4px; text-align: center; }
-.value { font-size: 22px; font-weight: 700; color: #fff; }
-.label { font-size: 11px; color: #aaa; }
-.chart-area h4 { margin: 0 0 4px; font-size: 11px; color: #aaa; }
-.hint { color: #888; font-size: 12px; }
+.card {
+	padding: 12px 10px;
+	background: rgba(0,229,255,0.04);
+	border: 1px solid rgba(0,229,255,0.18);
+	border-radius: 3px; text-align: center;
+	position: relative;
+	transition: border-color 200ms ease, box-shadow 200ms ease;
+}
+.card:hover {
+	border-color: rgba(0,229,255,0.5);
+	box-shadow: 0 0 10px rgba(0,229,255,0.15);
+}
+.value {
+	font-size: 26px; font-weight: 700; color: #00E5FF;
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+	letter-spacing: 1px;
+	text-shadow: 0 0 10px rgba(0,229,255,0.5);
+	animation: fsm-pulse 3s ease-in-out infinite;
+}
+@keyframes fsm-pulse {
+	0%, 100% { text-shadow: 0 0 10px rgba(0,229,255,0.5); }
+	50%      { text-shadow: 0 0 14px rgba(0,229,255,0.8); }
+}
+.label {
+	font-size: 10px; color: #8FA3C6;
+	text-transform: uppercase; letter-spacing: 2px;
+	margin-top: 4px;
+}
+.chart-area h4 {
+	margin: 0 0 6px; font-size: 11px;
+	color: #00E5FF; opacity: 0.85;
+	text-transform: uppercase; letter-spacing: 2px;
+	font-weight: 600;
+}
+.hint { color: #8FA3C6; font-size: 12px; }
 </style>

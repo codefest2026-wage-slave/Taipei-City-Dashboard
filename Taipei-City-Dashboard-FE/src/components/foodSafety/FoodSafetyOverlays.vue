@@ -14,6 +14,7 @@ import MapLegend                from "./MapLegend.vue";
 import RestaurantFilterBar      from "./RestaurantFilterBar.vue";
 import RestaurantInspectionPanel from "./RestaurantInspectionPanel.vue";
 import ExternalStatsStrip       from "./ExternalStatsStrip.vue";
+import "./cyber.css";
 
 const fs = useFoodSafetyStore();
 const mapStore = useMapStore();
@@ -84,7 +85,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="fsm-overlays">
+  <div class="fsm-overlays fsm-cyber">
     <!-- 校內 mode panels -->
     <template v-if="fs.activeLayer === 'school'">
       <SchoolSearchBar />

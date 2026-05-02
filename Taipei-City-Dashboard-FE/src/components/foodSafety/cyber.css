@@ -1,0 +1,50 @@
+/* Shared design tokens for the food-safety-monitor (數位城市科技風). */
+
+.fsm-cyber {
+	--fsm-bg: linear-gradient(135deg, rgba(10,18,40,0.92) 0%, rgba(16,24,56,0.85) 100%);
+	--fsm-border: rgba(0,229,255,0.35);
+	--fsm-glow: 0 0 18px rgba(0,229,255,0.12), inset 0 0 22px rgba(0,229,255,0.04);
+	--fsm-cyan: #00E5FF;
+	--fsm-cyan-soft: rgba(0,229,255,0.6);
+	--fsm-red: #FF1744;
+	--fsm-amber: #FFC107;
+	--fsm-green: #00E676;
+	--fsm-yellow: #FFD54F;
+	--fsm-text: #D7E3F4;
+	--fsm-text-dim: #8FA3C6;
+	--fsm-mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+.fsm-cyber-panel {
+	background: var(--fsm-bg);
+	border: 1px solid var(--fsm-border);
+	box-shadow: var(--fsm-glow);
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+	border-radius: 4px;
+	color: var(--fsm-text);
+	position: relative;
+	overflow: hidden;
+}
+
+.fsm-cyber-panel::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, var(--fsm-cyan), transparent);
+	pointer-events: none;
+}
+
+.fsm-cyber-h {
+	color: var(--fsm-cyan);
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: 600;
+}
+
+.fsm-cyber-mono {
+	font-family: var(--fsm-mono);
+}
