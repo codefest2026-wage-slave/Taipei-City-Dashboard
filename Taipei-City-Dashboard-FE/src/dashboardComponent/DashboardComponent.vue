@@ -28,6 +28,7 @@ import BarChartWithGoal from "./components/BarChartWithGoal.vue";
 import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
+import RiskMatrixChart from "./components/RiskMatrixChart.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -48,6 +49,7 @@ import BarChartWithGoalSvg from "./assets/chart/BarChartWithGoal.svg";
 import TreemapChartSvg from "./assets/chart/TreemapChart.svg";
 import IndicatorChartSvg from "./assets/chart/IndicatorChart.svg";
 import TextUnitChartSvg from "./assets/chart/TextUnitChart.svg";
+import RiskMatrixChartSvg from "./assets/chart/RiskMatrixChart.svg";
 
 
 const props = defineProps({
@@ -222,6 +224,8 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
+	case "RiskMatrixChart":
+		return svg ? RiskMatrixChartSvg : RiskMatrixChart;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
