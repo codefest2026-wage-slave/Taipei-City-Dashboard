@@ -1,0 +1,612 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.526193,
+          25.16073
+        ]
+      },
+      "properties": {
+        "id": "SUP-001",
+        "name": "永鮮食品供應股份有限公司",
+        "address": "臺北市北投區工業路148號",
+        "city": "臺北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-07-13",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-JH-009",
+          "TPE-EL-001",
+          "TPE-EL-014",
+          "TPE-EL-015"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.607095,
+          25.078552
+        ]
+      },
+      "properties": {
+        "id": "SUP-002",
+        "name": "康聯團膳事業股份有限公司",
+        "address": "臺北市內湖區民生路75號",
+        "city": "臺北市",
+        "hazard_level": "Low",
+        "last_inspection": "2025-08-03",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-013",
+          "NTPC-JH-003",
+          "TPE-EL-002",
+          "TPE-JH-013"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.548604,
+          25.131578
+        ]
+      },
+      "properties": {
+        "id": "SUP-003",
+        "name": "禾興食品行",
+        "address": "臺北市士林區重慶路209號",
+        "city": "臺北市",
+        "hazard_level": "High",
+        "last_inspection": "2025-09-02",
+        "last_status": "不合格",
+        "served_school_ids": [
+          "NTPC-EL-010",
+          "NTPC-JH-010",
+          "TPE-EL-015",
+          "TPE-JH-001"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.655494,
+          25.068667
+        ]
+      },
+      "properties": {
+        "id": "SUP-004",
+        "name": "安心廚房中央廚房",
+        "address": "新北市汐止區中華路141號",
+        "city": "新北市",
+        "hazard_level": "Low",
+        "last_inspection": "2025-09-17",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-011",
+          "NTPC-EL-014",
+          "TPE-JH-002",
+          "TPE-JH-014"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.457508,
+          25.001522
+        ]
+      },
+      "properties": {
+        "id": "SUP-005",
+        "name": "吉品營養午餐有限公司",
+        "address": "新北市板橋區中山北路120號",
+        "city": "新北市",
+        "hazard_level": "Low",
+        "last_inspection": "2025-07-13",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-JH-011",
+          "TPE-EL-003",
+          "TPE-EL-016"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.451132,
+          24.997939
+        ]
+      },
+      "properties": {
+        "id": "SUP-006",
+        "name": "大都會團膳股份有限公司",
+        "address": "新北市板橋區民生路179號",
+        "city": "新北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-08-25",
+        "last_status": "限期改善",
+        "served_school_ids": [
+          "NTPC-EL-001",
+          "NTPC-EL-015",
+          "TPE-EL-004",
+          "TPE-JH-007"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.433029,
+          25.028129
+        ]
+      },
+      "properties": {
+        "id": "SUP-007",
+        "name": "友善食物供應社",
+        "address": "新北市新莊區中華路31號",
+        "city": "新北市",
+        "hazard_level": "High",
+        "last_inspection": "2025-07-22",
+        "last_status": "限期改善",
+        "served_school_ids": [
+          "NTPC-EL-002",
+          "NTPC-EL-016",
+          "TPE-JH-003",
+          "TPE-JH-006"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.552933,
+          25.1232
+        ]
+      },
+      "properties": {
+        "id": "SUP-008",
+        "name": "新北食材物流股份有限公司",
+        "address": "臺北市士林區農安街108號",
+        "city": "臺北市",
+        "hazard_level": "Low",
+        "last_inspection": "2025-09-20",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-JH-001",
+          "NTPC-JH-012",
+          "TPE-EL-008",
+          "TPE-JH-004"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.366462,
+          25.088952
+        ]
+      },
+      "properties": {
+        "id": "SUP-009",
+        "name": "台北團膳事業有限公司",
+        "address": "新北市林口區中山北路88號",
+        "city": "新北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-08-12",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-017",
+          "NTPC-JH-002",
+          "TPE-EL-005"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.455498,
+          25.002094
+        ]
+      },
+      "properties": {
+        "id": "SUP-010",
+        "name": "群益餐盒食品廠",
+        "address": "新北市板橋區中華路242號",
+        "city": "新北市",
+        "hazard_level": "High",
+        "last_inspection": "2025-08-22",
+        "last_status": "限期改善",
+        "served_school_ids": [
+          "NTPC-EL-003",
+          "NTPC-EL-004",
+          "NTPC-JH-013",
+          "TPE-JH-005"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.406253,
+          24.975833
+        ]
+      },
+      "properties": {
+        "id": "SUP-011",
+        "name": "佳味食品工業股份有限公司",
+        "address": "新北市樹林區新生路166號",
+        "city": "新北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-07-14",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-004",
+          "NTPC-EL-018",
+          "TPE-EL-006"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.449592,
+          25.000686
+        ]
+      },
+      "properties": {
+        "id": "SUP-012",
+        "name": "全心餐飲管理顧問公司",
+        "address": "新北市板橋區中山北路6號",
+        "city": "新北市",
+        "hazard_level": "Critical",
+        "last_inspection": "2025-07-28",
+        "last_status": "不合格",
+        "served_school_ids": [
+          "NTPC-JH-003",
+          "NTPC-JH-014",
+          "TPE-JH-006"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.550008,
+          25.130034
+        ]
+      },
+      "properties": {
+        "id": "SUP-013",
+        "name": "頂好團膳事業",
+        "address": "臺北市士林區光復路197號",
+        "city": "臺北市",
+        "hazard_level": "Low",
+        "last_inspection": "2025-08-20",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-JH-004",
+          "TPE-EL-005",
+          "TPE-EL-007"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.552557,
+          25.128118
+        ]
+      },
+      "properties": {
+        "id": "SUP-014",
+        "name": "青葉食品供應有限公司",
+        "address": "臺北市士林區農安街21號",
+        "city": "臺北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-09-04",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-005",
+          "TPE-JH-002",
+          "TPE-JH-007"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.487189,
+          25.071038
+        ]
+      },
+      "properties": {
+        "id": "SUP-015",
+        "name": "元氣餐盒工坊",
+        "address": "新北市三重區建國街222號",
+        "city": "新北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-07-17",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-006",
+          "TPE-EL-007",
+          "TPE-EL-008",
+          "TPE-EL-016"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.401276,
+          24.981795
+        ]
+      },
+      "properties": {
+        "id": "SUP-016",
+        "name": "聯合中央廚房",
+        "address": "新北市樹林區建國街246號",
+        "city": "新北市",
+        "hazard_level": "Low",
+        "last_inspection": "2025-08-27",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-JH-005",
+          "TPE-EL-009",
+          "TPE-EL-013"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.53945,
+          25.123186
+        ]
+      },
+      "properties": {
+        "id": "SUP-017",
+        "name": "欣品蔬果批發",
+        "address": "臺北市士林區光復路4號",
+        "city": "臺北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-07-25",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-007",
+          "NTPC-EL-009",
+          "TPE-JH-008"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.543045,
+          25.120242
+        ]
+      },
+      "properties": {
+        "id": "SUP-018",
+        "name": "日清團膳有限公司",
+        "address": "臺北市士林區建國街137號",
+        "city": "臺北市",
+        "hazard_level": "High",
+        "last_inspection": "2025-08-09",
+        "last_status": "限期改善",
+        "served_school_ids": [
+          "NTPC-JH-006",
+          "TPE-EL-010",
+          "TPE-JH-008"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.650442,
+          25.06742
+        ]
+      },
+      "properties": {
+        "id": "SUP-019",
+        "name": "宏泰營養午餐",
+        "address": "新北市汐止區重慶路244號",
+        "city": "新北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-07-08",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-008",
+          "NTPC-JH-005",
+          "TPE-JH-009"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.379706,
+          25.086923
+        ]
+      },
+      "properties": {
+        "id": "SUP-020",
+        "name": "長庚膳食有限公司",
+        "address": "新北市林口區重慶路101號",
+        "city": "新北市",
+        "hazard_level": "Critical",
+        "last_inspection": "2025-08-06",
+        "last_status": "不合格",
+        "served_school_ids": [
+          "NTPC-EL-009",
+          "TPE-EL-011"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.478271,
+          25.066056
+        ]
+      },
+      "properties": {
+        "id": "SUP-021",
+        "name": "統聯食材公司",
+        "address": "新北市三重區工業路49號",
+        "city": "新北市",
+        "hazard_level": "Critical",
+        "last_inspection": "2025-09-17",
+        "last_status": "不合格",
+        "served_school_ids": [
+          "NTPC-JH-007",
+          "TPE-EL-010",
+          "TPE-JH-010"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.447146,
+          24.999771
+        ]
+      },
+      "properties": {
+        "id": "SUP-022",
+        "name": "亞洲餐盒事業股份有限公司",
+        "address": "新北市板橋區工業路27號",
+        "city": "新北市",
+        "hazard_level": "Low",
+        "last_inspection": "2025-09-25",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-010",
+          "NTPC-JH-013",
+          "TPE-EL-012"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.647095,
+          25.066939
+        ]
+      },
+      "properties": {
+        "id": "SUP-023",
+        "name": "陽光食品供應社",
+        "address": "新北市汐止區中山北路158號",
+        "city": "新北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-09-22",
+        "last_status": "限期改善",
+        "served_school_ids": [
+          "NTPC-EL-001",
+          "NTPC-JH-008",
+          "NTPC-JH-012",
+          "TPE-JH-011"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.525861,
+          25.152041
+        ]
+      },
+      "properties": {
+        "id": "SUP-024",
+        "name": "甘霖蔬果合作社",
+        "address": "臺北市北投區新生路245號",
+        "city": "臺北市",
+        "hazard_level": "High",
+        "last_inspection": "2025-08-12",
+        "last_status": "限期改善",
+        "served_school_ids": [
+          "NTPC-EL-011",
+          "TPE-EL-013"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.427923,
+          25.024677
+        ]
+      },
+      "properties": {
+        "id": "SUP-025",
+        "name": "安泰中央廚房有限公司",
+        "address": "新北市新莊區農安街120號",
+        "city": "新北市",
+        "hazard_level": "Medium",
+        "last_inspection": "2025-07-26",
+        "last_status": "合格",
+        "served_school_ids": [
+          "NTPC-EL-012",
+          "TPE-JH-012"
+        ]
+      }
+    }
+  ]
+}

@@ -199,7 +199,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		_removeLayerGroup(layer, mapStore) {
 			const ids =
 				layer === "school"
-					? ["fsm_schools", "fsm_supply_chain"]
+					? ["fsm_schools", "fsm_supply_chain", "fsm_suppliers"]
 					: ["fsm_restaurants", "fsm_district_heat"];
 			ids.forEach((idx) => {
 				// mapStore.currentLayers entries are `${index}-${type}-${city}`,
@@ -331,7 +331,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		resetAll() {
 			const mapStore = useMapStore();
 			// Defensive removal of any fsm_* layers
-			["fsm_schools", "fsm_supply_chain", "fsm_restaurants", "fsm_district_heat"]
+			["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_restaurants", "fsm_district_heat"]
 				.forEach((idx) => {
 					const matching = mapStore.currentLayers.filter(
 						(l) => l.startsWith(`${idx}-`),
