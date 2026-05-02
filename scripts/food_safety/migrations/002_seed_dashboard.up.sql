@@ -1,12 +1,13 @@
 -- scripts/food_safety/migrations/002_seed_dashboard.up.sql
 -- Project: 食安風險追蹤器 (Food Safety Radar)
--- Purpose: Register dashboard 503 with 5 food_* components (1011-1015) PLUS
---          mirror the 校內食安地圖 + 校外食安地圖 components (1021/1022)
---          from scripts/food_safety_monitor/, so dashboard 503 also exposes
---          those two map cards. fsm_* INSERTs are byte-identical to the 504
---          migration; defensive DELETE makes apply order between the two
---          dashboards irrelevant. 14 query_charts total (5×2 food_* + 2×2 fsm_*),
---          plus 2 food_* + 6 fsm_* component_maps.
+-- Purpose: Register dashboard 503 with 5 food_* components (1011-1015), the
+--          食安風險矩陣 component (1016, RiskQuadrantChart) merged in from
+--          earlier 004 seed, PLUS the 校內食安地圖 + 校外食安地圖 components
+--          (1021/1022) mirrored from scripts/food_safety_monitor/. dashboard
+--          503 is the single home for all of these — there is no standalone
+--          食安風險矩陣 dashboard 504 (food_safety_monitor owns 504). fsm_*
+--          INSERTs are byte-identical to the 504 migration; defensive DELETE
+--          makes apply order between the two dashboards irrelevant.
 -- down:    migrations/002_seed_dashboard.down.sql
 -- Order:   components → component_charts → component_maps → query_charts
 --          → dashboards → dashboard_groups
@@ -17,7 +18,7 @@ BEGIN;
 DELETE FROM query_charts   WHERE index LIKE 'food_%';
 DELETE FROM component_maps WHERE index LIKE 'food_%';
 DELETE FROM component_charts WHERE index LIKE 'food_%';
-DELETE FROM components WHERE id BETWEEN 1011 AND 1015;
+DELETE FROM components WHERE id BETWEEN 1011 AND 1016;
 -- Also wipe fsm_% rows so re-applying after dashboard 504 (food_safety_monitor)
 -- and this 503 migration produces the same end state regardless of order.
 DELETE FROM query_charts     WHERE index LIKE 'fsm_%';
@@ -230,6 +231,132 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit,mohw}', NOW(), NOW()
 );
 
+-- ── 4a. 食安風險矩陣 component (1016, merged from former 004 seed) ──
+-- Scatter散點圖：每筆 = 一家業者；象限色（左上紅 持續違規 / 右上黃 新興風險
+-- / 左下藍 改善中 / 右下綠 優良）。原為獨立 dashboard 504，現併入 503。
+
+INSERT INTO components (id, index, name) VALUES
+  (1016, 'food_risk_matrix', '食安風險矩陣')
+ON CONFLICT (index) DO NOTHING;
+
+INSERT INTO component_charts (index, color, types, unit) VALUES
+  ('food_risk_matrix',
+   ARRAY['#E53935','#FBC02D','#1E88E5','#43A047'],
+   ARRAY['RiskQuadrantChart'], '家')
+ON CONFLICT (index) DO NOTHING;
+
+-- 1016 食安風險矩陣 — taipei
+-- X 軸 = 「歷史違規」(cutoff 2025-05-03 之前) / Y 軸 = 「近期違規」(cutoff 之後)
+-- x_axis 字串編碼 "{x_value}|{biz_name}|h={n}|r={n}|gt={n}" 給 FE tooltip
+-- jitter 用 hashtext(biz_key) 衍生 → 同業者每次位置一致
+-- 優良象限業者抽樣 350 家避免散點過密；hash seed 含 'YYYY-MM-DD-HH'，每整點換一批
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_risk_matrix', 'two_d',
+  $$WITH per_biz AS (
+    SELECT
+      business_name || '@' || COALESCE(address,'') AS biz_key,
+      MAX(business_name) AS biz_name,
+      BOOL_OR(inspection_result='不合格' AND inspection_date <  DATE '2025-05-03') AS h_bool,
+      BOOL_OR(inspection_result='不合格' AND inspection_date >= DATE '2025-05-03') AS r_bool,
+      COUNT(*) FILTER (WHERE inspection_result='不合格' AND inspection_date <  DATE '2025-05-03') AS h_n,
+      COUNT(*) FILTER (WHERE inspection_result='不合格' AND inspection_date >= DATE '2025-05-03') AS r_n
+    FROM food_risk_inspection
+    WHERE city = '臺北市'
+    GROUP BY biz_key
+  ),
+  violators AS (
+    SELECT * FROM per_biz WHERE (h_bool OR r_bool)
+  ),
+  combined AS (
+    SELECT * FROM violators
+    UNION ALL
+    SELECT * FROM (
+      SELECT * FROM per_biz
+      WHERE NOT h_bool AND NOT r_bool
+      ORDER BY hashtext(biz_key || to_char(NOW(), 'YYYY-MM-DD-HH24'))
+      LIMIT 350
+    ) goods_sample
+  )
+  SELECT
+    ROUND((
+      (CASE WHEN h_bool THEN -1.2 ELSE 1.2 END)
+      + ((((hashtext(biz_key) % 1000) + 1000) % 1000)::float / 1000.0 - 0.5) * 2.3
+    )::numeric, 3)::text
+      || '|' || COALESCE(NULLIF(biz_name,''), '匿名業者')
+      || '|h=' || h_n::text || '|r=' || r_n::text
+      || '|gt=' || (SELECT COUNT(*) FROM per_biz WHERE NOT h_bool AND NOT r_bool)::text  AS x_axis,
+    CASE
+      WHEN r_bool THEN
+         1.225 + ((((hashtext(biz_key || '|y') % 1000) + 1000) % 1000)::float / 1000.0 - 0.5) * 1.45
+      ELSE
+        -1.35  + ((((hashtext(biz_key || '|y') % 1000) + 1000) % 1000)::float / 1000.0 - 0.5) * 1.7
+    END  AS data
+  FROM combined$$,
+  'taipei', '臺北市衛生局 / 食藥署食品查核及檢驗資訊平台',
+  '臺北市食安風險矩陣（歷史違規 × 近期違規）。',
+  '以業者為單位、依違規時間切兩段（cutoff 2025-05-03）：橫軸 = 歷史違規（左多→右少）、縱軸 = 近期違規（下少→上多）。四象限：左上紅 = 持續違規；左下藍 = 改善中；右上黃 = 新興風險；右下綠 = 優良（含合格業者抽樣 350 家）。資料來源：食藥署食品查核及檢驗資訊平台稽查紀錄。',
+  '主管機關優先稽查業者識別；研究者觀察食安行為趨勢；市民了解所在區域食安狀況。',
+  'static', '', 1, 'year', '{}', '{}', '{}', '{doit}', NOW(), NOW()
+);
+
+-- 1016 食安風險矩陣 — metrotaipei (雙北合計)
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_risk_matrix', 'two_d',
+  $$WITH per_biz AS (
+    SELECT
+      business_name || '@' || COALESCE(address,'') AS biz_key,
+      MAX(business_name) AS biz_name,
+      BOOL_OR(inspection_result='不合格' AND inspection_date <  DATE '2025-05-03') AS h_bool,
+      BOOL_OR(inspection_result='不合格' AND inspection_date >= DATE '2025-05-03') AS r_bool,
+      COUNT(*) FILTER (WHERE inspection_result='不合格' AND inspection_date <  DATE '2025-05-03') AS h_n,
+      COUNT(*) FILTER (WHERE inspection_result='不合格' AND inspection_date >= DATE '2025-05-03') AS r_n
+    FROM food_risk_inspection
+    WHERE city IN ('臺北市','新北市')
+    GROUP BY biz_key
+  ),
+  violators AS (
+    SELECT * FROM per_biz WHERE (h_bool OR r_bool)
+  ),
+  combined AS (
+    SELECT * FROM violators
+    UNION ALL
+    SELECT * FROM (
+      SELECT * FROM per_biz
+      WHERE NOT h_bool AND NOT r_bool
+      ORDER BY hashtext(biz_key || to_char(NOW(), 'YYYY-MM-DD-HH24'))
+      LIMIT 350
+    ) goods_sample
+  )
+  SELECT
+    ROUND((
+      (CASE WHEN h_bool THEN -1.2 ELSE 1.2 END)
+      + ((((hashtext(biz_key) % 1000) + 1000) % 1000)::float / 1000.0 - 0.5) * 2.3
+    )::numeric, 3)::text
+      || '|' || COALESCE(NULLIF(biz_name,''), '匿名業者')
+      || '|h=' || h_n::text || '|r=' || r_n::text
+      || '|gt=' || (SELECT COUNT(*) FROM per_biz WHERE NOT h_bool AND NOT r_bool)::text  AS x_axis,
+    CASE
+      WHEN r_bool THEN
+         1.225 + ((((hashtext(biz_key || '|y') % 1000) + 1000) % 1000)::float / 1000.0 - 0.5) * 1.45
+      ELSE
+        -1.35  + ((((hashtext(biz_key || '|y') % 1000) + 1000) % 1000)::float / 1000.0 - 0.5) * 1.7
+    END  AS data
+  FROM combined$$,
+  'metrotaipei', '雙北衛生局 / 食藥署',
+  '雙北食安風險矩陣（雙城合計，歷史違規 × 近期違規）。',
+  '雙城業者違規記錄合併聚合，每點 = 一家業者，cutoff 2025-05-03 切歷史/近期。象限定義同臺北版，資料範圍擴大為臺北市 + 新北市。',
+  '雙城聯合稽查資源配置；跨域食安政策評估；新北市民比較雙北食安風險落差。',
+  'static', '', 1, 'year', '{}', '{}', '{}', '{doit,ntpc}', NOW(), NOW()
+);
+
 -- ── 4b. food_safety_monitor 校內+校外 components (1021/1022) ──────
 -- Mirror of scripts/food_safety_monitor/migrations/001_seed_dashboard.up.sql
 -- so dashboard 503 also exposes the school + restaurant maps. Both
@@ -331,8 +458,10 @@ VALUES (
 -- ── 5. dashboards ────────────────────────────────────────────────
 INSERT INTO dashboards (id, index, name, components, icon, created_at, updated_at) VALUES
   (503, 'food_safety_radar', '食安風險追蹤器',
-   ARRAY[1011,1012,1013,1014,1015,1021,1022], 'restaurant', NOW(), NOW())
-ON CONFLICT (index) DO NOTHING;
+   ARRAY[1011,1012,1013,1014,1015,1016,1021,1022], 'restaurant', NOW(), NOW())
+ON CONFLICT (index) DO UPDATE
+  SET components = EXCLUDED.components,
+      updated_at = NOW();
 
 -- ── 6. dashboard_groups ──────────────────────────────────────────
 INSERT INTO dashboard_groups (dashboard_id, group_id) VALUES
