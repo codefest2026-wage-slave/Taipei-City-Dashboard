@@ -135,6 +135,12 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				this._removeLayerGroup(this.activeLayer, mapStore);
 			}
 			this.activeLayer = layer;
+			if (layer === "school") {
+				// After dashboard pipeline finishes loading fsm_* layers, ensure
+				// sub-toggle visibility matches current state (showSuppliers default
+				// is false; pipeline adds them visible by default).
+				setTimeout(() => this._reconcileSchoolSubLayers(), 700);
+			}
 			// New layer added by Mapbox via dashboard's normal toggle pipeline;
 			// nothing extra here. Panels reactively render via watch on activeLayer.
 			if (layer === "restaurant") {
@@ -440,19 +446,50 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			this.layerToggles[name] = !this.layerToggles[name];
 			const mapStore = useMapStore();
 			if (!mapStore.map) return;
-			const prefix = name === "showSchools" ? "fsm_schools-" : "fsm_suppliers-";
+			const prefixes = name === "showSchools"
+				? ["fsm_schools-"]
+				: ["fsm_suppliers-", "fsm_supplier_dots-"];
 			const visible = this.layerToggles[name] ? "visible" : "none";
-			mapStore.currentLayers
-				.filter((l) => l.startsWith(prefix))
-				.forEach((l) => {
-					if (mapStore.map.getLayer(l)) {
-						mapStore.map.setLayoutProperty(l, "visibility", visible);
-					}
-				});
+			prefixes.forEach((prefix) => {
+				mapStore.currentLayers
+					.filter((l) => l.startsWith(prefix))
+					.forEach((l) => {
+						if (mapStore.map.getLayer(l)) {
+							mapStore.map.setLayoutProperty(l, "visibility", visible);
+						}
+					});
+			});
 			// If suppliers just turned OFF and we have a focused school, keep its
 			// supplier connections visible (per spec: click-school always shows
 			// connected suppliers via arcs even when global toggle is off).
 			// Nothing extra needed here — arcs are drawn separately by selectSchool.
+		},
+
+		_reconcileSchoolSubLayers() {
+			const mapStore = useMapStore();
+			if (!mapStore.map) return;
+			// Schools
+			const schoolsLayer = mapStore.currentLayers.find(
+				(l) => l.startsWith("fsm_schools-"),
+			);
+			if (schoolsLayer && mapStore.map.getLayer(schoolsLayer)) {
+				mapStore.map.setLayoutProperty(
+					schoolsLayer,
+					"visibility",
+					this.layerToggles.showSchools ? "visible" : "none",
+				);
+			}
+			// Suppliers (ring + inner dot)
+			["fsm_suppliers-", "fsm_supplier_dots-"].forEach((prefix) => {
+				const layer = mapStore.currentLayers.find((l) => l.startsWith(prefix));
+				if (layer && mapStore.map.getLayer(layer)) {
+					mapStore.map.setLayoutProperty(
+						layer,
+						"visibility",
+						this.layerToggles.showSuppliers ? "visible" : "none",
+					);
+				}
+			});
 		},
 
 		// ── Reset on dashboard exit ─────────────────────────────
