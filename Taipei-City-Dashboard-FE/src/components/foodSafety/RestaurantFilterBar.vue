@@ -42,7 +42,7 @@ const districts = ['all', '臺北市', '新北市',
 <style scoped>
 .fsm-filter {
 	pointer-events: auto;
-	position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+	position: absolute; top: 16px; left: 16px;
 	display: flex; gap: 14px; padding: 10px 16px;
 }
 .fsm-filter label {

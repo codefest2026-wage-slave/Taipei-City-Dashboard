@@ -80,7 +80,7 @@ const inspection = computed(() => {
 <style scoped>
 .fsm-inspection {
 	pointer-events: auto;
-	position: absolute; top: 80px; right: 16px; width: 320px;
+	position: absolute; top: 16px; right: 16px; width: 320px;
 	max-height: calc(100vh - 280px); overflow-y: auto;
 	padding: 14px;
 }
