@@ -16,6 +16,7 @@ failure rolls back the whole load.
 import csv
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import psycopg2
@@ -59,22 +60,32 @@ def parse_city_filename(path):
 
 # ── value cleaners ──────────────────────────────────────────────────
 
-DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_DATE_FORMATS = (
+    "%Y-%m-%d",
+    "%Y/%m/%d",
+    "%Y-%m-%d %H:%M:%S",
+    "%Y-%m-%d %H:%M:%S.%f",
+)
 
 
 def parse_date(s):
-    """Accept 'YYYY/MM/DD', 'YYYY-MM-DD', or 'YYYY-MM-DD HH:MM:SS[.N]'.
+    """Parse 'YYYY/MM/DD', 'YYYY-MM-DD', or 'YYYY-MM-DD HH:MM:SS[.N]'.
 
-    Returns ISO 'YYYY-MM-DD' string (psycopg2 casts to DATE) or None.
+    Returns ISO 'YYYY-MM-DD' string or None on empty/invalid input.
+    Robust to invalid month/day (e.g. '2024-13-01') — returns None instead
+    of letting psycopg2 abort the whole transaction.
     """
     if s is None:
         return None
     s = str(s).strip()
     if not s:
         return None
-    s = s.split()[0]            # drop time portion
-    s = s.replace("/", "-")
-    return s if DATE_RE.match(s) else None
+    for fmt in _DATE_FORMATS:
+        try:
+            return datetime.strptime(s, fmt).date().isoformat()
+        except ValueError:
+            continue
+    return None
 
 
 def clean(v, max_len=None):
@@ -96,9 +107,9 @@ VALUES %s
 def load_food_dictionary(cur):
     path = SNAPSHOTS_DIR / "food_chinese_names.csv"
     if not path.exists():
-        print(f"  ⚠️  {path.name} missing — skipping food_dictionary", file=sys.stderr)
-        cur.execute("TRUNCATE school_meal_food_dictionary RESTART IDENTITY")
-        return 0
+        print(f"❌ {path.name} missing — refusing to truncate the dictionary. "
+              f"Run snapshot_apis.py first.", file=sys.stderr)
+        sys.exit(1)
     rows = []
     with path.open(encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
@@ -113,7 +124,7 @@ def load_food_dictionary(cur):
             ))
     cur.execute("TRUNCATE school_meal_food_dictionary RESTART IDENTITY")
     if rows:
-        execute_values(cur, INSERT_FOOD_DICT_SQL, rows, page_size=500)
+        execute_values(cur, INSERT_FOOD_DICT_SQL, rows, page_size=1000)
     return len(rows)
 
 
@@ -124,9 +135,11 @@ VALUES %s
 
 
 def load_caterers(cur):
-    rows = []
+    cur.execute("TRUNCATE school_meal_caterers RESTART IDENTITY")
+    total = 0
     files = sorted(SNAPSHOTS_DIR.glob("nation_*_學校供餐團膳業者*.csv"))
     for path in files:
+        rows = []
         with path.open(encoding="utf-8-sig", newline="") as f:
             reader = csv.DictReader(f)
             for r in reader:
@@ -139,10 +152,10 @@ def load_caterers(cur):
                     clean(r.get("業者統一編號"), 20),
                     clean(r.get("業者地址"), 500),
                 ))
-    cur.execute("TRUNCATE school_meal_caterers RESTART IDENTITY")
-    if rows:
-        execute_values(cur, INSERT_CATERER_SQL, rows, page_size=500)
-    return len(rows)
+        if rows:
+            execute_values(cur, INSERT_CATERER_SQL, rows, page_size=1000)
+            total += len(rows)
+    return total
 
 
 INSERT_SEASONING_NATION_SQL = """
@@ -156,9 +169,11 @@ INSERT INTO school_meal_seasoning_records_nation (
 
 
 def load_seasoning_records_nation(cur):
-    rows = []
+    cur.execute("TRUNCATE school_meal_seasoning_records_nation RESTART IDENTITY")
+    total = 0
     files = sorted(SNAPSHOTS_DIR.glob("nation_*_調味料及供應商*.csv"))
     for path in files:
+        rows = []
         with path.open(encoding="utf-8-sig", newline="") as f:
             reader = csv.DictReader(f)
             for r in reader:
@@ -175,10 +190,10 @@ def load_seasoning_records_nation(cur):
                     clean(r.get("認證標章"), 100),
                     clean(r.get("認證編號"), 100),
                 ))
-    cur.execute("TRUNCATE school_meal_seasoning_records_nation RESTART IDENTITY")
-    if rows:
-        execute_values(cur, INSERT_SEASONING_NATION_SQL, rows, page_size=1000)
-    return len(rows)
+        if rows:
+            execute_values(cur, INSERT_SEASONING_NATION_SQL, rows, page_size=1000)
+            total += len(rows)
+    return total
 
 
 INSERT_INGREDIENT_RECORD_SQL = """
@@ -196,13 +211,15 @@ INGREDIENT_FN_RE = re.compile(r"^(?:tpe|ntpc)_\d{6}(?:_[^_]+)?_午餐食材及�
 
 
 def load_ingredient_records(cur):
-    rows = []
+    cur.execute("TRUNCATE school_meal_ingredient_records RESTART IDENTITY")
+    total = 0
     files = sorted(p for p in SNAPSHOTS_DIR.glob("*.csv") if INGREDIENT_FN_RE.match(p.name))
     for path in files:
         meta = parse_city_filename(path)
         if not meta:
             continue
         yyyy, mm, county_q, grade_q, _ds = meta
+        rows = []
         with path.open(encoding="utf-8-sig", newline="") as f:
             reader = csv.DictReader(f)
             for r in reader:
@@ -223,10 +240,10 @@ def load_ingredient_records(cur):
                     clean(r.get("認證標章"), 100),
                     clean(r.get("認證號碼"), 100),
                 ))
-    cur.execute("TRUNCATE school_meal_ingredient_records RESTART IDENTITY")
-    if rows:
-        execute_values(cur, INSERT_INGREDIENT_RECORD_SQL, rows, page_size=1000)
-    return len(rows)
+        if rows:
+            execute_values(cur, INSERT_INGREDIENT_RECORD_SQL, rows, page_size=1000)
+            total += len(rows)
+    return total
 
 
 INSERT_DISH_RECORD_SQL = """
@@ -240,13 +257,15 @@ DISH_FN_RE = re.compile(r"^(?:tpe|ntpc)_\d{6}(?:_[^_]+)?_午餐菜色資料集\.
 
 
 def load_dish_records(cur):
-    rows = []
+    cur.execute("TRUNCATE school_meal_dish_records RESTART IDENTITY")
+    total = 0
     files = sorted(p for p in SNAPSHOTS_DIR.glob("*.csv") if DISH_FN_RE.match(p.name))
     for path in files:
         meta = parse_city_filename(path)
         if not meta:
             continue
         yyyy, mm, county_q, grade_q, _ds = meta
+        rows = []
         with path.open(encoding="utf-8-sig", newline="") as f:
             reader = csv.DictReader(f)
             for r in reader:
@@ -258,10 +277,10 @@ def load_dish_records(cur):
                     parse_date(r.get("供餐日期")),
                     clean(r.get("菜色名稱"), 200),
                 ))
-    cur.execute("TRUNCATE school_meal_dish_records RESTART IDENTITY")
-    if rows:
-        execute_values(cur, INSERT_DISH_RECORD_SQL, rows, page_size=1000)
-    return len(rows)
+        if rows:
+            execute_values(cur, INSERT_DISH_RECORD_SQL, rows, page_size=1000)
+            total += len(rows)
+    return total
 
 
 INSERT_DISH_INGREDIENT_RECORD_SQL = """
@@ -280,13 +299,15 @@ DISH_INGREDIENT_FN_RE = re.compile(r"^(?:tpe|ntpc)_\d{6}(?:_[^_]+)?_午餐菜色
 
 
 def load_dish_ingredient_records(cur):
-    rows = []
+    cur.execute("TRUNCATE school_meal_dish_ingredient_records RESTART IDENTITY")
+    total = 0
     files = sorted(p for p in SNAPSHOTS_DIR.glob("*.csv") if DISH_INGREDIENT_FN_RE.match(p.name))
     for path in files:
         meta = parse_city_filename(path)
         if not meta:
             continue
         yyyy, mm, county_q, grade_q, _ds = meta
+        rows = []
         with path.open(encoding="utf-8-sig", newline="") as f:
             reader = csv.DictReader(f)
             for r in reader:
@@ -309,10 +330,10 @@ def load_dish_ingredient_records(cur):
                     clean(r.get("認證標章"), 100),
                     clean(r.get("認證號碼"), 100),
                 ))
-    cur.execute("TRUNCATE school_meal_dish_ingredient_records RESTART IDENTITY")
-    if rows:
-        execute_values(cur, INSERT_DISH_INGREDIENT_RECORD_SQL, rows, page_size=1000)
-    return len(rows)
+        if rows:
+            execute_values(cur, INSERT_DISH_INGREDIENT_RECORD_SQL, rows, page_size=1000)
+            total += len(rows)
+    return total
 
 
 def main():
@@ -322,6 +343,9 @@ def main():
         sys.exit(1)
 
     counts = {}
+    # All 6 loaders share one transaction — partial loads would leave the
+    # dedupe layer (load_ingredient_names.py runs after) inconsistent with
+    # the raw tables. Failure rolls back everything cleanly.
     with psycopg2.connect(**db_kwargs()) as conn, conn.cursor() as cur:
         counts["food_dictionary"]          = load_food_dictionary(cur)
         counts["caterers"]                 = load_caterers(cur)
@@ -329,6 +353,21 @@ def main():
         counts["ingredient_records"]       = load_ingredient_records(cur)
         counts["dish_records"]             = load_dish_records(cur)
         counts["dish_ingredient_records"]  = load_dish_ingredient_records(cur)
+
+    # Detect city CSVs that didn't match any router — catches publisher
+    # filename drift before it silently drops data.
+    city_csvs = sorted(p for p in SNAPSHOTS_DIR.glob("*.csv")
+                       if p.name.startswith(("tpe_", "ntpc_")))
+    matchers = (INGREDIENT_FN_RE, DISH_FN_RE, DISH_INGREDIENT_FN_RE)
+    unmatched = [p.name for p in city_csvs
+                 if not any(r.match(p.name) for r in matchers)]
+    if unmatched:
+        print(f"\n⚠️  {len(unmatched)} city CSV(s) did not match any router:",
+              file=sys.stderr)
+        for name in unmatched[:10]:
+            print(f"    {name}", file=sys.stderr)
+        if len(unmatched) > 10:
+            print(f"    … and {len(unmatched) - 10} more", file=sys.stderr)
 
     print("✅ raw records loaded:")
     for table, n in counts.items():
