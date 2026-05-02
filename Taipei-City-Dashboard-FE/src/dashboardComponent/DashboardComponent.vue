@@ -22,6 +22,7 @@ import TimelineStackedChart from "./components/TimelineStackedChart.vue";
 import MapLegend from "./components/MapLegend.vue";
 import MetroChart from "./components/MetroChart.vue";
 import HeatmapChart from "./components/HeatmapChart.vue";
+import RiskQuadrantChart from "./components/RiskQuadrantChart.vue";
 import PolarAreaChart from "./components/PolarAreaChart.vue";
 import ColumnLineChart from "./components/ColumnLineChart.vue";
 import BarChartWithGoal from "./components/BarChartWithGoal.vue";
@@ -216,6 +217,8 @@ function returnChartComponent(name, svg) {
 		return svg ? RadarChartSvg : RadarChart;
 	case "HeatmapChart":
 		return svg ? HeatmapChartSvg : HeatmapChart;
+	case "RiskQuadrantChart":
+		return svg ? HeatmapChartSvg : RiskQuadrantChart;
 	case "ColumnLineChart":
 		return svg ? ColumnLineChartSvg : ColumnLineChart;
 	case "BarChartWithGoal":

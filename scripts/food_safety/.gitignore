@@ -1,3 +1,4 @@
 backups/*
 !backups/.gitkeep
 .env.script
+.venv/
