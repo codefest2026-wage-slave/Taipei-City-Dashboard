@@ -10,7 +10,7 @@
 #   3. docker/.env                                (BE config; only useful for local docker)
 #   4. defaults below                             (host-reachable local docker)
 #
-# All `docker run` invocations use --network=host so the temp postgres:16
+# All `docker run` invocations use --network=host so the temp $PG_CLIENT_IMAGE
 # container reaches `localhost` the same way the host does. For cloud DBs,
 # the connection just resolves the public hostname normally.
 
@@ -38,6 +38,11 @@ _load_env_file() {
 _load_env_file "$_LS_ROOT/.env.script"
 _load_env_file "$_LS_REPO/docker/.env"
 
+# Postgres client image used by `docker run` for psql / pg_dump. Must match
+# server major version (>= server major). Override in .env.script if needed.
+: "${PG_CLIENT_IMAGE:=postgres:17}"
+export PG_CLIENT_IMAGE
+
 # Defaults — local docker postgres exposed on host (5433 / 5432)
 : "${DB_DASHBOARD_HOST:=localhost}"
 : "${DB_DASHBOARD_PORT:=5433}"
@@ -54,7 +59,7 @@ _load_env_file "$_LS_REPO/docker/.env"
 : "${DB_MANAGER_SSLMODE:=disable}"
 
 # If host is a docker-internal name (BE config bleed-through), translate so the
-# temp postgres:16 container --network=host can reach the exposed port.
+# temp $PG_CLIENT_IMAGE container --network=host can reach the exposed port.
 case "$DB_DASHBOARD_HOST" in
   postgres-data) DB_DASHBOARD_HOST=localhost; DB_DASHBOARD_PORT=5433 ;;
 esac
@@ -81,7 +86,7 @@ pg_psql() {
     MANAGER)   url="$DB_URL_MANAGER" ;;
     *) echo "pg_psql: first arg must be DASHBOARD or MANAGER" >&2; return 2 ;;
   esac
-  docker run --rm -i --network=host postgres:16 psql "$url" -v ON_ERROR_STOP=1 "$@"
+  docker run --rm -i --network=host $PG_CLIENT_IMAGE psql "$url" -v ON_ERROR_STOP=1 "$@"
 }
 
 # pg_dump_to FILE DASHBOARD          — pg_dump dashboard DB to FILE
@@ -93,5 +98,5 @@ pg_dump_to() {
     MANAGER)   url="$DB_URL_MANAGER" ;;
     *) echo "pg_dump_to: second arg must be DASHBOARD or MANAGER" >&2; return 2 ;;
   esac
-  docker run --rm --network=host postgres:16 pg_dump "$url" > "$out"
+  docker run --rm --network=host $PG_CLIENT_IMAGE pg_dump "$url" > "$out"
 }

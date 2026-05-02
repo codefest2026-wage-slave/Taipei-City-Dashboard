@@ -28,5 +28,5 @@ echo "✅ backup → $OUT"
 ls -lh "$OUT"
 echo
 echo "Restore example:"
-echo "  cat $OUT/dashboard.sql        | docker run --rm -i --network=host postgres:16 psql \"\$DB_URL_DASHBOARD\""
-echo "  cat $OUT/dashboardmanager.sql | docker run --rm -i --network=host postgres:16 psql \"\$DB_URL_MANAGER\""
+echo "  cat $OUT/dashboard.sql        | docker run --rm -i --network=host $PG_CLIENT_IMAGE psql \"\$DB_URL_DASHBOARD\""
+echo "  cat $OUT/dashboardmanager.sql | docker run --rm -i --network=host $PG_CLIENT_IMAGE psql \"\$DB_URL_MANAGER\""
