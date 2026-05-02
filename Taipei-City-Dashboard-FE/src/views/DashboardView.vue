@@ -23,6 +23,10 @@ const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const authStore = useAuthStore();
 
+function isFoodSafetyComponent(index) {
+	return index?.startsWith("food_safety");
+}
+
 function handleOpenSettings() {
 	contentStore.editDashboard = JSON.parse(
 		JSON.stringify(contentStore.currentDashboard)
@@ -129,6 +133,7 @@ function handleMoreInfo(item) {
       :info-btn="true"
       :active-city="item.city"
       :select-btn="true"
+      :enable-time-filter="isFoodSafetyComponent(item.index)"
       :select-btn-disabled="contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city).length === 1 || contentStore.currentDashboardExcluded.components.filter((data) => data.index === item.index).length === 0"
       :select-btn-list="contentStore.currentDashboard?.city
         ? contentStore.cityManager.getSelectList(contentStore.currentDashboard?.city)
@@ -161,6 +166,11 @@ function handleMoreInfo(item) {
       @delete="
         (id) => {
           contentStore.deleteComponent(id);
+        }
+      "
+      @refetch-with-time="
+        (componentId, timefrom, timeto) => {
+          contentStore.refetchComponentChartData(componentId, timefrom, timeto);
         }
       "
       @change-city="(city)=> {
