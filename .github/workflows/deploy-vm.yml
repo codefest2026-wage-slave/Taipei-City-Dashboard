@@ -27,9 +27,16 @@ jobs:
           git reset --hard origin/main
           echo "Deployed commit: $(git rev-parse --short HEAD) - $(git log -1 --pretty=%s)"
 
+      - name: Free disk space
+        run: docker system prune -f
+
       - name: Restart services
         working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
         run: docker compose restart
+
+      - name: Populate vector DB
+        working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
+        run: docker compose up --build vector-db-upgrade
 
       - name: Health check
         working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
