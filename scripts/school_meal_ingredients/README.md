@@ -1,0 +1,121 @@
+# School Meal Ingredients — 校園食材登入平台 ETL
+
+Crawl 校園食材登入平台 OpenAPI for 雙北 全年月 CSV datasets, then dedupe
+食材名稱 into a dictionary table for downstream AI consumers.
+
+Mirrors the layout and conventions of `scripts/labor_safety/`.
+
+## Quick start
+
+```bash
+# 0. Copy and edit env file
+cp scripts/school_meal_ingredients/.env.script.example \
+   scripts/school_meal_ingredients/.env.script
+$EDITOR scripts/school_meal_ingredients/.env.script
+# Set FATRACE_ACCESSCODE, FATRACE_COOKIE, DB_DASHBOARD_*
+
+# 1. (Optional) Refresh CSV snapshots from the live API
+#    Long-running. Use --year-from/--year-to to limit scope.
+python3 scripts/school_meal_ingredients/etl/snapshot_apis.py
+
+# 2. Backup before applying (idempotent migration, but be safe)
+./scripts/school_meal_ingredients/backup_db.sh
+
+# 3. Apply: migrations + dedupe loader + verify
+./scripts/school_meal_ingredients/apply.sh
+
+# 4. Rollback (drops the table)
+./scripts/school_meal_ingredients/rollback.sh
+```
+
+## Layout
+
+```
+scripts/school_meal_ingredients/
+├── README.md                    # this file
+├── .env.script.example          # FATRACE_* + DB_DASHBOARD_* template
+├── .gitignore                   # backups/, .env.script, __pycache__
+├── apply.sh                     # idempotent: migrations + ETL + verify
+├── rollback.sh                  # drop table
+├── backup_db.sh                 # pg_dump dashboard
+├── _db_env.sh                   # shell env (sourced by *.sh)
+├── etl/
+│   ├── _db.py                   # psycopg2 kwargs + FATRACE creds resolver
+│   ├── snapshot_apis.py         # resumable API crawler (manual run)
+│   └── load_ingredient_names.py # CSV → dedupe → DB (called by apply.sh)
+├── snapshots/                   # committed CSVs + manifest.json
+└── migrations/
+    ├── 001_create_ingredient_names.up.sql
+    └── 001_create_ingredient_names.down.sql
+```
+
+## Data flow
+
+```
+                 (manual)
+fatraceschool API ─────► snapshot_apis.py ─► snapshots/*.csv + manifest.json
+                                                       │
+                                          (apply.sh)   │
+                                                       ▼
+                                       load_ingredient_names.py
+                                                       │
+                                                       ▼
+                                  dashboard.school_meal_ingredient_names
+```
+
+`apply.sh` reads only committed CSVs; it does **not** call the live API.
+Run `snapshot_apis.py` separately when you want to refresh the snapshots.
+
+## Datasets in scope
+
+The platform exposes 6 unique `datasetname` values; we download:
+
+| Dataset | County / grade | Source of 食材名稱? |
+|---|---|---|
+| 學校供餐團膳業者資料集 | 全國 | no |
+| 調味料及供應商資料集 | 全國 | maybe |
+| 午餐食材及供應商資料集 | 臺北市 / 新北市 × 國中小 / 高中職 | **yes** |
+| 午餐菜色資料集 | 臺北市 / 新北市 × 國中小 / 高中職 | no |
+| 午餐菜色及食材資料集 | 臺北市 / 新北市 × 國中小 / 高中職 | **yes** |
+| 食材中文名稱資料集 | one-shot | yes (standard names) |
+
+The `全國 × 國中小/高中職` variants are **skipped** to avoid superset
+duplication of the city-specific data.
+
+## Snapshot crawler — token expiry
+
+`accesscode` and `JSESSIONID` expire per session. When the API rejects
+the token, `snapshot_apis.py`:
+
+1. Saves `manifest.json` with what's been completed.
+2. Prints `⚠️  FATRACE token expired …` to stderr.
+3. Exits **0** (so a wrapper script can rerun cleanly).
+
+Refresh `FATRACE_ACCESSCODE` / `FATRACE_COOKIE` and rerun — it picks up
+where it left off.
+
+## Time range
+
+Default: `2020/01` → current month. Override:
+
+```bash
+python3 .../snapshot_apis.py --year-from 2024 --month-from 1 \
+                             --year-to 2024 --month-to 12
+```
+
+Months that return empty `datasetList` are recorded so subsequent runs
+skip them.
+
+## Dual-city compliance
+
+Per project CLAUDE.md, the loader **aborts** if neither 臺北市 nor 新北市
+appears in the aggregated `source_counties`. This catches accidental
+single-city snapshots before they reach the DB.
+
+## Restore from backup
+
+```bash
+source scripts/school_meal_ingredients/_db_env.sh
+cat scripts/school_meal_ingredients/backups/<TS>/dashboard.sql \
+  | docker run --rm -i --network=host "$PG_CLIENT_IMAGE" psql "$DB_URL_DASHBOARD"
+```
