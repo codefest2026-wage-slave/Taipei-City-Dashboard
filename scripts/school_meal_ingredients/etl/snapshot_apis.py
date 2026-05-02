@@ -181,12 +181,18 @@ def download_csv(link, cookie):
 # ── main loop ───────────────────────────────────────────────────────
 
 def months_in_range(yf, mf, yt, mt):
-    y, m = yf, mf
-    while (y, m) <= (yt, mt):
+    """Yield (year, month) tuples for [yf/mf, yt/mt] inclusive, NEWEST FIRST.
+
+    Reverse iteration ensures Ctrl-C / token expiry / network failures land
+    the most recent (and most useful) months in snapshots/ before falling
+    back through history.
+    """
+    y, m = yt, mt
+    while (y, m) >= (yf, mf):
         yield y, m
-        m += 1
-        if m > 12:
-            y += 1; m = 1
+        m -= 1
+        if m < 1:
+            y -= 1; m = 12
 
 
 def count_csv_rows(content_bytes):
@@ -236,9 +242,20 @@ def main():
     empties   = empty_month_keys(manifest)
     errors = []
 
+    all_yms = list(months_in_range(args.year_from, args.month_from,
+                                    args.year_to,   args.month_to))
+    pending_probes = sum(
+        1 for y, m in all_yms for c in TARGET_COUNTIES
+        if (str(y), str(m).zfill(2), c) not in empties
+    )
     print(f"▶ snapshot range: {args.year_from}/{args.month_from:02d} → "
-          f"{args.year_to}/{args.month_to:02d}")
-    print(f"▶ already completed: {len(completed)}, empty months: {len(empties)}")
+          f"{args.year_to}/{args.month_to:02d}  "
+          f"({len(all_yms)} months × {len(TARGET_COUNTIES)} counties = "
+          f"{len(all_yms) * len(TARGET_COUNTIES)} total probes)")
+    print(f"▶ iteration order: NEWEST first")
+    print(f"▶ manifest: {len(completed)} completed entries, "
+          f"{len(empties)} empty (year, month, county) skip-list, "
+          f"{pending_probes} probes to attempt this run")
 
     for year, month in months_in_range(args.year_from, args.month_from,
                                        args.year_to,   args.month_to):
