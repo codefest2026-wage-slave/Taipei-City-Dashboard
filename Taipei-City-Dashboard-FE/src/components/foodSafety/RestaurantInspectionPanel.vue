@@ -20,7 +20,7 @@ const inspection = computed(() => {
 </script>
 
 <template>
-  <div class="fsm-panel fsm-inspection">
+  <div class="fsm-panel fsm-cyber-panel fsm-inspection">
     <div
       v-if="!restaurant"
       class="fsm-empty"
@@ -69,22 +69,51 @@ const inspection = computed(() => {
 	pointer-events: auto;
 	position: absolute; top: 80px; right: 16px; width: 320px;
 	max-height: calc(100vh - 280px); overflow-y: auto;
-	background: rgba(20,20,30,0.92); border-radius: 6px;
-	padding: 14px; color: #ddd;
+	padding: 14px;
 }
-.fsm-empty { color: #888; font-size: 13px; }
-.fsm-view h3 { margin: 0; font-size: 16px; color: #fff; }
-.fsm-view p  { margin: 4px 0; font-size: 12px; color: #bbb; }
-.fsm-view h4 { margin: 12px 0 4px; font-size: 12px; color: #aaa; text-transform: uppercase; }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
-         font-size: 11px; font-weight: 600; margin: 4px 0; }
-.grade-優      { background: #43A047; color: #fff; }
-.grade-良      { background: #FFA000; color: #fff; }
-.grade-需改善  { background: #E53935; color: #fff; }
+.fsm-empty { color: #8FA3C6; font-size: 13px; }
+.fsm-view h3 {
+	margin: 0; font-size: 18px;
+	color: #00E5FF; letter-spacing: 1px;
+	text-shadow: 0 0 8px rgba(0,229,255,0.4);
+}
+.fsm-view p  { margin: 4px 0; font-size: 12px; color: #8FA3C6; }
+.fsm-view h4 {
+	margin: 12px 0 4px; font-size: 11px;
+	color: #00E5FF; opacity: 0.85;
+	text-transform: uppercase; letter-spacing: 2px;
+	font-weight: 600;
+}
+.badge {
+	display: inline-block; padding: 3px 10px; border-radius: 2px;
+	font-size: 11px; font-weight: 600; margin: 4px 0;
+	letter-spacing: 1px;
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+.grade-優      { background: #00E676; color: #0A1228; box-shadow: 0 0 10px rgba(0,230,118,0.5); }
+.grade-良      { background: #FFC107; color: #0A1228; box-shadow: 0 0 10px rgba(255,193,7,0.5); }
+.grade-需改善  { background: #FF1744; color: #fff; box-shadow: 0 0 10px rgba(255,23,68,0.5); }
 .history { list-style: none; padding: 0; margin: 0; }
-.history li { display: grid; grid-template-columns: 90px 50px 1fr; gap: 6px;
-              padding: 6px 0; border-bottom: 1px solid #333; font-size: 12px; }
-.row-pass .status { color: #43A047; font-weight: 600; }
-.row-fail .status { color: #E53935; font-weight: 600; }
-.hint { color: #888; font-size: 12px; }
+.history li {
+	display: grid; grid-template-columns: 90px 50px 1fr; gap: 6px;
+	padding: 7px 6px; border-bottom: 1px solid rgba(0,229,255,0.1);
+	font-size: 12px; color: #D7E3F4;
+}
+.history .date {
+	color: #8FA3C6;
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+}
+.history .status {
+	font-family: 'JetBrains Mono', 'Courier New', monospace;
+	letter-spacing: 1px;
+}
+.row-pass {
+	background: linear-gradient(90deg, rgba(0,230,118,0.06), transparent);
+}
+.row-pass .status { color: #00E676; font-weight: 600; text-shadow: 0 0 6px rgba(0,230,118,0.5); }
+.row-fail {
+	background: linear-gradient(90deg, rgba(255,23,68,0.08), transparent);
+}
+.row-fail .status { color: #FF1744; font-weight: 600; text-shadow: 0 0 6px rgba(255,23,68,0.6); }
+.hint { color: #8FA3C6; font-size: 12px; }
 </style>

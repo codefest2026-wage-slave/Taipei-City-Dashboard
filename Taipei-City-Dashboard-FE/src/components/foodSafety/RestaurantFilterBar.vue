@@ -10,7 +10,7 @@ const districts = ['all', '臺北市', '新北市',
 </script>
 
 <template>
-  <div class="fsm-panel fsm-filter">
+  <div class="fsm-panel fsm-cyber-panel fsm-filter">
     <label>區域
       <select v-model="fs.restaurantFilters.district">
         <option
@@ -43,10 +43,29 @@ const districts = ['all', '臺北市', '新北市',
 .fsm-filter {
 	pointer-events: auto;
 	position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
-	display: flex; gap: 10px; padding: 8px 14px;
-	background: rgba(20,20,30,0.92); border-radius: 6px; color: #ccc;
+	display: flex; gap: 14px; padding: 10px 16px;
 }
-.fsm-filter label { display: flex; flex-direction: column; font-size: 11px; gap: 2px; }
-.fsm-filter select { background: rgba(40,40,55,0.95); border: 1px solid #444;
-	color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+.fsm-filter label {
+	display: flex; flex-direction: column;
+	font-size: 10px; gap: 4px;
+	color: #00E5FF; opacity: 0.85;
+	text-transform: uppercase; letter-spacing: 2px;
+	font-weight: 600;
+}
+.fsm-filter select {
+	background: rgba(0,0,0,0.4);
+	border: 1px solid rgba(0,229,255,0.25);
+	color: #D7E3F4; padding: 5px 10px; border-radius: 3px;
+	font-size: 12px; letter-spacing: 0.5px;
+	transition: border-color 120ms ease, box-shadow 120ms ease;
+	cursor: pointer;
+}
+.fsm-filter select:focus {
+	outline: none;
+	border-color: #00E5FF;
+	box-shadow: 0 0 8px rgba(0,229,255,0.45);
+}
+.fsm-filter select option {
+	background: #0A1228; color: #D7E3F4;
+}
 </style>
