@@ -327,7 +327,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 
 		selectSupplier(supplier) {
 			this.setAnalysisFocus("supplier", supplier);
-			this._drawSelectedRing(null);
+			this._drawSelectedRing(supplier);
 			const arcs = this.supplyChain.filter(
 				(f) => f.properties.supplier_id === supplier.properties.id,
 			);
@@ -369,6 +369,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 
 		selectRestaurant(restaurant) {
 			this.selectedRestaurant = restaurant;
+			this._drawSelectedRing(restaurant);
 			const mapStore = useMapStore();
 			const coord = restaurant?.geometry?.coordinates;
 			if (mapStore.map && coord) {
