@@ -28,4 +28,5 @@ export const chartTypes: chartType = {
 	RecheckPriorityRanking: "複查優先佇列引擎", // V
 	RiskMatrixChart: "風險矩陣四象限圖", // V
 	FoodSafetyControls: "食安控制面板", // V
+	FoodSafetyExternalLegend: "校外食安圖例", // V
 };
