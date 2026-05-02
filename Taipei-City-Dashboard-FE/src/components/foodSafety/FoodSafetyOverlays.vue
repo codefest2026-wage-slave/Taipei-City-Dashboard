@@ -7,7 +7,6 @@ import { onMounted, onBeforeUnmount, watch } from "vue";
 import { useFoodSafetyStore } from "../../store/foodSafetyStore";
 import { useMapStore } from "../../store/mapStore";
 
-import SchoolSearchBar          from "./SchoolSearchBar.vue";
 import SchoolAnalysisPanel      from "./SchoolAnalysisPanel.vue";
 import RestaurantFilterBar      from "./RestaurantFilterBar.vue";
 import RestaurantInspectionPanel from "./RestaurantInspectionPanel.vue";
@@ -112,7 +111,6 @@ onBeforeUnmount(() => {
   <div class="fsm-overlays fsm-cyber">
     <!-- 校內 mode panels -->
     <template v-if="fs.activeLayer === 'school'">
-      <SchoolSearchBar />
       <SchoolAnalysisPanel />
     </template>
 

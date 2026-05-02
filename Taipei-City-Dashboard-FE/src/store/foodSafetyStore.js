@@ -14,12 +14,6 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		// Mode (mutex toggle result; null = neither layer active)
 		activeLayer: null,            // 'school' | 'restaurant' | null
 
-		// Sub-toggles for school map (LayerToggle.vue)
-		layerToggles: {
-			showSchools: true,
-			showSuppliers: false,
-		},
-
 		// Single covering analysis focus (covers school | supplier | incident)
 		analysisFocus: null,          // { type, payload } | null
 
@@ -135,12 +129,6 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				this._removeLayerGroup(this.activeLayer, mapStore);
 			}
 			this.activeLayer = layer;
-			if (layer === "school") {
-				// After dashboard pipeline finishes loading fsm_* layers, ensure
-				// sub-toggle visibility matches current state (showSuppliers default
-				// is false; pipeline adds them visible by default).
-				setTimeout(() => this._reconcileSchoolSubLayers(), 700);
-			}
 			// New layer added by Mapbox via dashboard's normal toggle pipeline;
 			// nothing extra here. Panels reactively render via watch on activeLayer.
 			if (layer === "restaurant") {
@@ -217,6 +205,12 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selected_school-source")) {
 					mapStore.map.removeSource("fsm_selected_school-source");
 				}
+				["fsm_connected_suppliers-ring", "fsm_connected_suppliers-dot"].forEach((id) => {
+					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
+				});
+				if (mapStore.map.getSource("fsm_connected_suppliers-source")) {
+					mapStore.map.removeSource("fsm_connected_suppliers-source");
+				}
 			}
 			const ids =
 				layer === "school"
@@ -251,6 +245,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			const suppliers = this.suppliers.filter(
 				(s) => supplierIds.has(s.properties.id),
 			);
+			this._drawConnectedSuppliers(suppliers);
 			const focusFeatures = [school, ...suppliers];
 			this._drawSelectionLabels(focusFeatures);
 			this._drawSelectedSchoolRing(school);
@@ -268,6 +263,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			const schools = this.schools.filter(
 				(s) => schoolIds.has(s.properties.id),
 			);
+			this._drawConnectedSuppliers([supplier]);
 			const focusFeatures = [supplier, ...schools];
 			this._drawSelectionLabels(focusFeatures);
 			this._fitBoundsTo(focusFeatures);
@@ -292,6 +288,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			const supplier = this.suppliers.find(
 				(s) => s.properties.id === incident.supplier_id,
 			);
+			this._drawConnectedSuppliers(supplier ? [supplier] : []);
 			const focusFeatures = supplier ? [supplier, ...affected] : [...affected];
 			this._drawSelectionLabels(focusFeatures);
 			this._fitBoundsTo(focusFeatures);
@@ -420,6 +417,94 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			});
 		},
 
+		// Programmatic temporary layer that shows ONLY the suppliers connected
+		// to the currently-clicked school/supplier/incident, with neon-glow
+		// styling matching the school dots. Pass empty array to clear.
+		_drawConnectedSuppliers(supplierFeatures) {
+			const mapStore = useMapStore();
+			if (!mapStore.map) return;
+			const sourceId = "fsm_connected_suppliers-source";
+			const ringLayerId = "fsm_connected_suppliers-ring";
+			const dotLayerId = "fsm_connected_suppliers-dot";
+
+			// Remove existing
+			[ringLayerId, dotLayerId].forEach((id) => {
+				if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
+			});
+			if (mapStore.map.getSource(sourceId)) mapStore.map.removeSource(sourceId);
+			if (!supplierFeatures || supplierFeatures.length === 0) return;
+
+			mapStore.map.addSource(sourceId, {
+				type: "geojson",
+				data: {
+					type: "FeatureCollection",
+					features: supplierFeatures,
+				},
+			});
+
+			// Outer ring with neon glow
+			mapStore.map.addLayer({
+				id: ringLayerId,
+				type: "circle",
+				source: sourceId,
+				paint: {
+					"circle-color": "rgba(0,0,0,0)",
+					"circle-radius": 10,
+					"circle-stroke-width": 6,
+					"circle-stroke-color": [
+						"case",
+						["any",
+							["==", ["get", "hazard_level"], "Critical"],
+							["==", ["get", "hazard_level"], "High"]],
+						"#FF1744",
+						"#00E5FF",
+					],
+					"circle-stroke-opacity": 0.4,
+					"circle-blur": 0.3,
+				},
+			});
+
+			// Inner sharp center dot
+			mapStore.map.addLayer({
+				id: dotLayerId,
+				type: "circle",
+				source: sourceId,
+				paint: {
+					"circle-color": [
+						"case",
+						["any",
+							["==", ["get", "hazard_level"], "Critical"],
+							["==", ["get", "hazard_level"], "High"]],
+						"#FF1744",
+						"#00E5FF",
+					],
+					"circle-radius": 4,
+					"circle-opacity": 1,
+				},
+			});
+
+			// Click handler so user can select a supplier (only the visible/connected ones)
+			if (!this._supplierClickAttached) {
+				mapStore.map.on("click", ringLayerId, (e) => {
+					const f = e.features?.[0];
+					if (!f) return;
+					this.selectSupplier(f);
+				});
+				mapStore.map.on("click", dotLayerId, (e) => {
+					const f = e.features?.[0];
+					if (!f) return;
+					this.selectSupplier(f);
+				});
+				mapStore.map.on("mouseenter", ringLayerId, () => {
+					mapStore.map.getCanvas().style.cursor = "pointer";
+				});
+				mapStore.map.on("mouseleave", ringLayerId, () => {
+					mapStore.map.getCanvas().style.cursor = "";
+				});
+				this._supplierClickAttached = true;
+			}
+		},
+
 		_fitBoundsTo(features) {
 			const mapStore = useMapStore();
 			if (!mapStore.map || !features || features.length === 0) return;
@@ -441,57 +526,6 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			});
 		},
 
-		// ── Layer toggles within school map ─────────────────────
-		toggleSubLayer(name) {
-			this.layerToggles[name] = !this.layerToggles[name];
-			const mapStore = useMapStore();
-			if (!mapStore.map) return;
-			const prefixes = name === "showSchools"
-				? ["fsm_schools-"]
-				: ["fsm_suppliers-", "fsm_supplier_dots-"];
-			const visible = this.layerToggles[name] ? "visible" : "none";
-			prefixes.forEach((prefix) => {
-				mapStore.currentLayers
-					.filter((l) => l.startsWith(prefix))
-					.forEach((l) => {
-						if (mapStore.map.getLayer(l)) {
-							mapStore.map.setLayoutProperty(l, "visibility", visible);
-						}
-					});
-			});
-			// If suppliers just turned OFF and we have a focused school, keep its
-			// supplier connections visible (per spec: click-school always shows
-			// connected suppliers via arcs even when global toggle is off).
-			// Nothing extra needed here — arcs are drawn separately by selectSchool.
-		},
-
-		_reconcileSchoolSubLayers() {
-			const mapStore = useMapStore();
-			if (!mapStore.map) return;
-			// Schools
-			const schoolsLayer = mapStore.currentLayers.find(
-				(l) => l.startsWith("fsm_schools-"),
-			);
-			if (schoolsLayer && mapStore.map.getLayer(schoolsLayer)) {
-				mapStore.map.setLayoutProperty(
-					schoolsLayer,
-					"visibility",
-					this.layerToggles.showSchools ? "visible" : "none",
-				);
-			}
-			// Suppliers (ring + inner dot)
-			["fsm_suppliers-", "fsm_supplier_dots-"].forEach((prefix) => {
-				const layer = mapStore.currentLayers.find((l) => l.startsWith(prefix));
-				if (layer && mapStore.map.getLayer(layer)) {
-					mapStore.map.setLayoutProperty(
-						layer,
-						"visibility",
-						this.layerToggles.showSuppliers ? "visible" : "none",
-					);
-				}
-			});
-		},
-
 		// ── Reset on dashboard exit ─────────────────────────────
 		resetAll() {
 			const mapStore = useMapStore();
@@ -508,6 +542,12 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				}
 				if (mapStore.map.getSource("fsm_selected_school-source")) {
 					mapStore.map.removeSource("fsm_selected_school-source");
+				}
+				["fsm_connected_suppliers-ring", "fsm_connected_suppliers-dot"].forEach((id) => {
+					if (mapStore.map.getLayer(id)) mapStore.map.removeLayer(id);
+				});
+				if (mapStore.map.getSource("fsm_connected_suppliers-source")) {
+					mapStore.map.removeSource("fsm_connected_suppliers-source");
 				}
 			}
 			// Defensive removal of any fsm_* layers
