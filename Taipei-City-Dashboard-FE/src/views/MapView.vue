@@ -30,18 +30,19 @@ const mapStore = useMapStore();
 const foodSafetyStore = useFoodSafetyStore();
 const route = useRoute();
 
-// Re-apply city filter on the FE-only fsm_* layers when the dashboard's
-// active city changes. The dashboard pipeline tears down + re-adds the layer
-// when @change-city fires (in the city tag dropdown handler), so wait a tick
-// for the new layer to finish loading before calling setFilter.
+// City switching for dashboard 504 happens via the per-component @change-city
+// handler — that adds a new fsm_*-circle-<city> layer (and hides the old one)
+// without changing route.query.city OR currentDashboard.city. So watch the
+// authoritative source: mapStore.currentLayers itself. The applyCityFilter
+// action derives each layer's target city from its own layerId, so it
+// applies the correct filter regardless of which city tab is active.
 watch(
-	[() => contentStore.currentDashboard.city, () => route.query?.city],
-	([dashCity, queryCity]) => {
+	() => [...mapStore.currentLayers],
+	() => {
 		if (contentStore.currentDashboard.index !== "food_safety_monitor") return;
-		const city = dashCity || queryCity || "metrotaipei";
-		setTimeout(() => foodSafetyStore.applyCityFilter(city), 700);
+		setTimeout(() => foodSafetyStore.applyCityFilter(), 400);
 	},
-	{ immediate: true },
+	{ deep: false },
 );
 
 const toggleOn = ref({

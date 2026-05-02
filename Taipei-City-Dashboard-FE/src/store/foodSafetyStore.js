@@ -197,26 +197,40 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			} catch { /* layer not present yet — no-op */ }
 		},
 
-		applyCityFilter(city) {
-			// city: 'metrotaipei' | 'taipei' | 'ntpc' | '臺北市' | '新北市' | null
+		// Per-layer city filter: derive the layer's city from its own layerId
+		// (`${index}-${type}-${city}` per mapStore convention) and apply the
+		// matching Mapbox setFilter. Self-contained — no external "current
+		// city" state needed. Run this whenever currentLayers changes; it's
+		// safe to call multiple times.
+		applyCityFilter() {
 			const mapStore = useMapStore();
-			const cityName =
-				city === "taipei" || city === "臺北市" ? "臺北市" :
-					city === "ntpc" || city === "新北市" ? "新北市" : null;
-			// city-keyed layers (schools, restaurants, suppliers, supplier_dots)
-			const cityFilter = cityName ? ["==", ["get", "city"], cityName] : null;
-			["fsm_schools", "fsm_restaurants", "fsm_suppliers", "fsm_supplier_dots"]
-				.forEach((idx) => {
-					const layer = mapStore.currentLayers.find((l) => l.startsWith(`${idx}-`));
-					if (!layer || !mapStore.map?.getLayer(layer)) return;
-					mapStore.map.setFilter(layer, cityFilter);
-				});
-			// district heatmap features use PNAME field instead of city
-			const heatFilter = cityName ? ["==", ["get", "PNAME"], cityName] : null;
-			const heatLayer = mapStore.currentLayers.find((l) => l.startsWith("fsm_district_heat-"));
-			if (heatLayer && mapStore.map?.getLayer(heatLayer)) {
-				mapStore.map.setFilter(heatLayer, heatFilter);
-			}
+			if (!mapStore.map) return;
+			const cityToName = (c) =>
+				c === "taipei" ? "臺北市" :
+					c === "ntpc" ? "新北市" : null;
+			const cityFromLayerId = (l) => {
+				const parts = l.split("-");
+				return parts[parts.length - 1];
+			};
+			const FSM_FIELDS = {
+				fsm_schools: "city",
+				fsm_restaurants: "city",
+				fsm_suppliers: "city",
+				fsm_supplier_dots: "city",
+				fsm_district_heat: "PNAME",
+			};
+			Object.entries(FSM_FIELDS).forEach(([idx, field]) => {
+				mapStore.currentLayers
+					.filter((l) => l.startsWith(`${idx}-`))
+					.forEach((l) => {
+						if (!mapStore.map.getLayer(l)) return;
+						const cityName = cityToName(cityFromLayerId(l));
+						mapStore.map.setFilter(
+							l,
+							cityName ? ["==", ["get", field], cityName] : null,
+						);
+					});
+			});
 		},
 
 		applyRestaurantFilters() {
