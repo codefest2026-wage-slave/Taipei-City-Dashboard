@@ -1,3 +1,21 @@
+TASK: Render a HIGH-FIDELITY 16:9 screenshot of the "校內食安地圖" (Map 1 / 校園供應鏈) view from the food safety monitoring system described below. This is THE MAIN VIEW — primary scene. Layout: top search bar + middle map area + bottom event list + right sidebar AI analysis panel.
+
+VIEW SPECIFICS:
+- Mapbox-style dark vector map of Greater Taipei (Taipei + New Taipei) showing all elementary/junior-high schools as bright cyan node dots; schools that have had food-safety incidents shown as red glowing dots
+- The user has clicked one school — that school is highlighted with a thick cyan ring, and supplier-chain LINES (network graph edges) radiate out from it to several supplier nodes (餐盒供應商) in surrounding districts; ONE supplier in the network is colored RED indicating it has caused incidents
+- From that red supplier, additional thin lines fan out to OTHER schools it also serves (the "this supplier serves which other schools" concept)
+- Top search bar with placeholder "搜尋學校 (例：板橋國小)"
+- Bottom event list panel: 5-8 recent incident cards with dates, school names, supplier names, severity badges (Critical/High/Medium/Low colored)
+- Right sidebar: "AI 分析" panel showing school panel info (歷史食安事件 + AI 摘要 + 原始新聞連結) with a Critical/High danger badge
+- Map controls top-left: toggle switches for "顯示供應鏈連線" + "顯示曾發生事件高亮"
+- Title bar: "食安監控系統 — 校內食安地圖 (校園供應鏈)"
+
+STYLE: Sleek modern smart-city dashboard mockup in the visual language of ApexCharts (web charts) and Mapbox GL JS (vector maps). Dark navy backgrounds (#0d1117 / #161b22), electric cyan (#58a6ff) + amber (#f0883e) accents with optional teal/coral semantic colors. Glassmorphic semi-transparent panels with hairline cyan borders and soft drop shadows. Inter / Noto Sans TC typography, readable Traditional Chinese labels (small but clean, NEVER gibberish). Subtle radial bloom in lower-right. Faint film grain. 2K quality. Render as a real production dashboard screenshot (Vue 3 + ApexCharts + Mapbox GL JS), NOT abstract illustration, NOT sci-fi.
+
+NEGATIVE: photographic real world, sci-fi hologram, 3D rendered, abstract art, retro/skeuomorphic UI, off-palette colors (no purple no pink no green except teal), human figures, hands, faces, watermark, garbled gibberish text. All Chinese text must be meaningful — never random characters.
+
+FULL FEATURE PLAN CONTEXT (for reference only — render the school map view above):
+---
 # 食安監控系統 — 題目功能規劃（會議整理）
 
 > 來源：團隊語音會議逐字稿整理
@@ -23,8 +41,6 @@
 
 ### 地圖 1：校內食安地圖（校園供應鏈）
 
-![校內食安地圖 — 板橋國小 + 供應鏈 network + AI 分析面板](public/images/food-safety-1-map-school.png)
-
 這是整場討論最核心的組件，被定義為「主場景」。
 
 **畫面架構**：上方查詢欄 + 中間地圖區 + 下方事件列表 + 側邊 AI 分析面板。
@@ -47,8 +63,6 @@
 
 ### 地圖 2：校外食安地圖（餐廳 / 外食）
 
-![校外食安地圖 — 41 區違規熱點 + 餐廳稽查歷史 popup](public/images/food-safety-2-map-restaurant.png)
-
 故事線銜接：「我們不只在乎校內，你帶小孩外食時也要注意」。
 
 **內容**：全台食品抽驗結果（MVP 範圍鎖定雙北）、發生過食安問題的地點、餐廳的稽查狀態。
@@ -60,8 +74,6 @@
 ---
 
 ## 輔助組件
-
-![輔助組件總覽 — 違規 Rank + 稽查效度 + 風險矩陣 4 象限](public/images/food-safety-3-dashboard.png)
 
 ### 組件 3：違規食品類別排行（Rank）
 
@@ -165,3 +177,4 @@
 | 組件 5 風險矩陣 | — | 全新；可從 `food_restaurant_tpe` + 違規記錄推導 |
 
 詳細欄位字典見 sidebar「資料表 (可用資源)」→「食安 7 張表」。
+---
