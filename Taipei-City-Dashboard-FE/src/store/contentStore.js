@@ -686,6 +686,39 @@ export const useContentStore = defineStore("content", {
 				this.loading = false;
 			}
 		},
+		// 6-1. Refetch a single component's chart data with custom time range
+		async refetchComponentChartData(componentId, timefrom, timeto) {
+			const allComponents = this.currentDashboard.components;
+			const idx = allComponents?.findIndex((c) => c.id === componentId);
+			if (idx === undefined || idx === -1) return;
+
+			const component = allComponents[idx];
+			try {
+				const response = await http.get(
+					`/component/${component.id}/chart`,
+					{
+						params: {
+							city: component.city,
+							timefrom,
+							timeto,
+						},
+					},
+				);
+				this.currentDashboard.components[idx].chart_data =
+					response.data.data;
+				if (response.data.categories) {
+					this.currentDashboard.components[
+						idx
+					].chart_config.categories = response.data.categories;
+				}
+			} catch (error) {
+				console.error(
+					`Failed to refetch chart data for component ${component.id}:`,
+					error,
+				);
+			}
+		},
+
 		// 6. Call an API to get contributor data (result consists of id, name, link)
 		setContributors() {
 			http.get(`/contributor/`)

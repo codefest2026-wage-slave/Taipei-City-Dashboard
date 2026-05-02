@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 // import "./styles/chartStyles.css";
 // import "./styles/toggleswitch.css";
 import "material-icons/iconfont/material-icons.css";
@@ -77,6 +77,7 @@ const props = defineProps({
 	footer: { type: Boolean, default: true },
 	activeCity: { type: String, default: '' },
 	toggleOn: { type: Boolean, default: false },
+	enableTimeFilter: { type: Boolean, default: false },
 });
 
 const emits = defineEmits([
@@ -90,7 +91,8 @@ const emits = defineEmits([
 	"clearByParamFilter",
 	"clearByLayerFilter",
 	"fly",
-	"changeCity"
+	"changeCity",
+	"refetchWithTime"
 ]);
 
 const activeChart = ref(props.config.chart_config.types[0]);
@@ -110,6 +112,25 @@ const toggleOn = computed({
 		emits("toggle", value, props.config.map_config);
 	},
 });
+
+// Time filter state
+const showTimeFilter = ref(false);
+const today = new Date().toISOString().slice(0, 10);
+const fiveYearsAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 5)).toISOString().slice(0, 10);
+const customTimefrom = ref(fiveYearsAgo);
+const customTimeto = ref(today);
+
+// Reset to default when config changes
+watch(() => props.config.index, () => {
+	customTimefrom.value = fiveYearsAgo;
+	customTimeto.value = today;
+	showTimeFilter.value = false;
+});
+
+function applyTimeFilter() {
+	if (!customTimefrom.value || !customTimeto.value) return;
+	emits("refetchWithTime", props.config.id, customTimefrom.value + "T00:00:00+08:00", customTimeto.value + "T23:59:59+08:00");
+}
 
 const mousePosition = ref({ x: null, y: null });
 const showTagTooltip = ref(false);
@@ -381,6 +402,42 @@ function returnChartComponent(name, svg) {
           {{ chartTypes[item] }}
         </button>
       </div>
+      <button
+        v-if="enableTimeFilter"
+        class="time-filter-toggle"
+        :class="{ 'time-filter-toggle-active': showTimeFilter }"
+        :title="showTimeFilter ? '關閉時間篩選' : '自訂時間區間'"
+        @click="showTimeFilter = !showTimeFilter"
+      >
+        <span class="material-icons-round">date_range</span>
+      </button>
+    </div>
+    <!-- Time Filter Row -->
+    <div
+      v-if="enableTimeFilter && showTimeFilter && (!mode.includes('map') || toggleOn) && mode !== 'preview'"
+      class="dashboardcomponent-timefilter"
+    >
+      <input
+        v-model="customTimefrom"
+        type="date"
+        class="time-filter-input"
+        :max="customTimeto"
+      >
+      <span class="time-filter-sep">～</span>
+      <input
+        v-model="customTimeto"
+        type="date"
+        class="time-filter-input"
+        :min="customTimefrom"
+        :max="today"
+      >
+      <button
+        class="time-filter-apply"
+        :disabled="!customTimefrom || !customTimeto"
+        @click="applyTimeFilter"
+      >
+        查詢
+      </button>
     </div>
     <!-- Main Content -->
     <div
@@ -741,6 +798,81 @@ button:hover {
 			padding: 3px;
 
 			&-disabled {
+				cursor: not-allowed;
+			}
+		}
+
+		.time-filter-toggle {
+			margin-left: auto;
+			padding: 2px 4px;
+			border-radius: 4px;
+			background-color: transparent;
+			color: var(--color-complement-text);
+			transition: color 0.2s, background-color 0.2s;
+			opacity: 0.6;
+
+			span {
+				font-family: var(--font-icon);
+				font-size: calc(var(--font-m) * var(--font-to-icon));
+				vertical-align: middle;
+			}
+
+			&:hover {
+				opacity: 1;
+				color: white;
+			}
+
+			&-active {
+				opacity: 1;
+				color: var(--color-highlight);
+			}
+		}
+	}
+
+	&-timefilter {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 4px 0 2px;
+		overflow: visible;
+
+		.time-filter-input {
+			background-color: rgb(60, 60, 60);
+			color: var(--color-normal-text);
+			border: 1px solid var(--color-border);
+			border-radius: 4px;
+			padding: 2px 6px;
+			font-size: var(--font-s);
+			flex: 1;
+			min-width: 0;
+
+			&::-webkit-calendar-picker-indicator {
+				filter: invert(0.7);
+				cursor: pointer;
+			}
+		}
+
+		.time-filter-sep {
+			color: var(--color-complement-text);
+			font-size: var(--font-s);
+			flex-shrink: 0;
+		}
+
+		.time-filter-apply {
+			padding: 2px 10px;
+			border-radius: 4px;
+			background-color: var(--color-highlight);
+			color: white;
+			font-size: var(--font-s);
+			flex-shrink: 0;
+			transition: opacity 0.2s;
+
+			&:hover:not(:disabled) {
+				opacity: 0.8;
+			}
+
+			&:disabled {
+				opacity: 0.4;
 				cursor: not-allowed;
 			}
 		}
