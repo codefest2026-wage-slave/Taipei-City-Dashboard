@@ -66,20 +66,24 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				(a, b) => b.occurred_at.localeCompare(a.occurred_at),
 			);
 		},
-		// Stats for ExternalStatsStrip (校外底部 4 張卡)
+		// Stats for ExternalStatsStrip (校外底部 4 張卡).
+		// Real-data shape: every business in restaurants.geojson already has
+		// at least one FAIL inspection; hazard_level = max severity recorded.
 		externalStats(state) {
 			const total = state.restaurants.length;
-			const fail = state.restaurants.filter(
-				(f) => f.properties.risk_quadrant === "high_risk"
-				    || f.properties.risk_quadrant === "emerging",
+			const totalFails = state.restaurants.reduce(
+				(s, f) => s + (f.properties.fail_count || 0), 0,
+			);
+			const critical = state.restaurants.filter(
+				(f) => f.properties.hazard_level === "critical",
 			).length;
-			const failRate = total > 0 ? (fail / total * 100).toFixed(2) : "0.00";
 			const highRiskDistricts = new Set(
 				state.restaurants
-					.filter((f) => f.properties.risk_quadrant === "high_risk")
+					.filter((f) => f.properties.hazard_level === "critical"
+						|| f.properties.hazard_level === "high")
 					.map((f) => f.properties.district),
 			).size;
-			return { total, fail, failRate, highRiskDistricts };
+			return { total, fail: totalFails, critical, highRiskDistricts };
 		},
 	},
 
@@ -210,14 +214,17 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			} else if (f.district !== "all") {
 				conditions.push(["==", ["get", "district"], f.district]);
 			}
-			// Severity: 'all' | 'high' | 'medium' | 'low'
-			if (f.severity !== "all") {
-				conditions.push(["==", ["get", "severity"], f.severity]);
+			// Severity: 'all' | 'high' (critical+high) | 'medium' | 'low' (low+info)
+			if (f.severity === "high") {
+				conditions.push(["match", ["get", "hazard_level"], ["critical", "high"], true, false]);
+			} else if (f.severity === "medium") {
+				conditions.push(["==", ["get", "hazard_level"], "medium"]);
+			} else if (f.severity === "low") {
+				conditions.push(["match", ["get", "hazard_level"], ["low", "info"], true, false]);
 			}
-			// timeRange currently has no per-feature property to filter on — mock data
-			// has no inspection_date per feature; the filter is captured in state for
-			// future use but does not currently constrain the layer. Spec §4.2 has no
-			// such field on restaurants.geojson; would require joining to inspections.
+			// timeRange currently has no per-feature aggregate (we'd have to join
+			// to inspection history), so the filter is captured in state but does
+			// not constrain the Mapbox layer.
 			const expr =
 				conditions.length === 0 ? null :
 					conditions.length === 1 ? conditions[0] :

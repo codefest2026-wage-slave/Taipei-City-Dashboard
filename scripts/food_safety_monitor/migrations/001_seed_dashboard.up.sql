@@ -37,8 +37,8 @@ INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
     '{"circle-color":"rgba(0,0,0,0)","circle-radius":10,"circle-opacity":1,"circle-stroke-width":3,"circle-stroke-color":["case",["any",["==",["get","hazard_level"],"Critical"],["==",["get","hazard_level"],"High"]],"#FF1744","#00E5FF"],"circle-stroke-opacity":0.95}'::json),
   ('fsm_supplier_dots',  '供應商中心點',   'circle', 'geojson', 'big',
     '{"circle-color":["case",["any",["==",["get","hazard_level"],"Critical"],["==",["get","hazard_level"],"High"]],"#FF1744","#00E5FF"],"circle-radius":3.5,"circle-opacity":1,"circle-stroke-width":1,"circle-stroke-color":"#0A1228","circle-stroke-opacity":0.6}'::json),
-  ('fsm_restaurants',   '餐廳稽查點',     'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","grade"],"優","#00E676","良","#FFC107","#FF1744"],"circle-radius":4,"circle-opacity":0.85,"circle-stroke-width":1,"circle-stroke-color":"#00E5FF","circle-stroke-opacity":0.4}'::json),
+  ('fsm_restaurants',   '校外稽查業者',   'circle', 'geojson', 'big',
+    '{"circle-color":["match",["get","hazard_level"],["critical","high"],"#FF1744","medium","#FFC107","#00E5FF"],"circle-radius":["match",["get","hazard_level"],"critical",7,["high","medium"],6,5],"circle-opacity":1,"circle-stroke-width":["match",["get","hazard_level"],["critical","high"],8,"medium",6,4],"circle-stroke-color":["match",["get","hazard_level"],["critical","high"],"#FF1744","medium","#FFC107","#00E5FF"],"circle-stroke-opacity":0.35,"circle-blur":0.3}'::json),
   ('fsm_district_heat', '行政區違規密度', 'fill',   'geojson', 'big',
     '{"fill-color":["interpolate",["linear"],["get","density"],0,"#003344",50,"#0088AA",100,"#00E5FF"],"fill-opacity":0.35,"fill-outline-color":"#00E5FF"}'::json);
 
@@ -88,7 +88,7 @@ VALUES (
   $$SELECT unnest(array['行政區違規密度','優等餐廳','良好餐廳','需改善餐廳']) as name, unnest(array['fill','circle','circle','circle']) as type$$,
   'taipei', '臺北市衛生局（mock）',
   '臺北市校外食安地圖 — 區域熱點與餐廳稽查狀態。',
-  '臺北市 12 區違規密度 choropleth + 餐廳節點（grade 三色），點擊餐廳展開稽查歷史。',
+  '臺北市 12 區違規密度 choropleth + 校外業者節點（hazard_level 三色），點擊業者展開稽查歷史。',
   '家長外食前查詢；衛生局調配稽查資源；店家了解所在區域風險評級。',
   'static', '', 1, 'year',
   ARRAY(SELECT id FROM component_maps WHERE index IN ('fsm_district_heat','fsm_restaurants') ORDER BY id),

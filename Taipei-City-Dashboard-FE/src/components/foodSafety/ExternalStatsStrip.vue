@@ -55,7 +55,7 @@ const top5Options = computed(() => ({
           {{ stats.total.toLocaleString() }}
         </div>
         <div class="label">
-          已抽驗餐廳
+          違規業者
         </div>
       </div>
       <div class="card">
@@ -63,15 +63,15 @@ const top5Options = computed(() => ({
           {{ stats.fail.toLocaleString() }}
         </div>
         <div class="label">
-          違規件數
+          累計違規次數
         </div>
       </div>
       <div class="card">
         <div class="value">
-          {{ stats.failRate }}%
+          {{ stats.critical }}
         </div>
         <div class="label">
-          違規率
+          重大危害業者
         </div>
       </div>
       <div class="card">
