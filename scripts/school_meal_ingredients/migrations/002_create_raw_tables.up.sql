@@ -65,10 +65,12 @@ CREATE TABLE IF NOT EXISTS school_meal_ingredient_records (
     seasoning_supplier_tax_id   VARCHAR(20),
     seasoning_name              VARCHAR(200),
     certification_label         VARCHAR(100),
-    certification_no            VARCHAR(100)
+    certification_no            VARCHAR(100),
+    CHECK (month_queried BETWEEN 1 AND 12),
+    CHECK (county_queried IN ('臺北市','新北市','全國'))
 );
 CREATE INDEX IF NOT EXISTS idx_smir_provenance
-    ON school_meal_ingredient_records (year_queried, month_queried, county_queried);
+    ON school_meal_ingredient_records (county_queried, year_queried, month_queried);
 CREATE INDEX IF NOT EXISTS idx_smir_ingredient_name
     ON school_meal_ingredient_records (ingredient_name);
 
@@ -83,10 +85,12 @@ CREATE TABLE IF NOT EXISTS school_meal_dish_records (
     district            VARCHAR(50),
     school_name         VARCHAR(300),
     meal_date           DATE,
-    dish_name           VARCHAR(200)
+    dish_name           VARCHAR(200),
+    CHECK (month_queried BETWEEN 1 AND 12),
+    CHECK (county_queried IN ('臺北市','新北市','全國'))
 );
 CREATE INDEX IF NOT EXISTS idx_smdr_provenance
-    ON school_meal_dish_records (year_queried, month_queried, county_queried);
+    ON school_meal_dish_records (county_queried, year_queried, month_queried);
 CREATE INDEX IF NOT EXISTS idx_smdr_dish_name
     ON school_meal_dish_records (dish_name);
 
@@ -112,10 +116,12 @@ CREATE TABLE IF NOT EXISTS school_meal_dish_ingredient_records (
     seasoning_supplier_tax_id   VARCHAR(20),
     seasoning_name              VARCHAR(200),
     certification_label         VARCHAR(100),
-    certification_no            VARCHAR(100)
+    certification_no            VARCHAR(100),
+    CHECK (month_queried BETWEEN 1 AND 12),
+    CHECK (county_queried IN ('臺北市','新北市','全國'))
 );
 CREATE INDEX IF NOT EXISTS idx_smdir_provenance
-    ON school_meal_dish_ingredient_records (year_queried, month_queried, county_queried);
+    ON school_meal_dish_ingredient_records (county_queried, year_queried, month_queried);
 CREATE INDEX IF NOT EXISTS idx_smdir_ingredient_name
     ON school_meal_dish_ingredient_records (ingredient_name);
 CREATE INDEX IF NOT EXISTS idx_smdir_dish_name
