@@ -55,6 +55,11 @@ ONE_SHOT_FILENAME = "food_chinese_names.csv"
 
 # ── manifest IO ─────────────────────────────────────────────────────
 
+def _now_iso_z():
+    """UTC timestamp in 'YYYY-MM-DDTHH:MM:SS.uuuuuuZ' (matches prior utcnow().isoformat()+'Z')."""
+    return datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00", "Z")
+
+
 def load_manifest():
     if not MANIFEST_PATH.exists():
         return {"completed": [], "empty_months": [], "last_run_at": None}
@@ -63,11 +68,13 @@ def load_manifest():
 
 def save_manifest(m):
     SNAPSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-    m["last_run_at"] = datetime.datetime.utcnow().isoformat() + "Z"
-    MANIFEST_PATH.write_text(
+    m["last_run_at"] = _now_iso_z()
+    tmp = MANIFEST_PATH.with_suffix(MANIFEST_PATH.suffix + ".tmp")
+    tmp.write_text(
         json.dumps(m, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+    tmp.replace(MANIFEST_PATH)  # atomic on POSIX
 
 
 def completed_keys(m):
@@ -307,7 +314,7 @@ def main():
                     "grade":         entry.get("grade", ""),
                     "datasetname":   entry.get("datasetname", ""),
                     "filename":      fn,
-                    "downloaded_at": datetime.datetime.utcnow().isoformat() + "Z",
+                    "downloaded_at": _now_iso_z(),
                     "rows":          rows,
                 })
                 completed.add(key)
