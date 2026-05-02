@@ -14,7 +14,4 @@ CREATE TABLE IF NOT EXISTS school_meal_ingredient_names (
     source_counties TEXT[]                            -- e.g. {'臺北市','新北市'}
 );
 
-CREATE INDEX IF NOT EXISTS idx_school_meal_ingredient_names_name
-    ON school_meal_ingredient_names (name);
-
 COMMIT;
