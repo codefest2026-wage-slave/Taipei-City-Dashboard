@@ -124,11 +124,12 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
         <div class="nutrition-menu">
           {{ latestNutrition.menu }}
         </div>
-        <div class="nutrition-stats">
-          <span><label>熱量</label>{{ latestNutrition.calories }} kcal</span>
-          <span><label>蛋白質</label>{{ latestNutrition.protein }} g</span>
-          <span><label>醣類</label>{{ latestNutrition.carbs }} g</span>
-          <span><label>脂肪</label>{{ latestNutrition.fat }} g</span>
+        <div
+          v-if="latestNutrition.ai_review"
+          class="ai-review"
+        >
+          <span class="ai-tag">AI 評語</span>
+          <p>{{ latestNutrition.ai_review }}</p>
         </div>
       </div>
       <p
@@ -366,18 +367,33 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	color: var(--fsm-text);
 	margin: 4px 0 8px;
 }
-.nutrition-stats {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 4px 12px;
-	font-size: 11px;
-	color: #8fa3c6;
-	font-family: var(--fsm-mono, monospace);
+.ai-review {
+	margin-top: 8px;
+	padding: 8px 10px;
+	background: rgba(0, 229, 255, 0.04);
+	border-left: 2px solid #00E5FF;
+	border-radius: 0 4px 4px 0;
+	position: relative;
 }
-.nutrition-stats label {
+.ai-review .ai-tag {
 	display: inline-block;
-	width: 36px;
+	font-size: 10px;
+	font-weight: 600;
 	color: #00E5FF;
+	letter-spacing: 1px;
+	padding: 1px 6px;
+	margin-bottom: 4px;
+	border: 1px solid rgba(0, 229, 255, 0.5);
+	border-radius: 3px;
+	background: rgba(0, 229, 255, 0.1);
+	box-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
+}
+.ai-review p {
+	margin: 4px 0 0;
+	font-size: 12px;
+	line-height: 1.6;
+	color: #b9c9e0;
+	font-style: italic;
 }
 
 .casualties {
