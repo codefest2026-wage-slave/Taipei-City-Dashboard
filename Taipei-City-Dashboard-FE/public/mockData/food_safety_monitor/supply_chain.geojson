@@ -1,0 +1,1727 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.526193,
+            25.16073
+          ],
+          [
+            121.529095,
+            24.936217
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-009",
+        "supplier_id": "SUP-001",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.526193,
+            25.16073
+          ],
+          [
+            121.576444,
+            25.02474
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-001",
+        "supplier_id": "SUP-001",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.526193,
+            25.16073
+          ],
+          [
+            121.495172,
+            25.025405
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-014",
+        "supplier_id": "SUP-001",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.526193,
+            25.16073
+          ],
+          [
+            121.51265,
+            25.065091
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-015",
+        "supplier_id": "SUP-001",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.607095,
+            25.078552
+          ],
+          [
+            121.473337,
+            25.08974
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-013",
+        "supplier_id": "SUP-002",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.607095,
+            25.078552
+          ],
+          [
+            121.489964,
+            25.061517
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-003",
+        "supplier_id": "SUP-002",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.607095,
+            25.078552
+          ],
+          [
+            121.5728,
+            25.026722
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-002",
+        "supplier_id": "SUP-002",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.607095,
+            25.078552
+          ],
+          [
+            121.49414,
+            25.032677
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-013",
+        "supplier_id": "SUP-002",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.548604,
+            25.131578
+          ],
+          [
+            121.450951,
+            24.964702
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-010",
+        "supplier_id": "SUP-003",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.548604,
+            25.131578
+          ],
+          [
+            121.469188,
+            25.09078
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-010",
+        "supplier_id": "SUP-003",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.548604,
+            25.131578
+          ],
+          [
+            121.51265,
+            25.065091
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-015",
+        "supplier_id": "SUP-003",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.548604,
+            25.131578
+          ],
+          [
+            121.577415,
+            25.031257
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-001",
+        "supplier_id": "SUP-003",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.655494,
+            25.068667
+          ],
+          [
+            121.538941,
+            24.934301
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-011",
+        "supplier_id": "SUP-004",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.655494,
+            25.068667
+          ],
+          [
+            121.399086,
+            24.983968
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-014",
+        "supplier_id": "SUP-004",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.655494,
+            25.068667
+          ],
+          [
+            121.578972,
+            25.025359
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-002",
+        "supplier_id": "SUP-004",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.655494,
+            25.068667
+          ],
+          [
+            121.507881,
+            25.066291
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-014",
+        "supplier_id": "SUP-004",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.457508,
+            25.001522
+          ],
+          [
+            121.402507,
+            24.989158
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-011",
+        "supplier_id": "SUP-005",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.457508,
+            25.001522
+          ],
+          [
+            121.547079,
+            25.017928
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-003",
+        "supplier_id": "SUP-005",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.457508,
+            25.001522
+          ],
+          [
+            121.571684,
+            25.028285
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-016",
+        "supplier_id": "SUP-005",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.451132,
+            24.997939
+          ],
+          [
+            121.458795,
+            25.00437
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-001",
+        "supplier_id": "SUP-006",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.451132,
+            24.997939
+          ],
+          [
+            121.657829,
+            25.072544
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-015",
+        "supplier_id": "SUP-006",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.451132,
+            24.997939
+          ],
+          [
+            121.545046,
+            25.022684
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-004",
+        "supplier_id": "SUP-006",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.451132,
+            24.997939
+          ],
+          [
+            121.557257,
+            25.056057
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-007",
+        "supplier_id": "SUP-006",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.433029,
+            25.028129
+          ],
+          [
+            121.454469,
+            25.004816
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-002",
+        "supplier_id": "SUP-007",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.433029,
+            25.028129
+          ],
+          [
+            121.654076,
+            25.071697
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-016",
+        "supplier_id": "SUP-007",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.433029,
+            25.028129
+          ],
+          [
+            121.543125,
+            25.019618
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-003",
+        "supplier_id": "SUP-007",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.433029,
+            25.028129
+          ],
+          [
+            121.539883,
+            25.071295
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-006",
+        "supplier_id": "SUP-007",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.552933,
+            25.1232
+          ],
+          [
+            121.457329,
+            25.00573
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-001",
+        "supplier_id": "SUP-008",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.552933,
+            25.1232
+          ],
+          [
+            121.658196,
+            25.078615
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-012",
+        "supplier_id": "SUP-008",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.552933,
+            25.1232
+          ],
+          [
+            121.601045,
+            25.088657
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-008",
+        "supplier_id": "SUP-008",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.552933,
+            25.1232
+          ],
+          [
+            121.549359,
+            25.023079
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-004",
+        "supplier_id": "SUP-008",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.366462,
+            25.088952
+          ],
+          [
+            121.477564,
+            25.188709
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-017",
+        "supplier_id": "SUP-009",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.366462,
+            25.088952
+          ],
+          [
+            121.45119,
+            24.998291
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-002",
+        "supplier_id": "SUP-009",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.366462,
+            25.088952
+          ],
+          [
+            121.518524,
+            25.025793
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-005",
+        "supplier_id": "SUP-009",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.455498,
+            25.002094
+          ],
+          [
+            121.484355,
+            25.061047
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-003",
+        "supplier_id": "SUP-010",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.455498,
+            25.002094
+          ],
+          [
+            121.48331,
+            25.067799
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-004",
+        "supplier_id": "SUP-010",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.455498,
+            25.002094
+          ],
+          [
+            121.48067,
+            25.183848
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-013",
+        "supplier_id": "SUP-010",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.455498,
+            25.002094
+          ],
+          [
+            121.524414,
+            25.019965
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-005",
+        "supplier_id": "SUP-010",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.406253,
+            24.975833
+          ],
+          [
+            121.48331,
+            25.067799
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-004",
+        "supplier_id": "SUP-011",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.406253,
+            24.975833
+          ],
+          [
+            121.377535,
+            25.088184
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-018",
+        "supplier_id": "SUP-011",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.406253,
+            24.975833
+          ],
+          [
+            121.544538,
+            25.076721
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-006",
+        "supplier_id": "SUP-011",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.449592,
+            25.000686
+          ],
+          [
+            121.489964,
+            25.061517
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-003",
+        "supplier_id": "SUP-012",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.449592,
+            25.000686
+          ],
+          [
+            121.377696,
+            25.088094
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-014",
+        "supplier_id": "SUP-012",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.449592,
+            25.000686
+          ],
+          [
+            121.539883,
+            25.071295
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-006",
+        "supplier_id": "SUP-012",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.550008,
+            25.130034
+          ],
+          [
+            121.487754,
+            25.062326
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-004",
+        "supplier_id": "SUP-013",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.550008,
+            25.130034
+          ],
+          [
+            121.518524,
+            25.025793
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-005",
+        "supplier_id": "SUP-013",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.550008,
+            25.130034
+          ],
+          [
+            121.565902,
+            25.058456
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-007",
+        "supplier_id": "SUP-013",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.552557,
+            25.128118
+          ],
+          [
+            121.432585,
+            25.031959
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-005",
+        "supplier_id": "SUP-014",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.552557,
+            25.128118
+          ],
+          [
+            121.578972,
+            25.025359
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-002",
+        "supplier_id": "SUP-014",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.552557,
+            25.128118
+          ],
+          [
+            121.557257,
+            25.056057
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-007",
+        "supplier_id": "SUP-014",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.487189,
+            25.071038
+          ],
+          [
+            121.426089,
+            25.029836
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-006",
+        "supplier_id": "SUP-015",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.487189,
+            25.071038
+          ],
+          [
+            121.565902,
+            25.058456
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-007",
+        "supplier_id": "SUP-015",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.487189,
+            25.071038
+          ],
+          [
+            121.601045,
+            25.088657
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-008",
+        "supplier_id": "SUP-015",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.487189,
+            25.071038
+          ],
+          [
+            121.571684,
+            25.028285
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-016",
+        "supplier_id": "SUP-015",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.401276,
+            24.981795
+          ],
+          [
+            121.429054,
+            25.029997
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-005",
+        "supplier_id": "SUP-016",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.401276,
+            24.981795
+          ],
+          [
+            121.600641,
+            25.089917
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-009",
+        "supplier_id": "SUP-016",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.401276,
+            24.981795
+          ],
+          [
+            121.56877,
+            24.98455
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-013",
+        "supplier_id": "SUP-016",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.53945,
+            25.123186
+          ],
+          [
+            121.500336,
+            24.994268
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-007",
+        "supplier_id": "SUP-017",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.53945,
+            25.123186
+          ],
+          [
+            121.513149,
+            25.000081
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-009",
+        "supplier_id": "SUP-017",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.53945,
+            25.123186
+          ],
+          [
+            121.597932,
+            25.092351
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-008",
+        "supplier_id": "SUP-017",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.543045,
+            25.120242
+          ],
+          [
+            121.498484,
+            24.987483
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-006",
+        "supplier_id": "SUP-018",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.543045,
+            25.120242
+          ],
+          [
+            121.546575,
+            25.13068
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-010",
+        "supplier_id": "SUP-018",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.543045,
+            25.120242
+          ],
+          [
+            121.597932,
+            25.092351
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-008",
+        "supplier_id": "SUP-018",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.650442,
+            25.06742
+          ],
+          [
+            121.522215,
+            25.004705
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-008",
+        "supplier_id": "SUP-019",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.650442,
+            25.06742
+          ],
+          [
+            121.429054,
+            25.029997
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-005",
+        "supplier_id": "SUP-019",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.650442,
+            25.06742
+          ],
+          [
+            121.551084,
+            25.131345
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-009",
+        "supplier_id": "SUP-019",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.379706,
+            25.086923
+          ],
+          [
+            121.513149,
+            25.000081
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-009",
+        "supplier_id": "SUP-020",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.379706,
+            25.086923
+          ],
+          [
+            121.527197,
+            25.159844
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-011",
+        "supplier_id": "SUP-020",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.478271,
+            25.066056
+          ],
+          [
+            121.513336,
+            25.005884
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-007",
+        "supplier_id": "SUP-021",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.478271,
+            25.066056
+          ],
+          [
+            121.546575,
+            25.13068
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-010",
+        "supplier_id": "SUP-021",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.478271,
+            25.066056
+          ],
+          [
+            121.525626,
+            25.154528
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-010",
+        "supplier_id": "SUP-021",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.447146,
+            24.999771
+          ],
+          [
+            121.450951,
+            24.964702
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-010",
+        "supplier_id": "SUP-022",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.447146,
+            24.999771
+          ],
+          [
+            121.48067,
+            25.183848
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-013",
+        "supplier_id": "SUP-022",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.447146,
+            24.999771
+          ],
+          [
+            121.618499,
+            25.030214
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-012",
+        "supplier_id": "SUP-022",
+        "risk": "low"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.647095,
+            25.066939
+          ],
+          [
+            121.458795,
+            25.00437
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-001",
+        "supplier_id": "SUP-023",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.647095,
+            25.066939
+          ],
+          [
+            121.443665,
+            24.964296
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-008",
+        "supplier_id": "SUP-023",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.647095,
+            25.066939
+          ],
+          [
+            121.658196,
+            25.078615
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-JH-012",
+        "supplier_id": "SUP-023",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.647095,
+            25.066939
+          ],
+          [
+            121.617018,
+            25.029648
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-011",
+        "supplier_id": "SUP-023",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.525861,
+            25.152041
+          ],
+          [
+            121.538941,
+            24.934301
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-011",
+        "supplier_id": "SUP-024",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.525861,
+            25.152041
+          ],
+          [
+            121.56877,
+            24.98455
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-EL-013",
+        "supplier_id": "SUP-024",
+        "risk": "high"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.427923,
+            25.024677
+          ],
+          [
+            121.538691,
+            24.937618
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "NTPC-EL-012",
+        "supplier_id": "SUP-025",
+        "risk": "medium"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.427923,
+            25.024677
+          ],
+          [
+            121.574117,
+            24.985418
+          ]
+        ]
+      },
+      "properties": {
+        "school_id": "TPE-JH-012",
+        "supplier_id": "SUP-025",
+        "risk": "medium"
+      }
+    }
+  ]
+}
