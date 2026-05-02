@@ -389,4 +389,20 @@ CREATE TABLE IF NOT EXISTS food_poisoning_cause (
 | ArcGIS Geocoder 改格式 / 限速 | `.geocode_cache.json` 已 commit；apply 階段純讀 cache，cache miss 走 district centroid fallback |
 | FE build 在新分支因 base 不同找不到 dependency | base = labor-safety-radar，labor 分支 FE build 已通過驗證；本次 FE 變更 = 0，理論上必通過 |
 | 食安資料檔（CSV/xlsx）大小（最大 2.7 MB） | 沿用 commit fbd23a2 既有大小，可接受；不另作 LFS |
+
+### 實作期發現的資料缺口（query 對照修正）
+
+實作 T11 後確認 MOHW 10521-01-03 xlsx 結構與初始假設不符：
+
+1. **無 by-city × by-venue 細分**：xlsx 僅提供 city-level 合計（venue='合計' 一筆 / 城市 / 年），不包含餐飲店/冷飲店/...等 6 種場所的 by-city breakdown。
+2. **無 by-city poisoning_cases**：xlsx 列出 by-city 不合格家次與不符規定比率，但「食物中毒人數」僅在 TPE 自有 CSV，新北無 by-city 公開。
+3. **跨年度資料**：xlsx 是多年（2007-2025）多 sheet，非單一 115 年。
+
+對應 query 改寫：
+- **1011 metrotaipei** 從「TPE poisoning + NTPC poisoning」改為「TPE 不合格場所 + NTPC 不合格場所 + TPE 食物中毒人數」三條線；NTPC 不合格場所數來自 `food_inspection_by_city` (2010-2025)。
+- **1012 metrotaipei** 從「by-venue × by-city」改為「by-year × by-city 合計 NC%」，雙城近 8 年並列。
+- **1014 metrotaipei** 加上 `GROUP BY category, city` 與 `year >= 2020` 累計。
+- **1015 metrotaipei** 從硬碼 '2026' 單點改為 2018-2025 雙城序列。
+
+`food_poisoning_cause` 仍 populated 但暫未 wired（per 設計 §4 fallback 用途）。
 | labor 與 food 同 base 分支整合進 develop 時的衝突 | 兩者 components / dashboard / migrations / scripts 完全不重疊；docs/assets/ 各加各的檔，不衝突 |
