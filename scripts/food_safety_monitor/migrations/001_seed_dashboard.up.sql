@@ -35,7 +35,7 @@ INSERT INTO component_charts (index, color, types, unit) VALUES
 -- ── 3. component_maps ──────────────────────────────────────────
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
   ('fsm_schools',       '學校節點',       'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","incident_status"],"red","#FF1744","#00E5FF"],"circle-radius":["match",["get","incident_status"],"red",7,5],"circle-opacity":1,"circle-stroke-width":["match",["get","incident_status"],"red",8,6],"circle-stroke-color":["match",["get","incident_status"],"red","#FF1744","#00E5FF"],"circle-stroke-opacity":0.35,"circle-blur":0.3}'::json),
+    '{"circle-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-radius":["match",["get","recent_alert"],"red",7,5],"circle-opacity":1,"circle-stroke-width":["match",["get","recent_alert"],"red",8,6],"circle-stroke-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-stroke-opacity":0.35,"circle-blur":0.3}'::json),
   ('fsm_supply_chain',  '供應鏈連線',     'arc',    'geojson', 'big',
     '{"arc-color":["#00E5FF","#FF1744"],"arc-width":2,"arc-opacity":0.8,"arc-animate":true}'::json),
   ('fsm_suppliers',     '供應商節點',     'circle', 'geojson', 'big',

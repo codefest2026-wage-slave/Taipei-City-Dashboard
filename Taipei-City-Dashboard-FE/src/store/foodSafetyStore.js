@@ -446,7 +446,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 					"circle-color": "rgba(0,0,0,0)",
 					"circle-radius": 16,
 					"circle-stroke-width": 2.5,
-					"circle-stroke-color": ["match", ["get", "incident_status"], "red", "#FF1744", "#00E5FF"],
+					"circle-stroke-color": ["match", ["get", "recent_alert"], "red", "#FF1744", "#00E5FF"],
 					"circle-stroke-opacity": 0.85,
 				},
 			});
@@ -484,14 +484,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				type: "circle",
 				source: sourceId,
 				paint: {
-					"circle-color": [
-						"case",
-						["any",
-							["==", ["get", "hazard_level"], "Critical"],
-							["==", ["get", "hazard_level"], "High"]],
-						"#FF1744",
-						"#00E5FF",
-					],
+					"circle-color": ["match", ["get", "recent_alert"], "red", "#FF1744", "#00E5FF"],
 					"circle-radius": 13,
 					"circle-opacity": 0.25,
 					"circle-blur": 0.7,
@@ -510,14 +503,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 					"icon-ignore-placement": true,
 				},
 				paint: {
-					"icon-color": [
-						"case",
-						["any",
-							["==", ["get", "hazard_level"], "Critical"],
-							["==", ["get", "hazard_level"], "High"]],
-						"#FF1744",
-						"#00E5FF",
-					],
+					"icon-color": ["match", ["get", "recent_alert"], "red", "#FF1744", "#00E5FF"],
 				},
 			});
 
