@@ -30,8 +30,8 @@ INSERT INTO component_charts (index, color, types, unit) VALUES
    ARRAY['#E53935','#F57F17'],
    ARRAY['ColumnLineChart'], '件/人'),
   ('food_venue_risk',
-   ARRAY['#E91E63','#FF5722','#FF9800','#FFC107','#8BC34A','#26C6DA'],
-   ARRAY['BarChart'], '件'),
+   ARRAY['#43A047','#1565C0','#FF9800','#FFC107','#8BC34A','#26C6DA'],
+   ARRAY['ColumnChart'], '件'),
   ('food_safety_map',
    ARRAY['#43A047','#FFA000','#1565C0'],
    ARRAY['MapLegend'], '家'),
@@ -39,8 +39,8 @@ INSERT INTO component_charts (index, color, types, unit) VALUES
    ARRAY['#E53935','#8E24AA','#FF6D00','#F57F17','#388E3C','#0288D1','#9E9E9E'],
    ARRAY['DonutChart'], '件'),
   ('food_testing_rate',
-   ARRAY['#FF5722','#FF8A65','#FFCCBC'],
-   ARRAY['BarChart'], '件')
+   ARRAY['#43A047','#1565C0','#FFCCBC'],
+   ARRAY['ColumnChart'], '件')
 ON CONFLICT (index) DO NOTHING;
 
 -- ── 3. component_maps ──────────────────────────────────────────
