@@ -65,18 +65,22 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit}', NOW(), NOW()
 );
 
--- 1011 食物中毒趨勢 — metrotaipei (TPE full series + NTPC 2026 single point)
+-- 1011 食物中毒趨勢 — metrotaipei
+-- Data limitation: MOHW 10521-01-03 by-city xlsx provides 不合格家次 by city/year
+-- but NOT 食物中毒人數 by city. Pivot: dual-city comparison uses NC counts (the
+-- common metric available for both). TPE poisoning persons retained as a third
+-- line for context.
 INSERT INTO query_charts (index, query_type, query_chart, city, source,
   short_desc, long_desc, use_case,
   time_from, time_to, update_freq, update_freq_unit,
   map_config_ids, map_filter, links, contributors, created_at, updated_at)
 VALUES (
   'food_poisoning_trend', 'time',
-  $$SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '臺北市' AS y_axis, food_poisoning_cases AS data FROM food_inspection_tpe UNION ALL SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '新北市' AS y_axis, poisoning_cases AS data FROM food_inspection_by_city WHERE city = '新北市' AND venue = '合計' AND poisoning_cases IS NOT NULL ORDER BY x_axis, y_axis$$,
+  $$SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '臺北市不合格場所' AS y_axis, total_noncompliance AS data FROM food_inspection_tpe UNION ALL SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '新北市不合格場所' AS y_axis, noncompliance AS data FROM food_inspection_by_city WHERE city = '新北市' AND venue = '合計' UNION ALL SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '臺北市食物中毒人數' AS y_axis, food_poisoning_cases AS data FROM food_inspection_tpe ORDER BY x_axis, y_axis$$,
   'metrotaipei', '臺北市衛生局 / 衛福部',
-  '雙北食物中毒人數趨勢（TPE 2006-2025；NTPC 2026 起公開）。',
-  'TPE 含 2006-2025 完整序列，NTPC 自 2026 年起依衛福部統一格式公開。雙線並列，TPE 作為長期趨勢，NTPC 作為近期錨點。',
-  '衛生局追蹤雙城食安趨勢；市民比較雙城食安風險；學術研究分析資料公開政策成效。',
+  '雙北食安趨勢：不合格場所家次（雙城比較）+ 臺北食物中毒人數。',
+  '雙線比較雙北年度不合格家次（TPE 2006-2025；NTPC 2010-2025），輔以 TPE 食物中毒人數作為食安風險脈動。NTPC 食物中毒人數無 by-city 公開，故略。',
+  '衛生局追蹤雙城食安趨勢；市民比較雙城食安風險；研究者分析查驗強度與中毒事件的相關性。',
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit,mohw}', NOW(), NOW()
 );
 
@@ -95,18 +99,21 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit}', NOW(), NOW()
 );
 
--- 1012 場所不合格率 — metrotaipei (real dual-city from MOHW by-city xlsx)
+-- 1012 場所不合格率 — metrotaipei
+-- Data limitation: MOHW 10521-01-03 by-city xlsx has city-level 合計 NC rates
+-- but no per-venue breakdown by city. Pivot: show year-by-year city NC rate
+-- comparison instead of per-venue (which is only meaningful for TPE alone).
 INSERT INTO query_charts (index, query_type, query_chart, city, source,
   short_desc, long_desc, use_case,
   time_from, time_to, update_freq, update_freq_unit,
   map_config_ids, map_filter, links, contributors, created_at, updated_at)
 VALUES (
   'food_venue_risk', 'two_d',
-  $$SELECT venue || '(' || city || ')' AS x_axis, ROUND(noncompliance::numeric * 100 / NULLIF(inspections, 0), 1) AS data FROM food_inspection_by_city WHERE city IN ('臺北市','新北市') AND venue <> '合計' AND inspections > 0 ORDER BY data DESC$$,
+  $$SELECT city || ' ' || year::text AS x_axis, ntpc_violation_rate AS data FROM food_inspection_by_city WHERE city IN ('臺北市','新北市') AND year >= 2018 AND ntpc_violation_rate IS NOT NULL ORDER BY year DESC, city$$,
   'metrotaipei', '衛福部食藥署',
-  '雙北各場所食安不合格率（115年衛福部統計）。',
-  '依衛福部 10521-01-03 食品衛生管理工作-按縣市別分統計，雙城各 6 種場所並列，識別雙北高風險場所類型。',
-  '市民比較雙城場所安全；衛生局跨城稽查資源評估。',
+  '雙北年度食安不合格率比較（衛福部統計）。',
+  '依衛福部 10521-01-03 食品衛生管理工作-按縣市別分統計，雙城近年合計不符規定比率並列。臺北普遍 0.4-0.7%，新北 0.1-0.6%。資料未提供 by-city × by-venue 細分故以年度比較替代。',
+  '市民比較雙城整體食安水準；衛生局跨城績效評估。',
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit,mohw}', NOW(), NOW()
 );
 
@@ -170,7 +177,7 @@ INSERT INTO query_charts (index, query_type, query_chart, city, source,
   map_config_ids, map_filter, links, contributors, created_at, updated_at)
 VALUES (
   'food_violation_types', 'two_d',
-  $$SELECT category || '(' || city || ')' AS x_axis, count AS data FROM food_type_violations WHERE city IN ('臺北市','新北市') AND count > 0 ORDER BY data DESC$$,
+  $$SELECT category || '(' || city || ')' AS x_axis, SUM(count) AS data FROM food_type_violations WHERE city IN ('臺北市','新北市') AND year >= 2020 GROUP BY category, city HAVING SUM(count) > 0 ORDER BY data DESC$$,
   'metrotaipei', '衛福部食藥署',
   '雙北食品違規原因分類（115年衛福部統計）。',
   '依衛福部 10521-01-03 統計，雙城各食品類別（乳品/肉品/蛋品/水產/穀豆烘焙/蔬果/飲料及水/食用油脂/調味品/健康食品/複合調理/其他）違規件數並列。',
@@ -193,17 +200,19 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit}', NOW(), NOW()
 );
 
--- 1015 年度檢驗違規率 — metrotaipei (TPE full series + NTPC 2026 bar)
+-- 1015 年度檢驗違規率 — metrotaipei
+-- two_d returns single-series (x_axis, data); city encoded into x_axis label
+-- so bars appear as "臺北市 2018", "新北市 2018", "臺北市 2019", etc.
 INSERT INTO query_charts (index, query_type, query_chart, city, source,
   short_desc, long_desc, use_case,
   time_from, time_to, update_freq, update_freq_unit,
   map_config_ids, map_filter, links, contributors, created_at, updated_at)
 VALUES (
   'food_testing_rate', 'two_d',
-  $$SELECT year::text AS x_axis, violation_rate AS data, '臺北市' AS y_axis FROM food_testing_tpe WHERE year >= 2015 UNION ALL SELECT '2026', ntpc_violation_rate, '新北市' FROM food_inspection_by_city WHERE city = '新北市' AND venue = '合計' AND ntpc_violation_rate IS NOT NULL ORDER BY x_axis, y_axis$$,
+  $$SELECT '臺北市 ' || year::text AS x_axis, violation_rate AS data FROM food_testing_tpe WHERE year >= 2018 UNION ALL SELECT '新北市 ' || year::text, ntpc_violation_rate FROM food_inspection_by_city WHERE city = '新北市' AND venue = '合計' AND year >= 2018 AND ntpc_violation_rate IS NOT NULL ORDER BY x_axis$$,
   'metrotaipei', '臺北市衛生局 / 衛福部',
-  '雙北食品檢驗違規率（TPE 2015-2025；NTPC 2026 起公開）。',
-  'TPE 含 2015-2025 完整序列，NTPC 自 2026 年起公開。視覺呈現雙城違規率水平差異。',
+  '雙北食品檢驗不合格率（2018-2025）。',
+  '雙城年度不合格率並列：TPE 來自食品衛生管理查驗工作年度統計；NTPC 來自衛福部食品衛生管理工作-按縣市別分。',
   '政府評估雙城食安政策成效；消費者比較雙北食品安全水準。',
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit,mohw}', NOW(), NOW()
 );
