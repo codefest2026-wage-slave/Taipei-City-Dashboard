@@ -7,6 +7,8 @@ Mirrors the layout and conventions of `scripts/labor_safety/`.
 
 ## Quick start
 
+> Run all commands from the repo root.
+
 ```bash
 # 0. Copy and edit env file
 cp scripts/school_meal_ingredients/.env.script.example \
@@ -108,8 +110,8 @@ skip them.
 
 ## Dual-city compliance
 
-Per project CLAUDE.md, the loader **aborts** if neither 臺北市 nor 新北市
-appears in the aggregated `source_counties`. This catches accidental
+Per project CLAUDE.md, the loader **aborts** unless both 臺北市 AND 新北市
+appear in the aggregated `source_counties`. This catches accidental
 single-city snapshots before they reach the DB.
 
 ## Restore from backup
