@@ -211,6 +211,18 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
           >
             {{ r.issue }}
           </div>
+          <div
+            v-if="r.status === 'FAIL' && r.product_name && r.product_name !== '-'"
+            class="audit-meta-line"
+          >
+            <label>產品</label>{{ r.product_name }}
+          </div>
+          <div
+            v-if="r.status === 'FAIL' && r.hazard_basis"
+            class="audit-meta-line"
+          >
+            <label>判定依據</label>{{ r.hazard_basis }}
+          </div>
         </li>
       </ul>
       <p
@@ -239,6 +251,18 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
           </div>
           <div class="audit-issue-line">
             {{ r.issue }}
+          </div>
+          <div
+            v-if="r.product_name && r.product_name !== '-'"
+            class="audit-meta-line"
+          >
+            <label>產品</label>{{ r.product_name }}
+          </div>
+          <div
+            v-if="r.hazard_basis"
+            class="audit-meta-line"
+          >
+            <label>判定依據</label>{{ r.hazard_basis }}
           </div>
         </li>
       </ul>
@@ -386,6 +410,16 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	margin-top: 4px;
 	font-size: 11px;
 	color: rgba(255, 255, 255, 0.75);
+}
+.audit-meta-line {
+	margin-top: 2px;
+	font-size: 11px;
+	color: rgba(255, 255, 255, 0.65);
+}
+.audit-meta-line label {
+	display: inline-block; width: 60px;
+	font-size: 9px; color: rgba(255, 255, 255, 0.45);
+	letter-spacing: 1px; text-transform: uppercase;
 }
 .fail-count {
 	display: inline-block;

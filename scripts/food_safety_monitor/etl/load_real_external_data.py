@@ -95,7 +95,7 @@ def main():
         SELECT i.business_name, i.address, i.city, i.district, i.business_type,
                i.inspection_date, i.inspection_result, i.hazard_level,
                i.fine_amount, i.violated_law_standardized, i.note,
-               i.inspection_item, i.product_name
+               i.inspection_item, i.product_name, i.hazard_basis
         FROM food_safety_inspection_metrotaipei i
         JOIN bad b ON i.business_name = b.business_name
                   AND i.address = b.address
@@ -111,7 +111,7 @@ def main():
     biz = {}  # bid → {name, address, city, district, business_type, history[], ...}
     for r in rows:
         (name, address, city, district, btype, date, result, level,
-         fine, law_std, note, item, product) = r
+         fine, law_std, note, item, product, basis) = r
         bid = biz_id(name, address)
         agg = biz.get(bid)
         if agg is None:
@@ -145,6 +145,8 @@ def main():
             "fine_amount": float(fine) if fine is not None else None,
             "result_raw": result,
             "hazard_level": sev,
+            "hazard_basis": (basis or "").strip(),
+            "product_name": (product or "").strip(),
         })
     print(f"  distinct businesses (with ≥1 FAIL): {len(biz):,}")
 

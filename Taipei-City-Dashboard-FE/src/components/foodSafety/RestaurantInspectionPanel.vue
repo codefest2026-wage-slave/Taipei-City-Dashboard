@@ -62,9 +62,23 @@ const inspection = computed(() => {
           :key="i"
           :class="`row-${h.status.toLowerCase()}`"
         >
-          <span class="date">{{ h.date }}</span>
-          <span class="status">{{ h.status }}</span>
-          <span class="issue">{{ h.issue }}</span>
+          <div class="history-head">
+            <span class="date">{{ h.date }}</span>
+            <span class="status">{{ h.status }}</span>
+            <span class="issue">{{ h.issue }}</span>
+          </div>
+          <div
+            v-if="h.product_name && h.product_name !== '-'"
+            class="history-meta"
+          >
+            <label>產品</label>{{ h.product_name }}
+          </div>
+          <div
+            v-if="h.hazard_basis"
+            class="history-meta"
+          >
+            <label>判定依據</label>{{ h.hazard_basis }}
+          </div>
         </li>
       </ul>
       <p
@@ -129,9 +143,21 @@ const inspection = computed(() => {
 }
 .history { list-style: none; padding: 0; margin: 0; }
 .history li {
-	display: grid; grid-template-columns: 90px 50px 1fr; gap: 6px;
-	padding: 7px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	display: flex; flex-direction: column; gap: 3px;
+	padding: 8px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	font-size: 12px; color: #F5F5F5;
+}
+.history-head {
+	display: grid; grid-template-columns: 90px 50px 1fr; gap: 6px;
+}
+.history-meta {
+	font-size: 11px; color: rgba(255, 255, 255, 0.7);
+	padding-left: 96px;
+}
+.history-meta label {
+	display: inline-block; width: 60px;
+	font-size: 9px; color: rgba(255, 255, 255, 0.45);
+	letter-spacing: 1px; text-transform: uppercase;
 }
 .history .date {
 	color: rgba(255, 255, 255, 0.55);
