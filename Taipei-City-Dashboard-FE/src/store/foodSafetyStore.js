@@ -154,6 +154,21 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			} catch { /* layer not present yet — no-op */ }
 		},
 
+		applyCityFilter(city) {
+			// city: 'metrotaipei' | 'taipei' | 'ntpc'
+			const mapStore = useMapStore();
+			const cityFilter =
+				city === "taipei" ? ["==", ["get", "city"], "臺北市"] :
+					city === "ntpc"   ? ["==", ["get", "city"], "新北市"] :
+						null;
+			["fsm_schools", "fsm_restaurants"].forEach((idx) => {
+				const layer = mapStore.currentLayers.find((l) => l.startsWith(`${idx}-`));
+				if (!layer || !mapStore.map?.getLayer(layer)) return;
+				if (cityFilter) mapStore.map.setFilter(layer, cityFilter);
+				else            mapStore.map.setFilter(layer, null);
+			});
+		},
+
 		_removeLayerGroup(layer, mapStore) {
 			const ids =
 				layer === "school"

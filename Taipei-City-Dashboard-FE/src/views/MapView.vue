@@ -30,6 +30,15 @@ const mapStore = useMapStore();
 const foodSafetyStore = useFoodSafetyStore();
 const route = useRoute();
 
+watch(
+	() => route.query?.city,
+	(newCity) => {
+		if (contentStore.currentDashboard.index === "food_safety_monitor") {
+			foodSafetyStore.applyCityFilter(newCity || "metrotaipei");
+		}
+	},
+);
+
 const toggleOn = ref({
 	hasMap: [],
 	noMap: [],
