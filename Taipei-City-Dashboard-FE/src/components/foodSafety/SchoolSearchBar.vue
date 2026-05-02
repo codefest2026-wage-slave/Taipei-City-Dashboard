@@ -36,10 +36,9 @@ function pick(school) {
         <span class="name">{{ s.properties.name }}</span>
         <span
           class="status"
-          :class="`status-${s.properties.incident_status}`"
+          :class="`status-${s.properties.recent_alert}`"
         >{{
-          s.properties.incident_status === "red" ? "事件" :
-          s.properties.incident_status === "yellow" ? "疑慮" : "正常"
+          s.properties.recent_alert === "red" ? "警示" : "正常"
         }}</span>
       </li>
     </ul>
@@ -96,6 +95,5 @@ function pick(school) {
 	background: rgba(255, 255, 255, 0.05);
 }
 .status-red    { color: #FF1744; }
-.status-yellow { color: #FFC107; }
-.status-green  { color: #8fa3c6; }
+.status-normal { color: rgba(255, 255, 255, 0.5); }
 </style>
