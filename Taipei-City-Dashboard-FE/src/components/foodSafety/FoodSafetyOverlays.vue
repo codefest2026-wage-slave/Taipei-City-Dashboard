@@ -8,9 +8,7 @@ import { useFoodSafetyStore } from "../../store/foodSafetyStore";
 import { useMapStore } from "../../store/mapStore";
 
 import SchoolSearchBar          from "./SchoolSearchBar.vue";
-import LayerToggle              from "./LayerToggle.vue";
 import SchoolAnalysisPanel      from "./SchoolAnalysisPanel.vue";
-import MapLegend                from "./MapLegend.vue";
 import RestaurantFilterBar      from "./RestaurantFilterBar.vue";
 import RestaurantInspectionPanel from "./RestaurantInspectionPanel.vue";
 import ExternalStatsStrip       from "./ExternalStatsStrip.vue";
@@ -115,8 +113,6 @@ onBeforeUnmount(() => {
     <!-- 校內 mode panels -->
     <template v-if="fs.activeLayer === 'school'">
       <SchoolSearchBar />
-      <LayerToggle />
-      <MapLegend />
       <SchoolAnalysisPanel />
     </template>
 

@@ -214,7 +214,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			}
 			const ids =
 				layer === "school"
-					? ["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_supplier_icons"]
+					? ["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_supplier_dots"]
 					: ["fsm_restaurants", "fsm_district_heat"];
 			ids.forEach((idx) => {
 				// mapStore.currentLayers entries are `${index}-${type}-${city}`,
@@ -474,7 +474,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				}
 			}
 			// Defensive removal of any fsm_* layers
-			["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_supplier_icons", "fsm_restaurants", "fsm_district_heat"]
+			["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_supplier_dots", "fsm_restaurants", "fsm_district_heat"]
 				.forEach((idx) => {
 					const matching = mapStore.currentLayers.filter(
 						(l) => l.startsWith(`${idx}-`),

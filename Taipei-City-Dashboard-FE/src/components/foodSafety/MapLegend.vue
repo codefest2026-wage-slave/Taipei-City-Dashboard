@@ -1,6 +1,6 @@
-<!-- Bottom-left legend panel. Static reference for color/shape semantics
-     across schools, incidents, suppliers, and supply chain lines.
-     Pure visual reference — no interactive state. -->
+<!-- Sidebar legend panel for the school map. Shows only the visual semantics
+     used in the simplified data point design: school colors, selected ring,
+     supplier ring colors. -->
 <script setup></script>
 
 <template>
@@ -11,30 +11,16 @@
         學校
       </div>
       <div class="legend-row">
-        <span class="dot s-normal" />一般學校
+        <span class="dot s-normal" />
+        <span>無事件</span>
       </div>
       <div class="legend-row">
-        <span class="dot s-warning" />供應商有疑慮
+        <span class="dot s-incident" />
+        <span>曾有事件</span>
       </div>
       <div class="legend-row">
-        <span class="dot s-incident" />曾發生食安事件
-      </div>
-    </div>
-    <div class="legend-section">
-      <div class="legend-title">
-        事件等級
-      </div>
-      <div class="legend-row">
-        <span class="dot sev-critical" />Critical
-      </div>
-      <div class="legend-row">
-        <span class="dot sev-high" />High
-      </div>
-      <div class="legend-row">
-        <span class="dot sev-medium" />Medium
-      </div>
-      <div class="legend-row">
-        <span class="dot sev-low" />Low
+        <span class="ring-wrap"><span class="ring-outer" /><span class="ring-dot" /></span>
+        <span>已選取</span>
       </div>
     </div>
     <div class="legend-section">
@@ -42,18 +28,12 @@
         供應商
       </div>
       <div class="legend-row">
-        <span class="dot p-normal" />正常
+        <span class="ring-wrap"><span class="ring-outer ring-cyan" /><span class="ring-dot ring-dot-cyan" /></span>
+        <span>無事件</span>
       </div>
       <div class="legend-row">
-        <span class="dot p-bad" />有問題
-      </div>
-    </div>
-    <div class="legend-section">
-      <div class="legend-title">
-        連線
-      </div>
-      <div class="legend-row">
-        <span class="line line-arc" />供應鏈連線
+        <span class="ring-wrap"><span class="ring-outer ring-red" /><span class="ring-dot ring-dot-red" /></span>
+        <span>有事件</span>
       </div>
     </div>
   </div>
@@ -62,33 +42,58 @@
 <style scoped>
 .fsm-legend {
 	pointer-events: auto;
-	position: absolute; bottom: 16px; left: 16px;
-	padding: 10px 14px; min-width: 160px;
+	padding: 10px 14px;
+	color: var(--fsm-text, #d7e3f4);
 	font-size: 12px;
 }
 .fsm-legend h4 {
-	margin: 0 0 8px; font-size: 12px;
-	color: #00E5FF; text-transform: uppercase; letter-spacing: 2px;
-	font-weight: 600;
+	margin: 0 0 6px;
+	font-size: 13px;
+	color: var(--fsm-cyan, #00e5ff);
+	letter-spacing: 2px;
+	text-transform: uppercase;
 }
 .legend-section { margin: 8px 0; }
 .legend-title {
-	font-size: 10px; color: #00E5FF;
-	opacity: 0.7;
-	text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px;
+	font-size: 10px;
+	color: #8fa3c6;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	margin-bottom: 4px;
 }
-.legend-row { display: flex; align-items: center; gap: 8px; padding: 2px 0; color: #D7E3F4; }
-.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-.s-normal   { background: #00E5FF; box-shadow: 0 0 10px #00E5FF, 0 0 4px #00E5FF; }
-.s-warning  { background: #FFC107; box-shadow: 0 0 10px #FFC107, 0 0 4px #FFC107; }
-.s-incident { background: #FF1744; box-shadow: 0 0 10px #FF1744, 0 0 4px #FF1744; }
-.sev-critical { background: #FF1744; box-shadow: 0 0 10px #FF1744, 0 0 4px #FF1744; }
-.sev-high     { background: #FF6D00; box-shadow: 0 0 10px #FF6D00, 0 0 4px #FF6D00; }
-.sev-medium   { background: #FFC107; box-shadow: 0 0 10px #FFC107, 0 0 4px #FFC107; }
-.sev-low      { background: #00E676; box-shadow: 0 0 10px #00E676, 0 0 4px #00E676; }
-.p-normal { background: #FFD54F; box-shadow: 0 0 10px #FFD54F, 0 0 4px #FFD54F; }
-.p-bad    { background: #FF1744; box-shadow: 0 0 10px #FF1744, 0 0 4px #FF1744; }
-.line { width: 18px; height: 2px; flex-shrink: 0;
-        background: linear-gradient(90deg, #00E5FF, #FF1744);
-        box-shadow: 0 0 6px rgba(0, 229, 255, 0.7); }
+.legend-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 3px 0;
+}
+.dot {
+	width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0;
+}
+.s-normal   { background: #00E5FF; box-shadow: 0 0 6px #00E5FF; }
+.s-incident { background: #FF1744; box-shadow: 0 0 6px #FF1744; }
+/* Selected school: dot inside an outer ring */
+.ring-wrap {
+	position: relative;
+	width: 18px; height: 18px;
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+.ring-outer {
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	border: 2px solid #00E5FF;
+	box-shadow: 0 0 6px #00E5FF80;
+}
+.ring-outer.ring-cyan { border-color: #00E5FF; box-shadow: 0 0 6px #00E5FF80; }
+.ring-outer.ring-red  { border-color: #FF1744; box-shadow: 0 0 6px #FF174480; }
+.ring-dot {
+	width: 5px; height: 5px; border-radius: 50%;
+	background: #00E5FF;
+}
+.ring-dot.ring-dot-cyan { background: #00E5FF; }
+.ring-dot.ring-dot-red  { background: #FF1744; }
 </style>
