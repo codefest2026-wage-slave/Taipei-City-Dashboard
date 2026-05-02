@@ -36,19 +36,11 @@ const latestNutrition = computed(() => {
 	return records[0] || null;
 });
 
-// Supplier view: parse "YYYY/MM/DD" string → Date
-function parseAuditDate(s) {
-	const [y, m, d] = s.split("/").map(Number);
-	return new Date(y, m - 1, d);
-}
-
-// Supplier view: audit records in the last 3 months (sorted desc)
+// Supplier view: latest 3 audit records (already sorted desc in mock data)
 const supplierRecentAudits = computed(() => {
 	if (f.value?.type !== "supplier") return [];
 	const audits = fs.supplierAudits[f.value.payload.properties.id] || [];
-	const now = new Date();
-	const cutoff = new Date(now.getFullYear(), now.getMonth() - 3, now.getDate());
-	return audits.filter((r) => parseAuditDate(r.date) >= cutoff);
+	return audits.slice(0, 3);
 });
 
 // Supplier view: ALL historical FAIL records (sorted desc), for total count + latest 3
@@ -165,7 +157,7 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
         {{ f.payload.properties.address }}
       </p>
 
-      <h4>近三月稽核紀錄 ({{ supplierRecentAudits.length }})</h4>
+      <h4>近 {{ supplierRecentAudits.length }} 筆稽核紀錄</h4>
       <ul
         v-if="supplierRecentAudits.length"
         class="audit-list"
@@ -194,7 +186,7 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
         v-else
         class="hint"
       >
-        近三月無稽核紀錄
+        無稽核紀錄
       </p>
 
       <h4>
