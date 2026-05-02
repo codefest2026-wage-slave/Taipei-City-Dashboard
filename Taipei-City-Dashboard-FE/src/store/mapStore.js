@@ -2562,6 +2562,33 @@ export const useMapStore = defineStore("map", {
 			this.flyToLocation(res.geometry.coordinates);
 		},
 
+		/* Layer removal */
+		// Per-layer removal — used by feature stores (e.g. foodSafetyStore) to swap
+		// layers in/out without clearing the entire map. Mirrors the cleanup logic
+		// inside clearOnlyLayers() but scoped to one map_config.
+		removeMapLayer(map_config) {
+			const {layerId} = map_config;
+			if (!layerId || !this.map) return;
+			// 1. Mapbox layer + source
+			if (this.map.getLayer(layerId)) {
+				this.map.removeLayer(layerId);
+			}
+			if (this.map.getSource(`${layerId}-source`)) {
+				this.map.removeSource(`${layerId}-source`);
+			}
+			// 2. Bookkeeping arrays + config map
+			this.currentLayers = this.currentLayers.filter((l) => l !== layerId);
+			this.currentVisibleLayers = this.currentVisibleLayers.filter((l) => l !== layerId);
+			delete this.mapConfigs[layerId];
+			// 3. deck.gl layer (ArcLayer) — keyed by mapLayerId pattern
+			//    `${index}-${type}-${city}` (see AddArcMapLayer)
+			const deckKey = `${map_config.index}-${map_config.type}-${map_config.city}`;
+			if (this.deckGlLayer && this.deckGlLayer[deckKey]) {
+				delete this.deckGlLayer[deckKey];
+				this.renderDeckGLLayer();
+			}
+		},
+
 		/* Clearing the map */
 		// 1. Called when the user is switching between maps
 		clearOnlyLayers() {
