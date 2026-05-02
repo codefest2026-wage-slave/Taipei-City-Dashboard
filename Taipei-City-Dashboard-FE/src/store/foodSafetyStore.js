@@ -16,8 +16,8 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 
 		// Sub-toggles for school map (LayerToggle.vue)
 		layerToggles: {
-			showSupplyChain: false,
-			showIncidentSchools: true,
+			showSchools: true,
+			showSuppliers: false,
 		},
 
 		// Single covering analysis focus (covers school | supplier | incident)
@@ -224,12 +224,12 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			this.setAnalysisFocus("school", school);
 			const [lng, lat] = school.geometry.coordinates;
 			mapStore.easeToLocation([[lng, lat], 14, 0, 0]);
-			if (this.layerToggles.showSupplyChain) {
-				const arcs = this.supplyChain.filter(
-					(f) => f.properties.school_id === school.properties.id,
-				);
-				this.redrawSupplyArcs(arcs);
-			}
+			// Always draw the school's supply arcs on click — this is the
+			// path-1 behavior in spec §5.2.1.
+			const arcs = this.supplyChain.filter(
+				(f) => f.properties.school_id === school.properties.id,
+			);
+			this.redrawSupplyArcs(arcs);
 		},
 
 		selectSupplier(supplier) {
@@ -303,28 +303,21 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		// ── Layer toggles within school map ─────────────────────
 		toggleSubLayer(name) {
 			this.layerToggles[name] = !this.layerToggles[name];
-			// If supply chain just toggled and a school is focused, redraw
-			if (name === "showSupplyChain" && this.analysisFocus?.type === "school") {
-				if (this.layerToggles.showSupplyChain) {
-					const {id} = this.analysisFocus.payload.properties;
-					this.redrawSupplyArcs(
-						this.supplyChain.filter((f) => f.properties.school_id === id),
-					);
-				} else {
-					this.redrawSupplyArcs([]);
-				}
-			} else if (name === "showIncidentSchools") {
-				// Emphasize/de-emphasize incident schools by adjusting paint per
-				// data-driven expression. ON = red incident schools have radius 9
-				// (vs 6 default); OFF = uniform radius 6 across all incident_status.
-				const mapStore = useMapStore();
-				const layer = mapStore.currentLayers.find((l) => l.startsWith("fsm_schools-"));
-				if (!layer || !mapStore.map?.getLayer(layer)) return;
-				const radiusExpr = this.layerToggles.showIncidentSchools
-					? ["match", ["get", "incident_status"], "red", 9, "yellow", 7, 6]
-					: 6;
-				mapStore.map.setPaintProperty(layer, "circle-radius", radiusExpr);
-			}
+			const mapStore = useMapStore();
+			if (!mapStore.map) return;
+			const prefix = name === "showSchools" ? "fsm_schools-" : "fsm_suppliers-";
+			const visible = this.layerToggles[name] ? "visible" : "none";
+			mapStore.currentLayers
+				.filter((l) => l.startsWith(prefix))
+				.forEach((l) => {
+					if (mapStore.map.getLayer(l)) {
+						mapStore.map.setLayoutProperty(l, "visibility", visible);
+					}
+				});
+			// If suppliers just turned OFF and we have a focused school, keep its
+			// supplier connections visible (per spec: click-school always shows
+			// connected suppliers via arcs even when global toggle is off).
+			// Nothing extra needed here — arcs are drawn separately by selectSchool.
 		},
 
 		// ── Reset on dashboard exit ─────────────────────────────
