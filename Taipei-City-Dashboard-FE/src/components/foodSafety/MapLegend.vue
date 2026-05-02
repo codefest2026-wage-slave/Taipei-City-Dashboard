@@ -42,7 +42,7 @@
 	grid-template-columns: 1fr 1fr;
 	gap: var(--font-s);
 	padding: var(--font-s) 0 0;
-	color: #d7e3f4;
+	color: var(--color-normal-text, #f5f5f5);
 	font-size: 12px;
 }
 .legend-col {
@@ -52,11 +52,11 @@
 }
 .legend-title {
 	font-size: 10px;
-	color: #00E5FF;
+	color: rgba(255, 255, 255, 0.7);
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	margin-bottom: 4px;
-	border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 	padding-bottom: 2px;
 }
 .legend-row {

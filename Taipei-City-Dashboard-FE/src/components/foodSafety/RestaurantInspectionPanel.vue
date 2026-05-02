@@ -71,16 +71,15 @@ const inspection = computed(() => {
 	max-height: calc(100vh - 280px); overflow-y: auto;
 	padding: 14px;
 }
-.fsm-empty { color: #8FA3C6; font-size: 13px; }
+.fsm-empty { color: rgba(255, 255, 255, 0.5); font-size: 13px; }
 .fsm-view h3 {
 	margin: 0; font-size: 18px;
-	color: #00E5FF; letter-spacing: 1px;
-	text-shadow: 0 0 8px rgba(0,229,255,0.4);
+	color: #FFFFFF; letter-spacing: 1px;
 }
-.fsm-view p  { margin: 4px 0; font-size: 12px; color: #8FA3C6; }
+.fsm-view p  { margin: 4px 0; font-size: 12px; color: rgba(255, 255, 255, 0.55); }
 .fsm-view h4 {
 	margin: 12px 0 4px; font-size: 11px;
-	color: #00E5FF; opacity: 0.85;
+	color: rgba(255, 255, 255, 0.65);
 	text-transform: uppercase; letter-spacing: 2px;
 	font-weight: 600;
 }
@@ -96,11 +95,11 @@ const inspection = computed(() => {
 .history { list-style: none; padding: 0; margin: 0; }
 .history li {
 	display: grid; grid-template-columns: 90px 50px 1fr; gap: 6px;
-	padding: 7px 6px; border-bottom: 1px solid rgba(0,229,255,0.1);
-	font-size: 12px; color: #D7E3F4;
+	padding: 7px 6px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+	font-size: 12px; color: #F5F5F5;
 }
 .history .date {
-	color: #8FA3C6;
+	color: rgba(255, 255, 255, 0.55);
 	font-family: 'JetBrains Mono', 'Courier New', monospace;
 }
 .history .status {
@@ -115,5 +114,5 @@ const inspection = computed(() => {
 	background: linear-gradient(90deg, rgba(255,23,68,0.08), transparent);
 }
 .row-fail .status { color: #FF1744; font-weight: 600; text-shadow: 0 0 6px rgba(255,23,68,0.6); }
-.hint { color: #8FA3C6; font-size: 12px; }
+.hint { color: rgba(255, 255, 255, 0.5); font-size: 12px; }
 </style>
