@@ -10,7 +10,6 @@ import { useMapStore } from "../../store/mapStore";
 import SchoolAnalysisPanel      from "./SchoolAnalysisPanel.vue";
 import RestaurantFilterBar      from "./RestaurantFilterBar.vue";
 import RestaurantInspectionPanel from "./RestaurantInspectionPanel.vue";
-import ExternalStatsStrip       from "./ExternalStatsStrip.vue";
 import "./cyber.css";
 
 const fs = useFoodSafetyStore();
@@ -118,7 +117,6 @@ onBeforeUnmount(() => {
     <template v-else-if="fs.activeLayer === 'restaurant'">
       <RestaurantFilterBar />
       <RestaurantInspectionPanel />
-      <ExternalStatsStrip />
     </template>
   </div>
 </template>

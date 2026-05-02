@@ -38,7 +38,7 @@ INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
   ('fsm_supplier_dots',  '供應商中心點',   'circle', 'geojson', 'big',
     '{"circle-color":["case",["any",["==",["get","hazard_level"],"Critical"],["==",["get","hazard_level"],"High"]],"#FF1744","#00E5FF"],"circle-radius":3.5,"circle-opacity":1,"circle-stroke-width":1,"circle-stroke-color":"#0A1228","circle-stroke-opacity":0.6}'::json),
   ('fsm_restaurants',   '校外稽查業者',   'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","hazard_level"],["critical","high"],"#FF1744","medium","#FFC107","#00E5FF"],"circle-radius":["match",["get","hazard_level"],"critical",7,["high","medium"],6,5],"circle-opacity":1,"circle-stroke-width":["match",["get","hazard_level"],["critical","high"],8,"medium",6,4],"circle-stroke-color":["match",["get","hazard_level"],["critical","high"],"#FF1744","medium","#FFC107","#00E5FF"],"circle-stroke-opacity":0.35,"circle-blur":0.3}'::json),
+    '{"circle-color":["match",["get","hazard_level"],"critical","#FF1744","high","#FF6D00","medium","#FFC107","low","#00E676","#00E5FF"],"circle-radius":["match",["get","hazard_level"],"critical",7,"high",6,"medium",6,"low",5,4],"circle-opacity":1,"circle-stroke-width":["match",["get","hazard_level"],"critical",9,"high",7,"medium",6,"low",5,4],"circle-stroke-color":["match",["get","hazard_level"],"critical","#FF1744","high","#FF6D00","medium","#FFC107","low","#00E676","#00E5FF"],"circle-stroke-opacity":0.35,"circle-blur":0.3}'::json),
   ('fsm_district_heat', '行政區違規密度', 'fill',   'geojson', 'big',
     '{"fill-color":["interpolate",["linear"],["get","density"],0,"#003344",50,"#0088AA",100,"#00E5FF"],"fill-opacity":0.35,"fill-outline-color":"#00E5FF"}'::json);
 
