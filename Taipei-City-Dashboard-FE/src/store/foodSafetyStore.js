@@ -205,10 +205,16 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selection_labels-source")) {
 					mapStore.map.removeSource("fsm_selection_labels-source");
 				}
+				if (mapStore.map.getLayer("fsm_selected_school-layer")) {
+					mapStore.map.removeLayer("fsm_selected_school-layer");
+				}
+				if (mapStore.map.getSource("fsm_selected_school-source")) {
+					mapStore.map.removeSource("fsm_selected_school-source");
+				}
 			}
 			const ids =
 				layer === "school"
-					? ["fsm_schools", "fsm_supply_chain", "fsm_suppliers"]
+					? ["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_supplier_icons"]
 					: ["fsm_restaurants", "fsm_district_heat"];
 			ids.forEach((idx) => {
 				// mapStore.currentLayers entries are `${index}-${type}-${city}`,
@@ -241,11 +247,13 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			);
 			const focusFeatures = [school, ...suppliers];
 			this._drawSelectionLabels(focusFeatures);
+			this._drawSelectedSchoolRing(school);
 			this._fitBoundsTo(focusFeatures);
 		},
 
 		selectSupplier(supplier) {
 			this.setAnalysisFocus("supplier", supplier);
+			this._drawSelectedSchoolRing(null);
 			const arcs = this.supplyChain.filter(
 				(f) => f.properties.supplier_id === supplier.properties.id,
 			);
@@ -261,6 +269,11 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 
 		selectIncident(incident) {
 			this.setAnalysisFocus("incident", incident);
+			// If incident has a primary school, ring it; else clear.
+			const primarySchool = this.schools.find(
+				(s) => s.properties.id === incident.school_id,
+			);
+			this._drawSelectedSchoolRing(primarySchool || null);
 			const arcs = this.supplyChain.filter(
 				(f) =>
 					f.properties.supplier_id === incident.supplier_id &&
@@ -300,7 +313,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				type: "arc",
 				source: "geojson",
 				city: mapStore.map?.style?.metadata?.city || "metrotaipei",
-				layerId: `fsm_supply_chain-arc-${Date.now()}`,
+				layerId: "fsm_supply_chain-arc-metrotaipei",
 				paint: {
 					"arc-color": ["#FFA000", "#E53935"],
 					"arc-width": 2,
@@ -308,6 +321,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 					"arc-animate": true,
 				},
 			};
+			mapStore.step = 1;  // restart deck.gl arc animation from frame 1
 			mapStore.AddArcMapLayer(
 				map_config,
 				{ type: "FeatureCollection", features: filteredFeatures },
@@ -358,6 +372,44 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 					"text-halo-color": "#0A1228",
 					"text-halo-width": 2,
 					"text-halo-blur": 1,
+				},
+			});
+		},
+
+		// Show an extra outer ring around the currently-selected school feature.
+		// Pass null/undefined to clear.
+		_drawSelectedSchoolRing(school) {
+			const mapStore = useMapStore();
+			if (!mapStore.map) return;
+			const sourceId = "fsm_selected_school-source";
+			const layerId = "fsm_selected_school-layer";
+
+			if (mapStore.map.getLayer(layerId)) {
+				mapStore.map.removeLayer(layerId);
+			}
+			if (mapStore.map.getSource(sourceId)) {
+				mapStore.map.removeSource(sourceId);
+			}
+			if (!school) return;
+
+			mapStore.map.addSource(sourceId, {
+				type: "geojson",
+				data: {
+					type: "FeatureCollection",
+					features: [school],
+				},
+			});
+
+			mapStore.map.addLayer({
+				id: layerId,
+				type: "circle",
+				source: sourceId,
+				paint: {
+					"circle-color": "rgba(0,0,0,0)",
+					"circle-radius": 16,
+					"circle-stroke-width": 2.5,
+					"circle-stroke-color": "#00E5FF",
+					"circle-stroke-opacity": 0.85,
 				},
 			});
 		},
@@ -414,9 +466,15 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				if (mapStore.map.getSource("fsm_selection_labels-source")) {
 					mapStore.map.removeSource("fsm_selection_labels-source");
 				}
+				if (mapStore.map.getLayer("fsm_selected_school-layer")) {
+					mapStore.map.removeLayer("fsm_selected_school-layer");
+				}
+				if (mapStore.map.getSource("fsm_selected_school-source")) {
+					mapStore.map.removeSource("fsm_selected_school-source");
+				}
 			}
 			// Defensive removal of any fsm_* layers
-			["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_restaurants", "fsm_district_heat"]
+			["fsm_schools", "fsm_supply_chain", "fsm_suppliers", "fsm_supplier_icons", "fsm_restaurants", "fsm_district_heat"]
 				.forEach((idx) => {
 					const matching = mapStore.currentLayers.filter(
 						(l) => l.startsWith(`${idx}-`),

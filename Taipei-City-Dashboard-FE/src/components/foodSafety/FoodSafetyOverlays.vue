@@ -66,6 +66,26 @@ function attachLayerClickHandler(layerId) {
 			if (!f) return;
 			fs.selectSchool(f);
 		});
+		mapStore.map.on("mouseenter", layerId, () => {
+			mapStore.map.getCanvas().style.cursor = "pointer";
+		});
+		mapStore.map.on("mouseleave", layerId, () => {
+			mapStore.map.getCanvas().style.cursor = "";
+		});
+		attachedHandlers.add(layerId);
+	} else if (layerId.startsWith("fsm_suppliers-")) {
+		mapStore.map.on("click", layerId, (e) => {
+			e.preventDefault?.();
+			const f = e.features?.[0];
+			if (!f) return;
+			fs.selectSupplier(f);
+		});
+		mapStore.map.on("mouseenter", layerId, () => {
+			mapStore.map.getCanvas().style.cursor = "pointer";
+		});
+		mapStore.map.on("mouseleave", layerId, () => {
+			mapStore.map.getCanvas().style.cursor = "";
+		});
 		attachedHandlers.add(layerId);
 	} else if (layerId.startsWith("fsm_restaurants-")) {
 		mapStore.map.on("click", layerId, (e) => {
@@ -73,6 +93,12 @@ function attachLayerClickHandler(layerId) {
 			const f = e.features?.[0];
 			if (!f) return;
 			fs.selectRestaurant(f);
+		});
+		mapStore.map.on("mouseenter", layerId, () => {
+			mapStore.map.getCanvas().style.cursor = "pointer";
+		});
+		mapStore.map.on("mouseleave", layerId, () => {
+			mapStore.map.getCanvas().style.cursor = "";
 		});
 		attachedHandlers.add(layerId);
 	}
