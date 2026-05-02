@@ -30,7 +30,15 @@ const mapStore = useMapStore();
 const foodSafetyStore = useFoodSafetyStore();
 const route = useRoute();
 
-// City switching for dashboard 504 happens via the per-component @change-city
+// fsm_* maps live on dashboard 504 (food_safety_monitor) AND dashboard 503
+// (food_safety_radar) — 503 mirrors the two map cards. Both need the same
+// overlay panels + city filter wiring.
+const isFsmDashboard = computed(() => {
+	const idx = contentStore.currentDashboard.index;
+	return idx === "food_safety_monitor" || idx === "food_safety_radar";
+});
+
+// City switching for fsm dashboards happens via the per-component @change-city
 // handler — that adds a new fsm_*-circle-<city> layer (and hides the old one)
 // without changing route.query.city OR currentDashboard.city. So watch the
 // authoritative source: mapStore.currentLayers itself. The applyCityFilter
@@ -39,7 +47,7 @@ const route = useRoute();
 watch(
 	() => [...mapStore.currentLayers],
 	() => {
-		if (contentStore.currentDashboard.index !== "food_safety_monitor") return;
+		if (!isFsmDashboard.value) return;
 		setTimeout(() => foodSafetyStore.applyCityFilter(), 400);
 	},
 	{ deep: false },
@@ -603,7 +611,7 @@ function popularBasicLayerGA(map_config) {
     </div>
     <MapContainer />
     <FoodSafetyOverlays
-      v-if="contentStore.currentDashboard.index === 'food_safety_monitor'"
+      v-if="isFsmDashboard"
     />
     <MoreInfo />
     <ReportIssue />
