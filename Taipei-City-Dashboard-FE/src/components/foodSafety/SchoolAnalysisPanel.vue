@@ -123,7 +123,7 @@ function pickSchool(school) { fs.selectSchool(school); }
       </div>
       <h4>確認問題食物</h4>
       <p>{{ f.payload.confirmed_food }}</p>
-      <h4>議事問題食物</h4>
+      <h4>疑似問題食物</h4>
       <p>{{ f.payload.suspected_food }}</p>
       <h4>AI 摘要</h4>
       <p class="summary">
