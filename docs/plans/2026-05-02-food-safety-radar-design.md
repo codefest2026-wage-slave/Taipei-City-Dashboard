@@ -400,9 +400,21 @@ CREATE TABLE IF NOT EXISTS food_poisoning_cause (
 
 對應 query 改寫：
 - **1011 metrotaipei** 從「TPE poisoning + NTPC poisoning」改為「TPE 不合格場所 + NTPC 不合格場所 + TPE 食物中毒人數」三條線；NTPC 不合格場所數來自 `food_inspection_by_city` (2010-2025)。
-- **1012 metrotaipei** 從「by-venue × by-city」改為「by-year × by-city 合計 NC%」，雙城近 8 年並列。
+- **1012 metrotaipei** 從「by-venue × by-city」改為「by-year × by-city 合計 NC 件數」，雙城近 8 年並列。
 - **1014 metrotaipei** 加上 `GROUP BY category, city` 與 `year >= 2020` 累計。
 - **1015 metrotaipei** 從硬碼 '2026' 單點改為 2018-2025 雙城序列。
 
 `food_poisoning_cause` 仍 populated 但暫未 wired（per 設計 §4 fallback 用途）。
+
+### 第二輪調整：雙北 BarChart/DonutChart 視覺合併
+
+`two_d` 為單一 series，雙北資料若同 series 顯示則「臺北 2025 / 新北 2025 / 臺北 2024 ...」交替成 16 條獨立 bar，視覺切碎。改採：
+
+| Component | 改動 | 原因 |
+|---|---|---|
+| 1012 場所不合格率 → 場所不合格件數 | unit `%` → `件`；query_type → `three_d`（metrotaipei）；taipei 改顯示 NC 件數 | three_d 為 `int` 才能維持精度 + 由 BarChart `stacked:true` 自然分組 |
+| 1015 年度檢驗違規率 → 年度檢驗違規件數 | 同上 | 同上 |
+| 1014 違規原因分析 metrotaipei | 取消 city 在 x_axis suffix；改 `GROUP BY category` 雙城合併為單一 donut | DonutChart 不支援 multi-series；user 偏好「相同類型一起顯示」 |
+
+語義轉換：1012/1015 從 rate(%) 改為 count(件)。Component 名稱跟著從「不合格率/違規率」改為「不合格件數/違規件數」以名實一致。三個 component 改完後雙北資料在視覺上同年度 stacked，相同類型不再切分。
 | labor 與 food 同 base 分支整合進 develop 時的衝突 | 兩者 components / dashboard / migrations / scripts 完全不重疊；docs/assets/ 各加各的檔，不衝突 |
