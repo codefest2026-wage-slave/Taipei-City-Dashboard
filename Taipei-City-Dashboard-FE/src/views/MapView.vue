@@ -18,6 +18,7 @@ import DashboardComponent from "../dashboardComponent/DashboardComponent.vue";
 import { useContentStore } from "../store/contentStore";
 import { useDialogStore } from "../store/dialogStore";
 import { useMapStore } from "../store/mapStore";
+import { useFoodSafetyStore } from "../store/foodSafetyStore";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
@@ -26,6 +27,7 @@ import FoodSafetyOverlays from "../components/foodSafety/FoodSafetyOverlays.vue"
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
 const mapStore = useMapStore();
+const foodSafetyStore = useFoodSafetyStore();
 const route = useRoute();
 
 const toggleOn = ref({
@@ -79,6 +81,17 @@ function handleOpenSettings() {
 
 // Open and closes the component as well as communicates to the mapStore to turn on and off map layers
 function handleToggle(value, map_config) {
+	// Mutex toggle for dashboard 504 (food safety monitor). When user enables one
+	// of the two map components, disable the other in foodSafetyStore (panels
+	// re-render). The actual Mapbox layer add/remove still flows through the
+	// existing pipeline below; foodSafetyStore.setActiveLayer is purely state.
+	const fsmIndex = Array.isArray(map_config) ? map_config[0]?.index : map_config?.index;
+	if (fsmIndex === "fsm_schools" || fsmIndex === "fsm_supply_chain") {
+		foodSafetyStore.setActiveLayer(value ? "school" : null);
+	} else if (fsmIndex === "fsm_restaurants" || fsmIndex === "fsm_district_heat") {
+		foodSafetyStore.setActiveLayer(value ? "restaurant" : null);
+	}
+
 	if (!map_config[0]) {
 		if (value) {
 			dialogStore.showNotification(
