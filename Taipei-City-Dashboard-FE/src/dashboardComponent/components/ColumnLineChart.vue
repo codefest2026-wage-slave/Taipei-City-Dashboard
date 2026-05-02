@@ -93,6 +93,8 @@ const chartOptions = ref({
 			dataPointIndex,
 			w,
 		}) {
+			const units = props.chart_config.unit.split("/").map((u) => u.trim());
+			const unit = units.length > seriesIndex ? units[seriesIndex] : units[units.length - 1];
 			return (
 				`<div class="chart-tooltip">` +
 				`<h6>` +
@@ -100,7 +102,7 @@ const chartOptions = ref({
 					w.globals.seriesNames[seriesIndex]
 				}` +
 				`</h6>` +
-				`<span>${series[seriesIndex][dataPointIndex]} ${props.chart_config.unit}</span>` +
+				`<span>${series[seriesIndex][dataPointIndex]} ${unit}</span>` +
 				`</div>`
 			);
 		},

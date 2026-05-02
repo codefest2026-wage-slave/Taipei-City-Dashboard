@@ -35,8 +35,9 @@ TwoDimensionalData Json Format:
 	}
 */
 type TwoDimensionalData struct {
-	Xaxis string  `gorm:"column:x_axis" json:"x"`
-	Data  float64 `gorm:"column:data" json:"y"`
+	Xaxis   string   `gorm:"column:x_axis" json:"x"`
+	Data    float64  `gorm:"column:data" json:"y"`
+	Tooltip *float64 `gorm:"column:tooltip" json:"meta,omitempty"`
 }
 type TwoDimensionalDataOutput struct {
 	Data []TwoDimensionalData `json:"data"`

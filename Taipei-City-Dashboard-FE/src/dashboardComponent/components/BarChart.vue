@@ -62,6 +62,10 @@ const chartOptions = ref({
 			dataPointIndex,
 			w,
 		}) {
+			const item = w.config.series[seriesIndex].data[dataPointIndex];
+			const maxFine = item && item.meta != null && item.meta > 0
+				? `<span style="opacity:0.7;font-size:0.85em;">最高罰款 ${Number(item.meta).toLocaleString()} 元</span>`
+				: "";
 			return (
 				'<div class="chart-tooltip">' +
 				"<h6>" +
@@ -71,6 +75,7 @@ const chartOptions = ref({
 				series[seriesIndex][dataPointIndex] +
 				` ${props.chart_config.unit}` +
 				"</span>" +
+				maxFine +
 				"</div>"
 			);
 		},
