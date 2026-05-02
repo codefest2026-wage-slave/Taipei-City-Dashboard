@@ -23,4 +23,6 @@ export const chartTypes: chartType = {
 	IndicatorChart: "指標圖", // V
 	MapLegend: "地圖圖例", // V
 	TextUnitChart: "文字數值圖", // V
+	SearchableViolationTable: "雙北違規快查表", // V
+	RecheckPriorityRanking: "複查優先佇列引擎", // V
 };

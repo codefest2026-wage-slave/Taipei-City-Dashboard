@@ -28,6 +28,8 @@ import BarChartWithGoal from "./components/BarChartWithGoal.vue";
 import IconPercentChart from "./components/IconPercentChart.vue";
 import IndicatorChart from "./components/IndicatorChart.vue";
 import TextUnitChart from "./components/TextUnitChart.vue";
+import SearchableViolationTable from "./components/SearchableViolationTable.vue";
+import RecheckPriorityRanking from "./components/RecheckPriorityRanking.vue";
 
 import MapLegendSvg from "./assets/chart/MapLegend.svg";
 import DistrictChartSvg from "./assets/chart/DistrictChart.svg";
@@ -222,6 +224,10 @@ function returnChartComponent(name, svg) {
 		return svg ? IndicatorChartSvg : IndicatorChart;
 	case "TextUnitChart":
 		return svg ? TextUnitChartSvg : TextUnitChart;
+	case "SearchableViolationTable":
+		return svg ? MapLegendSvg : SearchableViolationTable;
+	case "RecheckPriorityRanking":
+		return svg ? MapLegendSvg : RecheckPriorityRanking;
 	default:
 		return svg ? MapLegendSvg : MapLegend;
 	}
