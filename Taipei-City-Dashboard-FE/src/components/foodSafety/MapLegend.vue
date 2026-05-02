@@ -1,12 +1,9 @@
-<!-- Sidebar legend panel for the school map. Shows only the visual semantics
-     used in the simplified data point design: school colors, selected ring,
-     supplier ring colors. -->
+<!-- 2-column compact legend: 學校 (left) and 供應商 (right). -->
 <script setup></script>
 
 <template>
-  <div class="fsm-panel fsm-cyber-panel fsm-legend">
-    <h4>圖例</h4>
-    <div class="legend-section">
+  <div class="fsm-legend">
+    <div class="legend-col">
       <div class="legend-title">
         學校
       </div>
@@ -19,11 +16,11 @@
         <span>曾有事件</span>
       </div>
       <div class="legend-row">
-        <span class="ring-wrap"><span class="ring-outer" /><span class="ring-dot" /></span>
+        <span class="ring-wrap"><span class="ring-outer ring-cyan" /><span class="ring-dot ring-dot-cyan" /></span>
         <span>已選取</span>
       </div>
     </div>
-    <div class="legend-section">
+    <div class="legend-col">
       <div class="legend-title">
         供應商
       </div>
@@ -41,41 +38,52 @@
 
 <style scoped>
 .fsm-legend {
-	pointer-events: auto;
-	padding: 10px 14px;
-	color: var(--fsm-text, #d7e3f4);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--font-s);
+	padding: var(--font-s) 0 0;
+	color: #d7e3f4;
 	font-size: 12px;
 }
-.fsm-legend h4 {
-	margin: 0 0 6px;
-	font-size: 13px;
-	color: var(--fsm-cyan, #00e5ff);
-	letter-spacing: 2px;
-	text-transform: uppercase;
+.legend-col {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
 }
-.legend-section { margin: 8px 0; }
 .legend-title {
 	font-size: 10px;
-	color: #8fa3c6;
+	color: #00E5FF;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	margin-bottom: 4px;
+	border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+	padding-bottom: 2px;
 }
 .legend-row {
 	display: flex;
 	align-items: center;
-	gap: 10px;
-	padding: 3px 0;
+	gap: 8px;
+	padding: 2px 0;
 }
 .dot {
-	width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	display: inline-block;
+	flex-shrink: 0;
 }
-.s-normal   { background: #00E5FF; box-shadow: 0 0 6px #00E5FF; }
-.s-incident { background: #FF1744; box-shadow: 0 0 6px #FF1744; }
-/* Selected school: dot inside an outer ring */
+.s-normal {
+	background: radial-gradient(circle, #66F2FF 0%, #00E5FF 60%, rgba(0, 229, 255, 0) 100%);
+	box-shadow: 0 0 8px #00E5FF, 0 0 14px rgba(0, 229, 255, 0.6);
+}
+.s-incident {
+	background: radial-gradient(circle, #FF6B85 0%, #FF1744 60%, rgba(255, 23, 68, 0) 100%);
+	box-shadow: 0 0 8px #FF1744, 0 0 14px rgba(255, 23, 68, 0.6);
+}
 .ring-wrap {
 	position: relative;
-	width: 18px; height: 18px;
+	width: 16px;
+	height: 16px;
 	flex-shrink: 0;
 	display: inline-flex;
 	align-items: center;
@@ -85,15 +93,21 @@
 	position: absolute;
 	inset: 0;
 	border-radius: 50%;
-	border: 2px solid #00E5FF;
-	box-shadow: 0 0 6px #00E5FF80;
+	border: 1.5px solid #00E5FF;
 }
-.ring-outer.ring-cyan { border-color: #00E5FF; box-shadow: 0 0 6px #00E5FF80; }
-.ring-outer.ring-red  { border-color: #FF1744; box-shadow: 0 0 6px #FF174480; }
+.ring-outer.ring-cyan {
+	border-color: #00E5FF;
+	box-shadow: 0 0 6px rgba(0, 229, 255, 0.7);
+}
+.ring-outer.ring-red {
+	border-color: #FF1744;
+	box-shadow: 0 0 6px rgba(255, 23, 68, 0.7);
+}
 .ring-dot {
-	width: 5px; height: 5px; border-radius: 50%;
-	background: #00E5FF;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
 }
 .ring-dot.ring-dot-cyan { background: #00E5FF; }
-.ring-dot.ring-dot-red  { background: #FF1744; }
+.ring-dot.ring-dot-red { background: #FF1744; }
 </style>

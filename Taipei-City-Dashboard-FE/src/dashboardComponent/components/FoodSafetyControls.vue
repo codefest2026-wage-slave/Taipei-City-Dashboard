@@ -1,9 +1,8 @@
-<!-- Dashboard chart component for the food-safety-monitor 校內 control panel.
-     Renders LayerToggle + MapLegend inside a DashboardComponent body.
-     Receives standard chart props (chart_config, activeChart, series, etc.)
-     but ignores them — this is a UI control panel, not a data chart. -->
+<!-- Dashboard chart component for fsm_school_map. Renders inside the card body
+     when 校內食安地圖 is toggled on. Contains the search bar and the simplified
+     2-column legend. Suppliers are click-driven (no manual toggle). -->
 <script setup>
-import LayerToggle from "../../components/foodSafety/LayerToggle.vue";
+import SchoolSearchBar from "../../components/foodSafety/SchoolSearchBar.vue";
 import MapLegend from "../../components/foodSafety/MapLegend.vue";
 
 defineProps([
@@ -16,7 +15,7 @@ defineProps([
     v-if="activeChart === 'FoodSafetyControls'"
     class="fsm-controls-content"
   >
-    <LayerToggle />
+    <SchoolSearchBar />
     <MapLegend />
   </div>
 </template>
