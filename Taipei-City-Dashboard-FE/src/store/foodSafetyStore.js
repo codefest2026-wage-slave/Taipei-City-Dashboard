@@ -137,6 +137,21 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			this.activeLayer = layer;
 			// New layer added by Mapbox via dashboard's normal toggle pipeline;
 			// nothing extra here. Panels reactively render via watch on activeLayer.
+			if (layer === "restaurant") {
+				// After Mapbox/dashboard adds the district fill layer, raise the
+				// town label so labels stay visible on top of choropleth (R4).
+				setTimeout(() => this._raiseTownLabel(mapStore), 600);
+			}
+		},
+
+		_raiseTownLabel(mapStore) {
+			const m = mapStore.map;
+			if (!m) return;
+			try {
+				if (m.getLayer("metrotaipei_town_label-symbol")) {
+					m.moveLayer("metrotaipei_town_label-symbol");
+				}
+			} catch { /* layer not present yet — no-op */ }
 		},
 
 		_removeLayerGroup(layer, mapStore) {
