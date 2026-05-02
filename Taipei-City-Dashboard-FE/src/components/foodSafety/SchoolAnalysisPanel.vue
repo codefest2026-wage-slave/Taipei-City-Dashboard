@@ -288,22 +288,22 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	max-height: calc(100vh - 200px);
 	overflow-y: auto;
 	padding: 14px;
-	color: var(--fsm-text, #d7e3f4);
+	color: var(--fsm-text, #f5f5f5);
 }
 .fsm-empty {
-	color: #8fa3c6;
+	color: rgba(255, 255, 255, 0.5);
 	font-size: 13px;
 }
 .fsm-view h3 {
 	margin: 0 0 4px;
 	font-size: 16px;
-	color: #00E5FF;
+	color: #FFFFFF;
 	letter-spacing: 1px;
 }
 .fsm-view h4 {
 	margin: 14px 0 6px;
 	font-size: 11px;
-	color: #00E5FF;
+	color: rgba(255, 255, 255, 0.65);
 	text-transform: uppercase;
 	letter-spacing: 2px;
 }
@@ -311,9 +311,9 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	margin: 4px 0;
 	font-size: 13px;
 }
-.meta { color: #8fa3c6; font-size: 12px; }
-.summary { font-style: italic; color: #b9c9e0; }
-.hint { color: #8fa3c6; font-size: 12px; }
+.meta { color: rgba(255, 255, 255, 0.55); font-size: 12px; }
+.summary { font-style: italic; color: rgba(255, 255, 255, 0.75); }
+.hint { color: rgba(255, 255, 255, 0.45); font-size: 12px; }
 
 .status-badge {
 	display: inline-block;
@@ -344,7 +344,7 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 }
 .audit-list li, .served li {
 	padding: 6px 0;
-	border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	cursor: pointer;
 	font-size: 12px;
 }
@@ -352,12 +352,12 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	cursor: default;
 }
 .served li:hover, .audit-list li:not(.row-pass):hover {
-	background: rgba(0, 229, 255, 0.05);
+	background: rgba(255, 255, 255, 0.05);
 }
 .audit-issue-line {
 	margin-top: 4px;
 	font-size: 11px;
-	color: #b9c9e0;
+	color: rgba(255, 255, 255, 0.75);
 }
 .fail-count {
 	display: inline-block;
@@ -385,7 +385,7 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	gap: 8px;
 	margin-top: 4px;
 	font-size: 11px;
-	color: #8fa3c6;
+	color: rgba(255, 255, 255, 0.55);
 }
 .audit-detail-block {
 	padding: 8px 10px;
@@ -408,12 +408,12 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	color: var(--fsm-text);
 	margin-top: 4px;
 }
-.status-ok-block .audit-issue { margin: 0; color: #8fa3c6; }
-.audit-date { font-size: 12px; color: #8fa3c6; }
+.status-ok-block .audit-issue { margin: 0; color: rgba(255, 255, 255, 0.55); }
+.audit-date { font-size: 12px; color: rgba(255, 255, 255, 0.55); font-family: var(--fsm-mono, monospace); }
 
 .nutrition-card {
-	background: rgba(0, 229, 255, 0.05);
-	border: 1px solid rgba(0, 229, 255, 0.2);
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 4px;
 	padding: 10px;
 }
@@ -423,7 +423,7 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	align-items: baseline;
 	margin-bottom: 6px;
 }
-.nutrition-date { font-size: 11px; color: #8fa3c6; }
+.nutrition-date { font-size: 11px; color: rgba(255, 255, 255, 0.55); }
 .nutrition-score {
 	font-family: var(--fsm-mono, monospace);
 	font-size: 24px;
@@ -439,8 +439,8 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 .ai-review {
 	margin-top: 8px;
 	padding: 8px 10px;
-	background: rgba(0, 229, 255, 0.04);
-	border-left: 2px solid #00E5FF;
+	background: rgba(255, 255, 255, 0.04);
+	border-left: 2px solid var(--fsm-cyan, #00E5FF);
 	border-radius: 0 4px 4px 0;
 	position: relative;
 }
@@ -461,7 +461,7 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	margin: 4px 0 0;
 	font-size: 12px;
 	line-height: 1.6;
-	color: #b9c9e0;
+	color: rgba(255, 255, 255, 0.78);
 	font-style: italic;
 }
 

@@ -113,37 +113,31 @@ const top5Options = computed(() => ({
 .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .card {
 	padding: 12px 10px;
-	background: rgba(0,229,255,0.04);
-	border: 1px solid rgba(0,229,255,0.18);
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 3px; text-align: center;
 	position: relative;
 	transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 .card:hover {
-	border-color: rgba(0,229,255,0.5);
-	box-shadow: 0 0 10px rgba(0,229,255,0.15);
+	border-color: rgba(255, 255, 255, 0.25);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 .value {
-	font-size: 26px; font-weight: 700; color: #00E5FF;
+	font-size: 26px; font-weight: 700; color: #FFFFFF;
 	font-family: 'JetBrains Mono', 'Courier New', monospace;
 	letter-spacing: 1px;
-	text-shadow: 0 0 10px rgba(0,229,255,0.5);
-	animation: fsm-pulse 3s ease-in-out infinite;
-}
-@keyframes fsm-pulse {
-	0%, 100% { text-shadow: 0 0 10px rgba(0,229,255,0.5); }
-	50%      { text-shadow: 0 0 14px rgba(0,229,255,0.8); }
 }
 .label {
-	font-size: 10px; color: #8FA3C6;
+	font-size: 10px; color: rgba(255, 255, 255, 0.55);
 	text-transform: uppercase; letter-spacing: 2px;
 	margin-top: 4px;
 }
 .chart-area h4 {
 	margin: 0 0 6px; font-size: 11px;
-	color: #00E5FF; opacity: 0.85;
+	color: rgba(255, 255, 255, 0.65);
 	text-transform: uppercase; letter-spacing: 2px;
 	font-weight: 600;
 }
-.hint { color: #8FA3C6; font-size: 12px; }
+.hint { color: rgba(255, 255, 255, 0.5); font-size: 12px; }
 </style>

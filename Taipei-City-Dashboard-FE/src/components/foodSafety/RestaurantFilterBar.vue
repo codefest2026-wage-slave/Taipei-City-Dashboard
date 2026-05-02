@@ -48,24 +48,24 @@ const districts = ['all', '臺北市', '新北市',
 .fsm-filter label {
 	display: flex; flex-direction: column;
 	font-size: 10px; gap: 4px;
-	color: #00E5FF; opacity: 0.85;
+	color: rgba(255, 255, 255, 0.7);
 	text-transform: uppercase; letter-spacing: 2px;
 	font-weight: 600;
 }
 .fsm-filter select {
-	background: rgba(0,0,0,0.4);
-	border: 1px solid rgba(0,229,255,0.25);
-	color: #D7E3F4; padding: 5px 10px; border-radius: 3px;
+	background: rgba(0,0,0,0.35);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	color: #F5F5F5; padding: 5px 10px; border-radius: 3px;
 	font-size: 12px; letter-spacing: 0.5px;
 	transition: border-color 120ms ease, box-shadow 120ms ease;
 	cursor: pointer;
 }
 .fsm-filter select:focus {
 	outline: none;
-	border-color: #00E5FF;
-	box-shadow: 0 0 8px rgba(0,229,255,0.45);
+	border-color: rgba(0, 229, 255, 0.5);
+	box-shadow: 0 0 6px rgba(0, 229, 255, 0.3);
 }
 .fsm-filter select option {
-	background: #0A1228; color: #D7E3F4;
+	background: #1c1e24; color: #F5F5F5;
 }
 </style>
