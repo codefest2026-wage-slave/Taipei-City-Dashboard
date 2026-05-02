@@ -28,7 +28,10 @@ jobs:
           echo "Deployed commit: $(git rev-parse --short HEAD) - $(git log -1 --pretty=%s)"
 
       - name: Free disk space
-        run: docker system prune -f
+        run: |
+          docker rmi dashboard-vector-upgrade:latest || true
+          docker system prune -f
+          df -h /
 
       - name: Restart services
         working-directory: /home/azureuser/workspace/Taipei-City-Dashboard/docker
