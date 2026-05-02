@@ -21,6 +21,7 @@ import { useMapStore } from "../store/mapStore";
 import MapContainer from "../components/map/MapContainer.vue";
 import MoreInfo from "../components/dialogs/MoreInfo.vue";
 import ReportIssue from "../components/dialogs/ReportIssue.vue";
+import FoodSafetyOverlays from "../components/foodSafety/FoodSafetyOverlays.vue";
 
 const contentStore = useContentStore();
 const dialogStore = useDialogStore();
@@ -573,6 +574,9 @@ function popularBasicLayerGA(map_config) {
       </div>
     </div>
     <MapContainer />
+    <FoodSafetyOverlays
+      v-if="contentStore.currentDashboard.index === 'food_safety_monitor'"
+    />
     <MoreInfo />
     <ReportIssue />
   </div>
