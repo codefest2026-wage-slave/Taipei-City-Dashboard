@@ -169,6 +169,33 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			});
 		},
 
+		applyRestaurantFilters() {
+			const mapStore = useMapStore();
+			const layer = mapStore.currentLayers.find((l) => l.startsWith("fsm_restaurants-"));
+			if (!layer || !mapStore.map?.getLayer(layer)) return;
+			const f = this.restaurantFilters;
+			const conditions = [];
+			// District: 'all' | '臺北市' | '新北市' | <district name>
+			if (f.district === "臺北市" || f.district === "新北市") {
+				conditions.push(["==", ["get", "city"], f.district]);
+			} else if (f.district !== "all") {
+				conditions.push(["==", ["get", "district"], f.district]);
+			}
+			// Severity: 'all' | 'high' | 'medium' | 'low'
+			if (f.severity !== "all") {
+				conditions.push(["==", ["get", "severity"], f.severity]);
+			}
+			// timeRange currently has no per-feature property to filter on — mock data
+			// has no inspection_date per feature; the filter is captured in state for
+			// future use but does not currently constrain the layer. Spec §4.2 has no
+			// such field on restaurants.geojson; would require joining to inspections.
+			const expr =
+				conditions.length === 0 ? null :
+					conditions.length === 1 ? conditions[0] :
+						["all", ...conditions];
+			mapStore.map.setFilter(layer, expr);
+		},
+
 		_removeLayerGroup(layer, mapStore) {
 			const ids =
 				layer === "school"
