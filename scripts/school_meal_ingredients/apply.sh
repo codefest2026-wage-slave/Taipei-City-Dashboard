@@ -16,13 +16,24 @@ source "$ROOT/_db_env.sh"
 echo "▶ target dashboard: $DB_DASHBOARD_HOST:$DB_DASHBOARD_PORT/$DB_DASHBOARD_DBNAME (sslmode=$DB_DASHBOARD_SSLMODE)"
 echo
 
-echo "1/3 migrations up ..."
+echo "1/4 migrations up ..."
 pg_psql -1 < "$ROOT/migrations/001_create_ingredient_names.up.sql"
+pg_psql -1 < "$ROOT/migrations/002_create_raw_tables.up.sql"
 
-echo "2/3 ETL ..."
+echo "2/4 ETL: raw records ..."
+python3 "$ROOT/etl/load_raw_records.py"
+
+echo "3/4 ETL: ingredient names dedupe ..."
 python3 "$ROOT/etl/load_ingredient_names.py"
 
-echo "3/3 verify row count ..."
-pg_psql -c "SELECT 'school_meal_ingredient_names' AS t, COUNT(*) FROM school_meal_ingredient_names;"
+echo "4/4 verify row counts ..."
+pg_psql -c "
+SELECT 'school_meal_ingredient_names'              AS t, COUNT(*) FROM school_meal_ingredient_names
+UNION ALL SELECT 'school_meal_food_dictionary',              COUNT(*) FROM school_meal_food_dictionary
+UNION ALL SELECT 'school_meal_caterers',                     COUNT(*) FROM school_meal_caterers
+UNION ALL SELECT 'school_meal_seasoning_records_nation',     COUNT(*) FROM school_meal_seasoning_records_nation
+UNION ALL SELECT 'school_meal_ingredient_records',           COUNT(*) FROM school_meal_ingredient_records
+UNION ALL SELECT 'school_meal_dish_records',                 COUNT(*) FROM school_meal_dish_records
+UNION ALL SELECT 'school_meal_dish_ingredient_records',      COUNT(*) FROM school_meal_dish_ingredient_records;"
 
 echo "✅ apply complete"
