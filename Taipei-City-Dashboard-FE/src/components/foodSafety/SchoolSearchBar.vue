@@ -1,7 +1,6 @@
-<!-- Top-center search bar that lets the user find a school by name. Uses
-     foodSafetyStore.schoolSearchResults getter for filtered options.
-     Selecting a result triggers selectSchool(school) which updates analysis
-     focus, eases the map, and (if showSupplyChain on) draws supply arcs. -->
+<!-- Search input that lets the user find a school by name. Lives inside the
+     FoodSafetyControls card body, so styling is intentionally plain (no extra
+     panel framing) to match the surrounding dashboard component card. -->
 <script setup>
 import { ref } from "vue";
 import { useFoodSafetyStore } from "../../store/foodSafetyStore";
@@ -17,7 +16,7 @@ function pick(school) {
 </script>
 
 <template>
-  <div class="fsm-panel fsm-cyber-panel fsm-search">
+  <div class="fsm-search">
     <input
       v-model="fs.schoolSearchQuery"
       type="text"
@@ -39,8 +38,8 @@ function pick(school) {
           class="status"
           :class="`status-${s.properties.incident_status}`"
         >{{
-          s.properties.incident_status === 'red' ? '事件' :
-          s.properties.incident_status === 'yellow' ? '疑慮' : '正常'
+          s.properties.incident_status === "red" ? "事件" :
+          s.properties.incident_status === "yellow" ? "疑慮" : "正常"
         }}</span>
       </li>
     </ul>
@@ -49,43 +48,38 @@ function pick(school) {
 
 <style scoped>
 .fsm-search {
-	pointer-events: auto;
-	width: 100%;
-	background: rgba(10, 18, 40, 0.5);
-	border: 1px solid rgba(0, 229, 255, 0.25);
-	border-radius: 4px;
-	padding: 6px 10px;
 	position: relative;
+	width: 100%;
+	box-sizing: border-box;
 }
 .fsm-search input {
 	width: 100%;
-	background: transparent;
-	border: 1px solid rgba(0, 229, 255, 0.35);
-	color: #d7e3f4;
-	padding: 6px 10px;
-	border-radius: 4px;
-	font-size: 12px;
 	box-sizing: border-box;
+	padding: 6px 10px;
+	font-size: 12px;
+	color: var(--color-normal-text, #d7e3f4);
+	background: rgba(255, 255, 255, 0.03);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 3px;
 	outline: none;
 }
 .fsm-search input:focus {
-	border-color: #00E5FF;
-	box-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+	border-color: rgba(0, 229, 255, 0.5);
 }
 .fsm-search input::placeholder {
-	color: rgba(143, 163, 198, 0.6);
+	color: rgba(215, 227, 244, 0.4);
 }
 .fsm-search-dropdown {
 	position: absolute;
-	top: calc(100% + 4px);
+	top: calc(100% + 2px);
 	left: 0;
 	right: 0;
 	margin: 0;
 	padding: 0;
 	list-style: none;
-	background: rgba(10, 18, 40, 0.95);
-	border: 1px solid rgba(0, 229, 255, 0.35);
-	border-radius: 4px;
+	background: var(--color-component-background, #1f2125);
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 3px;
 	max-height: 240px;
 	overflow-y: auto;
 	z-index: 100;
@@ -95,13 +89,13 @@ function pick(school) {
 	justify-content: space-between;
 	padding: 6px 10px;
 	cursor: pointer;
-	color: #d7e3f4;
+	color: var(--color-normal-text, #d7e3f4);
 	font-size: 12px;
 }
 .fsm-search-dropdown li:hover {
-	background: rgba(0, 229, 255, 0.1);
+	background: rgba(255, 255, 255, 0.05);
 }
 .status-red    { color: #FF1744; }
 .status-yellow { color: #FFC107; }
-.status-green  { color: #00E5FF; }
+.status-green  { color: #8fa3c6; }
 </style>
