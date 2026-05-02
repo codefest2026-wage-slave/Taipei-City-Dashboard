@@ -18,7 +18,7 @@ _load_env_file() {
   [ -f "$f" ] || return 0
   while IFS='=' read -r key val; do
     case "$key" in
-      DB_DASHBOARD_*|FATRACE_*)
+      DB_DASHBOARD_*)
         if [ -z "${!key+x}" ]; then
           val="${val%$'\r'}"
           val="${val#\"}"; val="${val%\"}"
@@ -27,7 +27,7 @@ _load_env_file() {
         fi
         ;;
     esac
-  done < <(grep -E '^(DB_DASHBOARD|FATRACE)_[A-Z_]+=' "$f" 2>/dev/null)
+  done < <(grep -E '^DB_DASHBOARD_[A-Z_]+=' "$f" 2>/dev/null)
 }
 
 _load_env_file "$_SMI_ROOT/.env.script"
