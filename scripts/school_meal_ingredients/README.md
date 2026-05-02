@@ -84,6 +84,24 @@ The platform exposes 6 unique `datasetname` values; we download:
 The `全國 × 國中小/高中職` variants are **skipped** to avoid superset
 duplication of the city-specific data.
 
+## Raw record tables (apply.sh step 2/4)
+
+`load_raw_records.py` lands every CSV's rows into a typed table. Re-running
+the loader TRUNCATEs each target before INSERT, so apply.sh stays idempotent.
+
+| Table | Source CSV | Provenance columns? |
+|---|---|---|
+| `school_meal_food_dictionary` | `food_chinese_names.csv` | no — one-shot dictionary |
+| `school_meal_caterers` | `nation_*_學校供餐團膳業者*.csv` | no — country-wide list |
+| `school_meal_seasoning_records_nation` | `nation_*_調味料及供應商*.csv` | no — entries carry their own start/end dates |
+| `school_meal_ingredient_records` | `(tpe\|ntpc)_*_*_午餐食材及供應商*.csv` | yes — `year_queried, month_queried, county_queried, grade_queried` |
+| `school_meal_dish_records` | `(tpe\|ntpc)_*_*_午餐菜色資料集.csv` | yes — same 4 |
+| `school_meal_dish_ingredient_records` | `(tpe\|ntpc)_*_*_午餐菜色及食材*.csv` | yes — same 4 |
+
+The dedupe table `school_meal_ingredient_names` (apply.sh step 3/4) is
+unchanged — still derived from the same CSV scan with column-detection +
+fallback.
+
 ## Snapshot crawler — token expiry
 
 `accesscode` and `JSESSIONID` expire per session. When the API rejects
