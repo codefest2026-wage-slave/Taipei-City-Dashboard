@@ -36,11 +36,26 @@ const latestNutrition = computed(() => {
 	return records[0] || null;
 });
 
-// Supplier view: latest FAIL audit for this supplier
-const supplierLatestFail = computed(() => {
-	if (f.value?.type !== "supplier") return null;
+// Supplier view: parse "YYYY/MM/DD" string → Date
+function parseAuditDate(s) {
+	const [y, m, d] = s.split("/").map(Number);
+	return new Date(y, m - 1, d);
+}
+
+// Supplier view: audit records in the last 3 months (sorted desc)
+const supplierRecentAudits = computed(() => {
+	if (f.value?.type !== "supplier") return [];
 	const audits = fs.supplierAudits[f.value.payload.properties.id] || [];
-	return audits.find((r) => r.status === "FAIL") || null;
+	const now = new Date();
+	const cutoff = new Date(now.getFullYear(), now.getMonth() - 3, now.getDate());
+	return audits.filter((r) => parseAuditDate(r.date) >= cutoff);
+});
+
+// Supplier view: ALL historical FAIL records (sorted desc), for total count + latest 3
+const supplierAllFails = computed(() => {
+	if (f.value?.type !== "supplier") return [];
+	const audits = fs.supplierAudits[f.value.payload.properties.id] || [];
+	return audits.filter((r) => r.status === "FAIL");
 });
 
 // Supplier view: served schools list (already implemented logic)
@@ -150,26 +165,66 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
         {{ f.payload.properties.address }}
       </p>
 
-      <h4>稽核狀況</h4>
-      <div
-        v-if="supplierLatestFail"
-        class="audit-detail-block status-fail-block"
+      <h4>近三月稽核紀錄 ({{ supplierRecentAudits.length }})</h4>
+      <ul
+        v-if="supplierRecentAudits.length"
+        class="audit-list"
       >
-        <div class="audit-row">
-          <span class="audit-date">{{ supplierLatestFail.date }}</span>
-          <span class="status-badge status-fail">{{ supplierLatestFail.severity }}</span>
-        </div>
-        <div class="audit-issue">
-          {{ supplierLatestFail.issue }}
-        </div>
-      </div>
-      <div
+        <li
+          v-for="(r, i) in supplierRecentAudits"
+          :key="`recent-${i}`"
+          :class="`row-${r.status.toLowerCase()}`"
+        >
+          <div class="audit-row">
+            <span class="audit-date">{{ r.date }}</span>
+            <span
+              class="status-badge"
+              :class="r.status === 'FAIL' ? 'status-fail' : 'status-ok'"
+            >{{ r.status === "FAIL" ? r.severity : "PASS" }}</span>
+          </div>
+          <div
+            v-if="r.status === 'FAIL'"
+            class="audit-issue-line"
+          >
+            {{ r.issue }}
+          </div>
+        </li>
+      </ul>
+      <p
         v-else
-        class="audit-detail-block status-ok-block"
+        class="hint"
       >
-        <span class="status-badge status-ok">正常</span>
-        <span class="audit-issue">無事件記錄</span>
-      </div>
+        近三月無稽核紀錄
+      </p>
+
+      <h4>
+        歷史不合格紀錄
+        <span class="fail-count">{{ supplierAllFails.length }} 筆</span>
+      </h4>
+      <ul
+        v-if="supplierAllFails.length"
+        class="audit-list"
+      >
+        <li
+          v-for="(r, i) in supplierAllFails.slice(0, 3)"
+          :key="`fail-${i}`"
+          class="row-fail"
+        >
+          <div class="audit-row">
+            <span class="audit-date">{{ r.date }}</span>
+            <span class="status-badge status-fail">{{ r.severity }}</span>
+          </div>
+          <div class="audit-issue-line">
+            {{ r.issue }}
+          </div>
+        </li>
+      </ul>
+      <p
+        v-else
+        class="hint"
+      >
+        無歷史不合格紀錄
+      </p>
 
       <h4>供應學校清單 ({{ supplierServedSchools.length }})</h4>
       <ul class="served">
@@ -298,8 +353,27 @@ function pickSchool(schoolFeature) { fs.selectSchool(schoolFeature); }
 	cursor: pointer;
 	font-size: 12px;
 }
-.audit-list li:hover, .served li:hover {
+.audit-list li.row-pass {
+	cursor: default;
+}
+.served li:hover, .audit-list li:not(.row-pass):hover {
 	background: rgba(0, 229, 255, 0.05);
+}
+.audit-issue-line {
+	margin-top: 4px;
+	font-size: 11px;
+	color: #b9c9e0;
+}
+.fail-count {
+	display: inline-block;
+	margin-left: 6px;
+	padding: 1px 8px;
+	font-size: 10px;
+	color: #FF6B85;
+	background: rgba(255, 23, 68, 0.12);
+	border: 1px solid rgba(255, 23, 68, 0.4);
+	border-radius: 10px;
+	letter-spacing: 0;
 }
 .audit-row {
 	display: flex;
