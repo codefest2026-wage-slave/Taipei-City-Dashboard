@@ -1,0 +1,436 @@
+{
+"SUP-001": [
+{
+"date": "2025/11/26",
+"status": "PASS"
+},
+{
+"date": "2025/05/10",
+"status": "PASS"
+},
+{
+"date": "2024/03/21",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "Medium"
+}
+],
+"SUP-002": [
+{
+"date": "2025/04/21",
+"status": "PASS"
+},
+{
+"date": "2025/03/03",
+"status": "PASS"
+}
+],
+"SUP-003": [
+{
+"date": "2025/11/20",
+"status": "PASS"
+},
+{
+"date": "2025/04/24",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "High"
+},
+{
+"date": "2024/08/24",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "Critical"
+},
+{
+"date": "2024/05/27",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "High"
+}
+],
+"SUP-004": [
+{
+"date": "2025/08/25",
+"status": "PASS"
+},
+{
+"date": "2025/05/12",
+"status": "PASS"
+}
+],
+"SUP-005": [
+{
+"date": "2025/07/22",
+"status": "PASS"
+},
+{
+"date": "2025/07/21",
+"status": "PASS"
+}
+],
+"SUP-006": [
+{
+"date": "2025/11/09",
+"status": "PASS"
+},
+{
+"date": "2025/02/12",
+"status": "PASS"
+},
+{
+"date": "2024/09/20",
+"status": "PASS"
+}
+],
+"SUP-007": [
+{
+"date": "2025/08/18",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "Critical"
+},
+{
+"date": "2025/03/15",
+"status": "PASS"
+},
+{
+"date": "2024/10/09",
+"status": "FAIL",
+"issue": "食材過期",
+"severity": "Critical"
+},
+{
+"date": "2024/09/12",
+"status": "FAIL",
+"issue": "保存環境溫度不合格",
+"severity": "High"
+}
+],
+"SUP-008": [
+{
+"date": "2025/08/18",
+"status": "PASS"
+},
+{
+"date": "2025/04/07",
+"status": "PASS"
+}
+],
+"SUP-009": [
+{
+"date": "2025/11/15",
+"status": "PASS"
+},
+{
+"date": "2025/03/03",
+"status": "PASS"
+},
+{
+"date": "2024/12/14",
+"status": "PASS"
+}
+],
+"SUP-010": [
+{
+"date": "2025/08/21",
+"status": "FAIL",
+"issue": "食用油酸價超標",
+"severity": "Medium"
+},
+{
+"date": "2025/01/08",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "Medium"
+},
+{
+"date": "2024/12/28",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "High"
+},
+{
+"date": "2024/12/28",
+"status": "PASS"
+}
+],
+"SUP-011": [
+{
+"date": "2025/12/20",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "Low"
+},
+{
+"date": "2025/09/23",
+"status": "PASS"
+},
+{
+"date": "2024/10/02",
+"status": "PASS"
+}
+],
+"SUP-012": [
+{
+"date": "2025/10/02",
+"status": "FAIL",
+"issue": "食材過期",
+"severity": "Medium"
+},
+{
+"date": "2025/06/06",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "Critical"
+},
+{
+"date": "2024/11/18",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "Critical"
+},
+{
+"date": "2024/09/23",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "High"
+},
+{
+"date": "2024/02/14",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "Medium"
+}
+],
+"SUP-013": [
+{
+"date": "2025/06/21",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "Medium"
+},
+{
+"date": "2025/05/04",
+"status": "PASS"
+}
+],
+"SUP-014": [
+{
+"date": "2025/05/19",
+"status": "PASS"
+},
+{
+"date": "2025/02/16",
+"status": "PASS"
+},
+{
+"date": "2024/01/01",
+"status": "PASS"
+}
+],
+"SUP-015": [
+{
+"date": "2025/09/17",
+"status": "PASS"
+},
+{
+"date": "2025/03/16",
+"status": "PASS"
+},
+{
+"date": "2024/04/22",
+"status": "FAIL",
+"issue": "食用油酸價超標",
+"severity": "Medium"
+}
+],
+"SUP-016": [
+{
+"date": "2025/12/05",
+"status": "PASS"
+},
+{
+"date": "2025/09/23",
+"status": "PASS"
+}
+],
+"SUP-017": [
+{
+"date": "2025/11/27",
+"status": "PASS"
+},
+{
+"date": "2025/05/14",
+"status": "PASS"
+},
+{
+"date": "2024/06/25",
+"status": "FAIL",
+"issue": "食用油酸價超標",
+"severity": "Low"
+}
+],
+"SUP-018": [
+{
+"date": "2025/07/15",
+"status": "FAIL",
+"issue": "食材過期",
+"severity": "Critical"
+},
+{
+"date": "2025/04/21",
+"status": "FAIL",
+"issue": "保存環境溫度不合格",
+"severity": "Critical"
+},
+{
+"date": "2024/04/15",
+"status": "FAIL",
+"issue": "食用油酸價超標",
+"severity": "Medium"
+},
+{
+"date": "2024/01/21",
+"status": "PASS"
+}
+],
+"SUP-019": [
+{
+"date": "2025/06/02",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "Low"
+},
+{
+"date": "2025/03/28",
+"status": "FAIL",
+"issue": "防護裝備不齊",
+"severity": "Low"
+},
+{
+"date": "2024/03/07",
+"status": "PASS"
+}
+],
+"SUP-020": [
+{
+"date": "2025/10/13",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "High"
+},
+{
+"date": "2025/02/12",
+"status": "FAIL",
+"issue": "食材過期",
+"severity": "Medium"
+},
+{
+"date": "2024/07/02",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "High"
+},
+{
+"date": "2024/03/01",
+"status": "PASS"
+},
+{
+"date": "2024/01/11",
+"status": "FAIL",
+"issue": "從業人員衛生不合格",
+"severity": "Medium"
+}
+],
+"SUP-021": [
+{
+"date": "2025/11/05",
+"status": "FAIL",
+"issue": "餐具大腸桿菌超標",
+"severity": "High"
+},
+{
+"date": "2025/06/09",
+"status": "PASS"
+},
+{
+"date": "2024/11/27",
+"status": "PASS"
+},
+{
+"date": "2024/09/26",
+"status": "PASS"
+},
+{
+"date": "2024/04/02",
+"status": "PASS"
+}
+],
+"SUP-022": [
+{
+"date": "2025/10/02",
+"status": "PASS"
+},
+{
+"date": "2025/08/07",
+"status": "PASS"
+}
+],
+"SUP-023": [
+{
+"date": "2025/09/25",
+"status": "PASS"
+},
+{
+"date": "2025/01/04",
+"status": "PASS"
+},
+{
+"date": "2024/09/13",
+"status": "FAIL",
+"issue": "保存環境溫度不合格",
+"severity": "Low"
+}
+],
+"SUP-024": [
+{
+"date": "2025/12/01",
+"status": "FAIL",
+"issue": "保存環境溫度不合格",
+"severity": "Medium"
+},
+{
+"date": "2025/02/12",
+"status": "FAIL",
+"issue": "食材標示不全",
+"severity": "Critical"
+},
+{
+"date": "2024/07/06",
+"status": "PASS"
+},
+{
+"date": "2024/02/11",
+"status": "PASS"
+}
+],
+"SUP-025": [
+{
+"date": "2025/11/23",
+"status": "PASS"
+},
+{
+"date": "2025/01/04",
+"status": "FAIL",
+"issue": "食用油酸價超標",
+"severity": "Low"
+},
+{
+"date": "2024/08/13",
+"status": "FAIL",
+"issue": "食用油酸價超標",
+"severity": "Medium"
+}
+]
+}

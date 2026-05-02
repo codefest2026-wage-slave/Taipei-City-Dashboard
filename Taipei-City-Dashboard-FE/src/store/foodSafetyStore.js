@@ -38,12 +38,15 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		districtHeatmap: null,
 		restaurants: [],
 		restaurantInspections: {},
+		supplierAudits: {},
+		schoolNutrition: {},
 
 		// Loading flags
 		loading: {
 			schools: false, suppliers: false, supplyChain: false,
 			incidents: false, districtHeatmap: false,
 			restaurants: false, restaurantInspections: false,
+			supplierAudits: false, schoolNutrition: false,
 		},
 		loadedAt: null,
 	}),
@@ -129,6 +132,10 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 					fetchJson("restaurants.geojson", "restaurants"),
 					fetchJson("restaurant_inspections.json", "restaurantInspections"),
 				]);
+			const [audits, nutrition] = await Promise.all([
+				fetchJson("supplier_audits.json", "supplierAudits"),
+				fetchJson("school_nutrition.json", "schoolNutrition"),
+			]);
 			this.schools = schools.features;
 			this.suppliers = suppliers.features;
 			this.supplyChain = chain.features;
@@ -136,6 +143,8 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 			this.districtHeatmap = heat;
 			this.restaurants = rest.features;
 			this.restaurantInspections = insp;
+			this.supplierAudits = audits;
+			this.schoolNutrition = nutrition;
 			this.loadedAt = Date.now();
 		},
 
