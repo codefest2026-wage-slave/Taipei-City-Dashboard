@@ -286,6 +286,17 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 				} else {
 					this.redrawSupplyArcs([]);
 				}
+			} else if (name === "showIncidentSchools") {
+				// Emphasize/de-emphasize incident schools by adjusting paint per
+				// data-driven expression. ON = red incident schools have radius 9
+				// (vs 6 default); OFF = uniform radius 6 across all incident_status.
+				const mapStore = useMapStore();
+				const layer = mapStore.currentLayers.find((l) => l.startsWith("fsm_schools-"));
+				if (!layer || !mapStore.map?.getLayer(layer)) return;
+				const radiusExpr = this.layerToggles.showIncidentSchools
+					? ["match", ["get", "incident_status"], "red", 9, "yellow", 7, 6]
+					: 6;
+				mapStore.map.setPaintProperty(layer, "circle-radius", radiusExpr);
 			}
 		},
 
