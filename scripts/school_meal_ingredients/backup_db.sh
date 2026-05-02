@@ -15,7 +15,8 @@ echo "▶ target dashboard: $DB_DASHBOARD_HOST:$DB_DASHBOARD_PORT/$DB_DASHBOARD_
 echo
 
 echo "▶ Dumping dashboard …"
-pg_dump_to "$OUT/dashboard.sql"
+pg_dump_to "$OUT/dashboard.sql.partial"
+mv "$OUT/dashboard.sql.partial" "$OUT/dashboard.sql"
 
 echo
 echo "✅ backup → $OUT"
