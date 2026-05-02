@@ -26,4 +26,5 @@ export const chartTypes: chartType = {
 	SearchableViolationTable: "雙北違規快查表", // V
 	RecheckPriorityRanking: "複查優先佇列引擎", // V
 	RiskMatrixChart: "風險矩陣四象限圖", // V
+	FoodSafetyControls: "食安控制面板", // V
 };
