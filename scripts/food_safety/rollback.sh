@@ -13,9 +13,11 @@ echo "▶ target dashboardmanager: $DB_MANAGER_HOST:$DB_MANAGER_PORT/$DB_MANAGER
 echo
 
 echo "1/3 down: dashboard registrations ..."
+pg_psql MANAGER -1 < "$ROOT/migrations/004_seed_risk_dashboard.down.sql"
 pg_psql MANAGER -1 < "$ROOT/migrations/002_seed_dashboard.down.sql"
 
 echo "2/3 down: drop tables ..."
+pg_psql DASHBOARD -1 < "$ROOT/migrations/003_create_food_risk.down.sql"
 pg_psql DASHBOARD -1 < "$ROOT/migrations/001_create_tables.down.sql"
 
 echo "3/3 clean GeoJSON ..."
