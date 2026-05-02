@@ -33,4 +33,21 @@ pg_psql DASHBOARD -c "
   UNION ALL SELECT 'food_type_violations',     COUNT(*) FROM food_type_violations
   UNION ALL SELECT 'food_poisoning_cause',     COUNT(*) FROM food_poisoning_cause;"
 
+# Floor check: fail loudly if any food_* table has zero rows after ETL.
+# Catches silent regressions (upstream column rename, snapshot truncation, etc.)
+empty_tables="$(pg_psql DASHBOARD -At -c "
+  SELECT t FROM (
+    SELECT 'food_inspection_tpe'      AS t, COUNT(*) AS n FROM food_inspection_tpe
+    UNION ALL SELECT 'food_testing_tpe',         COUNT(*) FROM food_testing_tpe
+    UNION ALL SELECT 'food_restaurant_tpe',      COUNT(*) FROM food_restaurant_tpe
+    UNION ALL SELECT 'food_factory_ntpc',        COUNT(*) FROM food_factory_ntpc
+    UNION ALL SELECT 'food_inspection_by_city',  COUNT(*) FROM food_inspection_by_city
+    UNION ALL SELECT 'food_type_violations',     COUNT(*) FROM food_type_violations
+    UNION ALL SELECT 'food_poisoning_cause',     COUNT(*) FROM food_poisoning_cause
+  ) c WHERE n = 0;" | tr -d '[:space:]')"
+if [ -n "$empty_tables" ]; then
+  echo "❌ FAIL: empty food_* table(s) detected after ETL: $empty_tables" >&2
+  exit 1
+fi
+
 echo "✅ apply complete"
