@@ -16,6 +16,7 @@ failure rolls back the whole load.
 import csv
 import re
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -124,7 +125,7 @@ def load_food_dictionary(cur):
             ))
     cur.execute("TRUNCATE school_meal_food_dictionary RESTART IDENTITY")
     if rows:
-        execute_values(cur, INSERT_FOOD_DICT_SQL, rows, page_size=1000)
+        execute_values(cur, INSERT_FOOD_DICT_SQL, rows, page_size=10000)
     return len(rows)
 
 
@@ -138,7 +139,7 @@ def load_caterers(cur):
     cur.execute("TRUNCATE school_meal_caterers RESTART IDENTITY")
     total = 0
     files = sorted(SNAPSHOTS_DIR.glob("nation_*_學校供餐團膳業者*.csv"))
-    for path in files:
+    for i, path in enumerate(files, 1):
         rows = []
         with path.open(encoding="utf-8-sig", newline="") as f:
             reader = csv.DictReader(f)
@@ -153,8 +154,9 @@ def load_caterers(cur):
                     clean(r.get("業者地址"), 500),
                 ))
         if rows:
-            execute_values(cur, INSERT_CATERER_SQL, rows, page_size=1000)
+            execute_values(cur, INSERT_CATERER_SQL, rows, page_size=10000)
             total += len(rows)
+        print(f"  [{i:>3}/{len(files)}] {path.name}: {len(rows):,} rows", flush=True)
     return total
 
 
@@ -172,7 +174,7 @@ def load_seasoning_records_nation(cur):
     cur.execute("TRUNCATE school_meal_seasoning_records_nation RESTART IDENTITY")
     total = 0
     files = sorted(SNAPSHOTS_DIR.glob("nation_*_調味料及供應商*.csv"))
-    for path in files:
+    for i, path in enumerate(files, 1):
         rows = []
         with path.open(encoding="utf-8-sig", newline="") as f:
             reader = csv.DictReader(f)
@@ -191,8 +193,9 @@ def load_seasoning_records_nation(cur):
                     clean(r.get("認證編號"), 100),
                 ))
         if rows:
-            execute_values(cur, INSERT_SEASONING_NATION_SQL, rows, page_size=1000)
+            execute_values(cur, INSERT_SEASONING_NATION_SQL, rows, page_size=10000)
             total += len(rows)
+        print(f"  [{i:>3}/{len(files)}] {path.name}: {len(rows):,} rows", flush=True)
     return total
 
 
@@ -214,7 +217,7 @@ def load_ingredient_records(cur):
     cur.execute("TRUNCATE school_meal_ingredient_records RESTART IDENTITY")
     total = 0
     files = sorted(p for p in SNAPSHOTS_DIR.glob("*.csv") if INGREDIENT_FN_RE.match(p.name))
-    for path in files:
+    for i, path in enumerate(files, 1):
         meta = parse_city_filename(path)
         if not meta:
             continue
@@ -241,8 +244,9 @@ def load_ingredient_records(cur):
                     clean(r.get("認證號碼"), 100),
                 ))
         if rows:
-            execute_values(cur, INSERT_INGREDIENT_RECORD_SQL, rows, page_size=1000)
+            execute_values(cur, INSERT_INGREDIENT_RECORD_SQL, rows, page_size=10000)
             total += len(rows)
+        print(f"  [{i:>3}/{len(files)}] {path.name}: {len(rows):,} rows", flush=True)
     return total
 
 
@@ -260,7 +264,7 @@ def load_dish_records(cur):
     cur.execute("TRUNCATE school_meal_dish_records RESTART IDENTITY")
     total = 0
     files = sorted(p for p in SNAPSHOTS_DIR.glob("*.csv") if DISH_FN_RE.match(p.name))
-    for path in files:
+    for i, path in enumerate(files, 1):
         meta = parse_city_filename(path)
         if not meta:
             continue
@@ -278,8 +282,9 @@ def load_dish_records(cur):
                     clean(r.get("菜色名稱"), 200),
                 ))
         if rows:
-            execute_values(cur, INSERT_DISH_RECORD_SQL, rows, page_size=1000)
+            execute_values(cur, INSERT_DISH_RECORD_SQL, rows, page_size=10000)
             total += len(rows)
+        print(f"  [{i:>3}/{len(files)}] {path.name}: {len(rows):,} rows", flush=True)
     return total
 
 
@@ -302,7 +307,7 @@ def load_dish_ingredient_records(cur):
     cur.execute("TRUNCATE school_meal_dish_ingredient_records RESTART IDENTITY")
     total = 0
     files = sorted(p for p in SNAPSHOTS_DIR.glob("*.csv") if DISH_INGREDIENT_FN_RE.match(p.name))
-    for path in files:
+    for i, path in enumerate(files, 1):
         meta = parse_city_filename(path)
         if not meta:
             continue
@@ -331,8 +336,9 @@ def load_dish_ingredient_records(cur):
                     clean(r.get("認證號碼"), 100),
                 ))
         if rows:
-            execute_values(cur, INSERT_DISH_INGREDIENT_RECORD_SQL, rows, page_size=1000)
+            execute_values(cur, INSERT_DISH_INGREDIENT_RECORD_SQL, rows, page_size=10000)
             total += len(rows)
+        print(f"  [{i:>3}/{len(files)}] {path.name}: {len(rows):,} rows", flush=True)
     return total
 
 
@@ -342,17 +348,27 @@ def main():
         print("❌ no snapshot CSVs found — run snapshot_apis.py first.", file=sys.stderr)
         sys.exit(1)
 
+    # Per-loader transaction (one connection per table). Single shared
+    # transaction was unworkable against cloud Postgres for 15M+ rows:
+    # WAL pressure + held locks make 30+ min loads. Each loader's TRUNCATE
+    # + INSERT is itself atomic, and the dedupe loader (step 3/4) reads
+    # CSVs not raw tables, so cross-table atomicity is not required.
+    loaders = [
+        ("food_dictionary",          load_food_dictionary),
+        ("caterers",                 load_caterers),
+        ("seasoning_records_nation", load_seasoning_records_nation),
+        ("ingredient_records",       load_ingredient_records),
+        ("dish_records",             load_dish_records),
+        ("dish_ingredient_records",  load_dish_ingredient_records),
+    ]
     counts = {}
-    # All 6 loaders share one transaction — partial loads would leave the
-    # dedupe layer (load_ingredient_names.py runs after) inconsistent with
-    # the raw tables. Failure rolls back everything cleanly.
-    with psycopg2.connect(**db_kwargs()) as conn, conn.cursor() as cur:
-        counts["food_dictionary"]          = load_food_dictionary(cur)
-        counts["caterers"]                 = load_caterers(cur)
-        counts["seasoning_records_nation"] = load_seasoning_records_nation(cur)
-        counts["ingredient_records"]       = load_ingredient_records(cur)
-        counts["dish_records"]             = load_dish_records(cur)
-        counts["dish_ingredient_records"]  = load_dish_ingredient_records(cur)
+    for name, fn in loaders:
+        print(f"\n── {name} ──", flush=True)
+        t0 = time.time()
+        with psycopg2.connect(**db_kwargs()) as conn, conn.cursor() as cur:
+            counts[name] = fn(cur)
+        print(f"  ✅ school_meal_{name}: {counts[name]:,} rows in {time.time() - t0:.1f}s",
+              flush=True)
 
     # Detect city CSVs that didn't match any router — catches publisher
     # filename drift before it silently drops data.
