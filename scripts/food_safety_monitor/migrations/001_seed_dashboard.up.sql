@@ -20,7 +20,7 @@ DELETE FROM dashboards WHERE id = 504;
 -- ── 1. components ──────────────────────────────────────────────
 INSERT INTO components (id, index, name) VALUES
   (1021, 'fsm_school_map',         '校內食安地圖'),
-  (1022, 'fsm_restaurant_map',     '校外食安地圖');
+  (1022, 'fsm_restaurant_map',     '雙北食安地圖');
 
 -- ── 2. component_charts ────────────────────────────────────────
 INSERT INTO component_charts (index, color, types, unit) VALUES
@@ -28,9 +28,17 @@ INSERT INTO component_charts (index, color, types, unit) VALUES
   ('fsm_restaurant_map',   ARRAY['#FF1744','#FF6D00','#FFC107','#00E676','#00E5FF'], ARRAY['FoodSafetyExternalLegend'], '家');
 
 -- ── 3. component_maps ──────────────────────────────────────────
+-- Re-sync sequence before INSERT — see food_safety/002 for rationale
+-- (DELETE doesn't reset sequences; collisions happen if max(id) > seq).
+SELECT setval(
+  pg_get_serial_sequence('component_maps', 'id'),
+  COALESCE((SELECT MAX(id) FROM component_maps), 0) + 1,
+  false
+);
+
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
   ('fsm_schools',       '學校節點',       'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-radius":["match",["get","recent_alert"],"red",6,4],"circle-opacity":1,"circle-stroke-width":["match",["get","recent_alert"],"red",4,3],"circle-stroke-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-stroke-opacity":0.25,"circle-blur":0.18}'::json),
+    '{"circle-color":["match",["get","recent_alert"],"red","#FF1744","#0288D1"],"circle-radius":["match",["get","recent_alert"],"red",6,4],"circle-opacity":1,"circle-stroke-width":["match",["get","recent_alert"],"red",4,2.5],"circle-stroke-color":["match",["get","recent_alert"],"red","#FF1744","#4FC3F7"],"circle-stroke-opacity":["match",["get","recent_alert"],"red",0.25,0.5],"circle-blur":0.2}'::json),
   ('fsm_supply_chain',  '供應鏈連線',     'arc',    'geojson', 'big',
     '{"arc-color":["#00E5FF","#FF1744"],"arc-width":2,"arc-opacity":0.8,"arc-animate":true}'::json),
   ('fsm_suppliers',     '供應商節點',     'circle', 'geojson', 'big',
