@@ -1,13 +1,20 @@
 -- scripts/food_safety/migrations/002_seed_dashboard.up.sql
 -- Project: 食安風險追蹤器 (Food Safety Radar)
--- Purpose: Register dashboard 503 with 5 food_* components (1011-1015), the
---          食安風險矩陣 component (1016, RiskQuadrantChart) merged in from
---          earlier 004 seed, PLUS the 校內食安地圖 + 校外食安地圖 components
---          (1021/1022) mirrored from scripts/food_safety_monitor/. dashboard
---          503 is the single home for all of these — there is no standalone
---          食安風險矩陣 dashboard 504 (food_safety_monitor owns 504). fsm_*
---          INSERTs are byte-identical to the 504 migration; defensive DELETE
---          makes apply order between the two dashboards irrelevant.
+-- Purpose: Register dashboard 503 — synced to cloud truth (2026-05-03).
+--   Components in display order:
+--     1012  food_venue_risk                  場所不合格件數
+--     1014  food_violation_types             違規食品種類
+--     1015  food_testing_rate                年度檢驗違規件數
+--     1016  food_risk_matrix                 食安風險矩陣 (RiskQuadrantChart)
+--     16    food_safety_repeat_offender_rank 累犯業者排行       (added on cloud)
+--     14    food_safety_violation_rate_trend 年度違規率趨勢      (added on cloud)
+--     1021  fsm_school_map                   校內食安地圖
+--     1022  fsm_restaurant_map               雙北食安地圖
+--   1011 (食物中毒趨勢) and 1013 (食安認證餐廳與食品工廠) were dropped from
+--   the dashboard on cloud, so they're no longer registered here.
+--   Components 14 / 16 use low IDs because they were created directly on
+--   cloud; this migration adopts them so fresh-environment applies stay
+--   reproducible.
 -- down:    migrations/002_seed_dashboard.down.sql
 -- Order:   components → component_charts → component_maps → query_charts
 --          → dashboards → dashboard_groups
@@ -19,6 +26,7 @@ DELETE FROM query_charts   WHERE index LIKE 'food_%';
 DELETE FROM component_maps WHERE index LIKE 'food_%';
 DELETE FROM component_charts WHERE index LIKE 'food_%';
 DELETE FROM components WHERE id BETWEEN 1011 AND 1016;
+DELETE FROM components WHERE id IN (14, 16);
 -- Also wipe fsm_% rows so re-applying after dashboard 504 (food_safety_monitor)
 -- and this 503 migration produces the same end state regardless of order.
 DELETE FROM query_charts     WHERE index LIKE 'fsm_%';
@@ -28,72 +36,41 @@ DELETE FROM components       WHERE id BETWEEN 1021 AND 1025;
 
 -- ── 1. components ───────────────────────────────────────────────
 INSERT INTO components (id, index, name) VALUES
-  (1011, 'food_poisoning_trend',   '食物中毒趨勢'),
-  (1012, 'food_venue_risk',        '場所不合格件數'),
-  (1013, 'food_safety_map',        '食安認證餐廳與食品工廠'),
-  (1014, 'food_violation_types',   '違規原因分析'),
-  (1015, 'food_testing_rate',      '年度檢驗違規件數')
-ON CONFLICT (index) DO NOTHING;
+  (1012, 'food_venue_risk',                  '場所不合格件數'),
+  (1014, 'food_violation_types',             '違規食品種類'),
+  (1015, 'food_testing_rate',                '年度檢驗違規件數'),
+  -- Cloud-added platform-low-id components (registered here so apply.sh on a
+  -- fresh DB recreates them; cloud upserts existing rows via DO UPDATE).
+  (14,   'food_safety_violation_rate_trend', '年度違規率趨勢'),
+  (16,   'food_safety_repeat_offender_rank', '累犯業者排行')
+ON CONFLICT (id) DO UPDATE
+  SET index = EXCLUDED.index,
+      name  = EXCLUDED.name;
 
 -- ── 2. component_charts ─────────────────────────────────────────
 INSERT INTO component_charts (index, color, types, unit) VALUES
-  ('food_poisoning_trend',
-   ARRAY['#E53935','#F57F17'],
-   ARRAY['ColumnLineChart'], '件/人'),
   ('food_venue_risk',
    ARRAY['#43A047','#1565C0','#FF9800','#FFC107','#8BC34A','#26C6DA'],
    ARRAY['ColumnChart'], '件'),
-  ('food_safety_map',
-   ARRAY['#43A047','#FFA000','#1565C0'],
-   ARRAY['MapLegend'], '家'),
   ('food_violation_types',
    ARRAY['#E53935','#8E24AA','#FF6D00','#F57F17','#388E3C','#0288D1','#9E9E9E'],
    ARRAY['DonutChart'], '件'),
   ('food_testing_rate',
    ARRAY['#43A047','#1565C0','#FFCCBC'],
-   ARRAY['ColumnChart'], '件')
+   ARRAY['ColumnChart'], '件'),
+  -- Cloud-added (component IDs 14, 16). 12-color palette on the rank chart
+  -- to differentiate top-12 repeat offenders.
+  ('food_safety_violation_rate_trend',
+   ARRAY['#F77F00','#D62828'],
+   ARRAY['ColumnLineChart'], '件 / %'),
+  ('food_safety_repeat_offender_rank',
+   ARRAY['#D62828','#E86A2E','#F77F00','#F5AD4A','#FCBF49','#9AC17C','#4CB495','#2EC4B6','#24B0DD','#6B6B8B','#A855D8','#E170A6'],
+   ARRAY['BarChart'], '次')
 ON CONFLICT (index) DO NOTHING;
 
 -- ── 3. component_maps ──────────────────────────────────────────
-INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
-  ('food_restaurant_tpe', '臺北認證餐廳', 'circle', 'geojson', 'big',
-   '{"circle-color":["match",["get","grade"],"優","#43A047","#FFA000"],"circle-radius":5,"circle-opacity":0.85}'::json),
-  ('food_factory_ntpc', '新北食品工廠', 'circle', 'geojson', 'big',
-   '{"circle-color":"#1565C0","circle-radius":5,"circle-opacity":0.75}'::json);
-
--- 1011 食物中毒趨勢 — taipei
-INSERT INTO query_charts (index, query_type, query_chart, city, source,
-  short_desc, long_desc, use_case,
-  time_from, time_to, update_freq, update_freq_unit,
-  map_config_ids, map_filter, links, contributors, created_at, updated_at)
-VALUES (
-  'food_poisoning_trend', 'time',
-  $$SELECT x_axis, y_axis, ROUND(AVG(data)) AS data FROM (SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '食物中毒人數' AS y_axis, food_poisoning_cases AS data FROM food_inspection_tpe UNION ALL SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '不合格場所' AS y_axis, total_noncompliance AS data FROM food_inspection_tpe) d GROUP BY x_axis, y_axis ORDER BY x_axis$$,
-  'taipei', '臺北市衛生局',
-  '臺北市食物中毒人數與不合格場所趨勢（2006-2025）。',
-  '食物中毒案例自169例（2023）激增至909例（2025），5.4倍增幅發出強烈警訊。雙軸設計同時呈現食物中毒人數與場所不合格件數，協助研究者分析執法力道與食安風險的關聯。',
-  '衛生局追蹤食安政策成效，市民了解食安風險趨勢，學術研究分析稽查與中毒的關聯性。',
-  'static', '', 1, 'year', '{}', '{}', '{}', '{doit}', NOW(), NOW()
-);
-
--- 1011 食物中毒趨勢 — metrotaipei
--- Data limitation: MOHW 10521-01-03 by-city xlsx provides 不合格家次 by city/year
--- but NOT 食物中毒人數 by city. Pivot: dual-city comparison uses NC counts (the
--- common metric available for both). TPE poisoning persons retained as a third
--- line for context.
-INSERT INTO query_charts (index, query_type, query_chart, city, source,
-  short_desc, long_desc, use_case,
-  time_from, time_to, update_freq, update_freq_unit,
-  map_config_ids, map_filter, links, contributors, created_at, updated_at)
-VALUES (
-  'food_poisoning_trend', 'time',
-  $$SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '臺北市不合格場所' AS y_axis, total_noncompliance AS data FROM food_inspection_tpe UNION ALL SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '新北市不合格場所' AS y_axis, noncompliance AS data FROM food_inspection_by_city WHERE city = '新北市' AND venue = '合計' UNION ALL SELECT TO_TIMESTAMP(year::text, 'YYYY') AS x_axis, '臺北市食物中毒人數' AS y_axis, food_poisoning_cases AS data FROM food_inspection_tpe ORDER BY x_axis, y_axis$$,
-  'metrotaipei', '臺北市衛生局 / 衛福部',
-  '雙北食安趨勢：不合格場所家次（雙城比較）+ 臺北食物中毒人數。',
-  '雙線比較雙北年度不合格家次（TPE 2006-2025；NTPC 2010-2025），輔以 TPE 食物中毒人數作為食安風險脈動。NTPC 食物中毒人數無 by-city 公開，故略。',
-  '衛生局追蹤雙城食安趨勢；市民比較雙城食安風險；研究者分析查驗強度與中毒事件的相關性。',
-  'static', '', 1, 'year', '{}', '{}', '{}', '{doit,mohw}', NOW(), NOW()
-);
+-- (food_restaurant_tpe / food_factory_ntpc were tied to the dropped
+-- component 1013 食安地圖 — removed.)
 
 -- 1012 場所不合格件數 — taipei (TPE per-venue NC counts, 2020-2025 cumulative)
 INSERT INTO query_charts (index, query_type, query_chart, city, source,
@@ -128,45 +105,7 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit,mohw}', NOW(), NOW()
 );
 
--- 1013 食安地圖 — taipei (1 layer: TPE restaurants)
-INSERT INTO query_charts (index, query_type, query_chart, city, source,
-  short_desc, long_desc, use_case,
-  time_from, time_to, update_freq, update_freq_unit,
-  map_config_ids, map_filter, links, contributors, created_at, updated_at)
-VALUES (
-  -- map_legend query is legend-only synthesized rows; real data is served from
-  -- FE/public/mapData/food_restaurant_tpe.geojson via the linked component_maps row.
-  'food_safety_map', 'map_legend',
-  $$SELECT unnest(array['優等認證餐廳','良好認證餐廳']) as name, unnest(array['circle','circle']) as type$$,
-  'taipei', '臺北市衛生局',
-  '臺北市通過衛生管理分級評核業者地圖（1,686家）。',
-  '標示臺北市114年通過餐飲衛生分級評核業者，綠色為優等（優）、黃色為良好（良），協助市民查詢附近通過認證的餐廳。',
-  '市民查詢附近衛生評核優良餐廳，餐飲業者了解鄰近競業的認證狀況。',
-  'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index = 'food_restaurant_tpe'),
-  '{}', '{}', '{doit}', NOW(), NOW()
-);
-
--- 1013 食安地圖 — metrotaipei (2 layers: TPE restaurants + NTPC factories)
-INSERT INTO query_charts (index, query_type, query_chart, city, source,
-  short_desc, long_desc, use_case,
-  time_from, time_to, update_freq, update_freq_unit,
-  map_config_ids, map_filter, links, contributors, created_at, updated_at)
-VALUES (
-  -- map_legend query is legend-only synthesized rows; real data is served from
-  -- FE/public/mapData/food_restaurant_tpe.geojson + food_factory_ntpc.geojson.
-  'food_safety_map', 'map_legend',
-  $$SELECT unnest(array['台北優等餐廳','台北良好餐廳','新北食品工廠']) as name, unnest(array['circle','circle','circle']) as type$$,
-  'metrotaipei', '衛生局 / 新北市經發局',
-  '雙北食安地圖：臺北認證餐廳（1,686家）+ 新北食品工廠（1,230家）。',
-  '雙層疊合：臺北市餐飲衛生評核業者（優/良分色）與新北市列管食品工廠，呈現雙北食安生態全貌。',
-  '市民跨城查詢食安認證場所，政策研究者分析食品供應鏈地理分布。',
-  'static', '', 1, 'year',
-  ARRAY(SELECT id FROM component_maps WHERE index IN ('food_restaurant_tpe','food_factory_ntpc') ORDER BY id),
-  '{}', '{}', '{doit,ntpc}', NOW(), NOW()
-);
-
--- 1014 違規原因分析 — taipei (TPE 7 categories cumulative 2022-2025)
+-- 1014 違規食品種類 — taipei (TPE 7 categories cumulative 2022-2025)
 INSERT INTO query_charts (index, query_type, query_chart, city, source,
   short_desc, long_desc, use_case,
   time_from, time_to, update_freq, update_freq_unit,
@@ -181,7 +120,7 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit}', NOW(), NOW()
 );
 
--- 1014 違規原因分析 — metrotaipei (combined dual-city sum per category, single donut)
+-- 1014 違規食品種類 — metrotaipei (combined dual-city sum per category, single donut)
 -- Donut: 12 categories with TPE+NTPC counts summed into one slice per category.
 -- 雙北合計，相同類型不分裂。
 INSERT INTO query_charts (index, query_type, query_chart, city, source,
@@ -357,6 +296,187 @@ VALUES (
   'static', '', 1, 'year', '{}', '{}', '{}', '{doit,ntpc}', NOW(), NOW()
 );
 
+-- ── 4ab. 14 / 16 query_charts (3 cities each: taipei, newtaipei, metrotaipei) ──
+-- Note the city naming: these were authored on cloud against a different
+-- naming convention (`newtaipei` instead of the `ntpc` we use for food_*).
+-- Time-window is dynamic — `time_from='fiveyear_ago'` causes the BE to
+-- substitute `%s` placeholders with computed inspection_date bounds.
+
+-- 14 食品稽查年度抽檢量與違規率 — taipei
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_safety_violation_rate_trend', 'time',
+  $$WITH base AS (
+  SELECT inspection_date, inspection_result
+  FROM food_safety_inspection_metrotaipei
+  WHERE city = '臺北市'
+    AND inspection_date IS NOT NULL
+    AND inspection_date BETWEEN '%s' AND '%s'
+)
+SELECT DATE_TRUNC('year', inspection_date::timestamp) AS x_axis,
+  '抽檢件數' AS y_axis,
+  COUNT(*)::float AS data
+FROM base GROUP BY 1
+UNION ALL
+SELECT DATE_TRUNC('year', inspection_date::timestamp) AS x_axis,
+  '違規率(%%)',
+  ROUND(COUNT(*) FILTER (WHERE inspection_result != '合格')
+    * 100.0 / NULLIF(COUNT(*), 0), 1)::float AS data
+FROM base GROUP BY 1
+ORDER BY 1, 2$$,
+  'taipei', '衛生福利部食品藥物管理署 / 臺北市衛生局 [2026]',
+  '臺北市食品稽查年度抽檢量與違規率',
+  '以年度為單位統計臺北市食品稽查總抽檢件數與違規率。',
+  '觀察臺北市食安稽查成效年度變化。',
+  'fiveyear_ago', 'now', 1, 'year', '{}', '{}',
+  ARRAY['https://food.fda.gov.tw/'], '{codefest2026-wage-slave}', NOW(), NOW()
+);
+
+-- 14 食品稽查年度抽檢量與違規率 — newtaipei
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_safety_violation_rate_trend', 'time',
+  $$WITH base AS (
+  SELECT inspection_date, inspection_result
+  FROM food_safety_inspection_metrotaipei
+  WHERE city = '新北市'
+    AND inspection_date IS NOT NULL
+    AND inspection_date BETWEEN '%s' AND '%s'
+)
+SELECT DATE_TRUNC('year', inspection_date::timestamp) AS x_axis,
+  '抽檢件數' AS y_axis,
+  COUNT(*)::float AS data
+FROM base GROUP BY 1
+UNION ALL
+SELECT DATE_TRUNC('year', inspection_date::timestamp) AS x_axis,
+  '違規率(%%)',
+  ROUND(COUNT(*) FILTER (WHERE inspection_result != '合格')
+    * 100.0 / NULLIF(COUNT(*), 0), 1)::float AS data
+FROM base GROUP BY 1
+ORDER BY 1, 2$$,
+  'newtaipei', '衛生福利部食品藥物管理署 / 新北市衛生局 [2026]',
+  '新北市食品稽查年度抽檢量與違規率',
+  '以年度為單位統計新北市食品稽查總抽檢件數與違規率。',
+  '觀察新北市食安稽查成效年度變化。',
+  'fiveyear_ago', 'now', 1, 'year', '{}', '{}',
+  ARRAY['https://food.fda.gov.tw/'], '{codefest2026-wage-slave}', NOW(), NOW()
+);
+
+-- 14 食品稽查年度抽檢量與違規率 — metrotaipei
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_safety_violation_rate_trend', 'time',
+  $$WITH base AS (
+  SELECT inspection_date, inspection_result
+  FROM food_safety_inspection_metrotaipei
+  WHERE inspection_date IS NOT NULL
+    AND inspection_date BETWEEN '%s' AND '%s'
+)
+SELECT DATE_TRUNC('year', inspection_date::timestamp) AS x_axis,
+  '抽檢件數' AS y_axis,
+  COUNT(*)::float AS data
+FROM base GROUP BY 1
+UNION ALL
+SELECT DATE_TRUNC('year', inspection_date::timestamp) AS x_axis,
+  '違規率(%%)',
+  ROUND(COUNT(*) FILTER (WHERE inspection_result != '合格')
+    * 100.0 / NULLIF(COUNT(*), 0), 1)::float AS data
+FROM base GROUP BY 1
+ORDER BY 1, 2$$,
+  'metrotaipei', '衛生福利部食品藥物管理署 / 臺北市衛生局 / 新北市衛生局 [2026]',
+  '雙北食品稽查年度抽檢量與違規率',
+  '以年度為單位統計雙北食品稽查總抽檢件數（柱狀）與違規率百分比（折線）。',
+  '觀察雙北食安稽查資源投入及違規率的年度變化。',
+  'fiveyear_ago', 'now', 1, 'year', '{}', '{}',
+  ARRAY['https://food.fda.gov.tw/'], '{codefest2026-wage-slave}', NOW(), NOW()
+);
+
+-- 16 累犯業者排行 — taipei
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_safety_repeat_offender_rank', 'two_d',
+  $$SELECT business_name AS x_axis, COUNT(*) AS data, MAX(fine_amount) AS tooltip
+FROM food_safety_inspection_metrotaipei
+WHERE city = '臺北市'
+  AND inspection_result IS NOT NULL
+  AND inspection_result != '合格'
+  AND business_name IS NOT NULL
+  AND TRIM(business_name) != ''
+  AND inspection_date BETWEEN '%s' AND '%s'
+GROUP BY business_name
+ORDER BY data DESC
+LIMIT 12$$,
+  'taipei', '衛生福利部食品藥物管理署 / 臺北市衛生局 [2026]',
+  '臺北市食品稽查累犯業者違規次數排行',
+  '統計臺北市各業者在稽查期間累計違規次數，由高至低排序。',
+  '鎖定臺北市高頻違規業者，輔助重點稽查。',
+  'fiveyear_ago', 'now', 1, 'month', '{}', '{}',
+  ARRAY['https://food.fda.gov.tw/'], '{codefest2026-wage-slave}', NOW(), NOW()
+);
+
+-- 16 累犯業者排行 — newtaipei
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_safety_repeat_offender_rank', 'two_d',
+  $$SELECT business_name AS x_axis, COUNT(*) AS data, MAX(fine_amount) AS tooltip
+FROM food_safety_inspection_metrotaipei
+WHERE city = '新北市'
+  AND inspection_result IS NOT NULL
+  AND inspection_result != '合格'
+  AND business_name IS NOT NULL
+  AND TRIM(business_name) != ''
+  AND inspection_date BETWEEN '%s' AND '%s'
+GROUP BY business_name
+ORDER BY data DESC
+LIMIT 12$$,
+  'newtaipei', '衛生福利部食品藥物管理署 / 新北市衛生局 [2026]',
+  '新北市食品稽查累犯業者違規次數排行',
+  '統計新北市各業者在稽查期間累計違規次數，由高至低排序。',
+  '鎖定新北市高頻違規業者，輔助重點稽查。',
+  'fiveyear_ago', 'now', 1, 'month', '{}', '{}',
+  ARRAY['https://food.fda.gov.tw/'], '{codefest2026-wage-slave}', NOW(), NOW()
+);
+
+-- 16 累犯業者排行 — metrotaipei
+INSERT INTO query_charts (index, query_type, query_chart, city, source,
+  short_desc, long_desc, use_case,
+  time_from, time_to, update_freq, update_freq_unit,
+  map_config_ids, map_filter, links, contributors, created_at, updated_at)
+VALUES (
+  'food_safety_repeat_offender_rank', 'two_d',
+  $$SELECT business_name AS x_axis, COUNT(*) AS data, MAX(fine_amount) AS tooltip
+FROM food_safety_inspection_metrotaipei
+WHERE inspection_result IS NOT NULL
+  AND inspection_result != '合格'
+  AND business_name IS NOT NULL
+  AND TRIM(business_name) != ''
+  AND inspection_date BETWEEN '%s' AND '%s'
+GROUP BY business_name
+ORDER BY data DESC
+LIMIT 12$$,
+  'metrotaipei', '衛生福利部食品藥物管理署 / 臺北市衛生局 / 新北市衛生局 [2026]',
+  '雙北食品稽查累犯業者違規次數排行',
+  '統計雙北地區各業者在稽查期間累計違規（不合格）次數，由高至低排序，協助識別需重點關注的慣犯業者，作為稽查資源優先配置依據。',
+  '用於鎖定雙北地區高頻違規業者，輔助衛生主管機關針對累犯實施重點稽查與輔導。',
+  'fiveyear_ago', 'now', 1, 'month', '{}', '{}',
+  ARRAY['https://food.fda.gov.tw/'], '{codefest2026-wage-slave}', NOW(), NOW()
+);
+
 -- ── 4b. food_safety_monitor 校內+校外 components (1021/1022) ──────
 -- Mirror of scripts/food_safety_monitor/migrations/001_seed_dashboard.up.sql
 -- so dashboard 503 also exposes the school + restaurant maps. Both
@@ -365,17 +485,29 @@ VALUES (
 
 INSERT INTO components (id, index, name) VALUES
   (1021, 'fsm_school_map',         '校內食安地圖'),
-  (1022, 'fsm_restaurant_map',     '校外食安地圖')
-ON CONFLICT (index) DO NOTHING;
+  (1022, 'fsm_restaurant_map',     '雙北食安地圖')
+ON CONFLICT (index) DO UPDATE
+  SET name = EXCLUDED.name;
 
 INSERT INTO component_charts (index, color, types, unit) VALUES
   ('fsm_school_map',       ARRAY['#00E5FF','#FF1744','#FFC107'], ARRAY['FoodSafetyControls'], '校'),
   ('fsm_restaurant_map',   ARRAY['#FF1744','#FF6D00','#FFC107','#00E676','#00E5FF'], ARRAY['FoodSafetyExternalLegend'], '家')
 ON CONFLICT (index) DO NOTHING;
 
+-- Re-sync component_maps.id sequence with MAX(id) before INSERT.
+-- Sequences don't roll back on DELETE; if a prior platform-demo seed left
+-- rows at high ids while the sequence was lower (common after pg_dump
+-- restore that skipped sequence values), nextval() walks forward and
+-- collides on those ids. Reset before our 6-row insert below.
+SELECT setval(
+  pg_get_serial_sequence('component_maps', 'id'),
+  COALESCE((SELECT MAX(id) FROM component_maps), 0) + 1,
+  false
+);
+
 INSERT INTO component_maps (index, title, type, source, size, paint) VALUES
   ('fsm_schools',       '學校節點',       'circle', 'geojson', 'big',
-    '{"circle-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-radius":["match",["get","recent_alert"],"red",6,4],"circle-opacity":1,"circle-stroke-width":["match",["get","recent_alert"],"red",4,3],"circle-stroke-color":["match",["get","recent_alert"],"red","#FF1744","#00E5FF"],"circle-stroke-opacity":0.25,"circle-blur":0.18}'::json),
+    '{"circle-color":["match",["get","recent_alert"],"red","#FF1744","#0288D1"],"circle-radius":["match",["get","recent_alert"],"red",6,4],"circle-opacity":1,"circle-stroke-width":["match",["get","recent_alert"],"red",4,2.5],"circle-stroke-color":["match",["get","recent_alert"],"red","#FF1744","#4FC3F7"],"circle-stroke-opacity":["match",["get","recent_alert"],"red",0.25,0.5],"circle-blur":0.2}'::json),
   ('fsm_supply_chain',  '供應鏈連線',     'arc',    'geojson', 'big',
     '{"arc-color":["#00E5FF","#FF1744"],"arc-width":2,"arc-opacity":0.8,"arc-animate":true}'::json),
   ('fsm_suppliers',     '供應商節點',     'circle', 'geojson', 'big',
@@ -456,9 +588,11 @@ VALUES (
 );
 
 -- ── 5. dashboards ────────────────────────────────────────────────
+-- Display order matches cloud truth (2026-05-03):
+--   1012, 1014, 1015, 1016, 16, 14, 1021, 1022
 INSERT INTO dashboards (id, index, name, components, icon, created_at, updated_at) VALUES
   (503, 'food_safety_radar', '食安風險追蹤器',
-   ARRAY[1011,1012,1013,1014,1015,1016,1021,1022], 'restaurant', NOW(), NOW())
+   ARRAY[1012,1014,1015,1016,16,14,1021,1022], 'restaurant', NOW(), NOW())
 ON CONFLICT (index) DO UPDATE
   SET components = EXCLUDED.components,
       updated_at = NOW();

@@ -50,6 +50,6 @@ const fs = useFoodSafetyStore();
 	font-size: 13px; padding: 4px 0; cursor: pointer;
 }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.dot-school   { background: #00E5FF; box-shadow: 0 0 6px #00E5FF; }
+.dot-school   { background: #0288D1; box-shadow: 0 0 6px #4FC3F7; }
 .dot-supplier { background: transparent; border: 2px solid #FFD54F; box-shadow: 0 0 6px #FFC10780; }
 </style>
