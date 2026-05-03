@@ -198,8 +198,8 @@ const chartOptions = computed(() => ({
 					text: `持續違規 (${grouped.value.persistent.length})`,
 					borderColor: "transparent", borderWidth: 0,
 					textAnchor: "start",
-					offsetX: 5,
-					offsetY: 16.5,
+					offsetX: 5.5,
+					offsetY: 18,
 					style: { color: "#fff", background: COLORS.persistent,
 					         fontSize: "10px", fontWeight: 600,
 					         padding: { left: 6, right: 6, top: 2, bottom: 2 } },
@@ -211,8 +211,8 @@ const chartOptions = computed(() => ({
 					text: `新興風險 (${grouped.value.emerging.length})`,
 					borderColor: "transparent", borderWidth: 0,
 					textAnchor: "start",
-					offsetX: 5,
-					offsetY: 16.5,
+					offsetX: 5.5,
+					offsetY: 18,
 					style: { color: "#222", background: COLORS.emerging,
 					         fontSize: "10px", fontWeight: 600,
 					         padding: { left: 6, right: 6, top: 2, bottom: 2 } },
@@ -224,8 +224,8 @@ const chartOptions = computed(() => ({
 					text: `改善中 (${grouped.value.improving.length})`,
 					borderColor: "transparent", borderWidth: 0,
 					textAnchor: "start",
-					offsetX: 5,
-					offsetY: 16.5,
+					offsetX: 5.5,
+					offsetY: 18,
 					style: { color: "#fff", background: COLORS.improving,
 					         fontSize: "10px", fontWeight: 600,
 					         padding: { left: 6, right: 6, top: 2, bottom: 2 } },
@@ -237,8 +237,8 @@ const chartOptions = computed(() => ({
 					text: `優良 (${goodsTotal.value || grouped.value.good.length} / 每小時換)`,
 					borderColor: "transparent", borderWidth: 0,
 					textAnchor: "start",
-					offsetX: 5,
-					offsetY: 16.5,
+					offsetX: 5.5,
+					offsetY: 18,
 					style: { color: "#fff", background: COLORS.good,
 					         fontSize: "10px", fontWeight: 600,
 					         padding: { left: 6, right: 6, top: 2, bottom: 2 } },
@@ -309,15 +309,15 @@ const chartOptions = computed(() => ({
 <!-- 非 scoped：強制 ApexCharts tooltip 跳脫 dashboard 卡片 overflow，固定 viewport 左下 -->
 <style lang="scss">
 /* :has(.rqc-tooltip) → 只影響本組件的 tooltip，不影響其他 chart */
-/* tooltip 跟著資料點移動，但用 margin 整體推到「點的左下方」（避開上方 dashboard 標題） */
+/* tooltip 跟著資料點移動，用 margin 整體推到「點的左下方」（避開上方 dashboard 標題） */
 .apexcharts-tooltip:has(.rqc-tooltip) {
 	z-index: 999999 !important;
 	overflow: visible !important;
 	background: transparent !important;
 	border: none !important;
 	box-shadow: none !important;
-	margin-left: -20px !important;   /* 從點往左推 220px (tooltip 寬約 200px → 完全在點左側) */
-	margin-top: 80px !important;       /* 從點往下推 40px → 在點下方 */
+	margin-left: -10px !important;   /* 從點往左推 220px */
+	margin-top: 60px !important;       /* 從點往下推 40px */
 }
 
 .rqc-tooltip {
