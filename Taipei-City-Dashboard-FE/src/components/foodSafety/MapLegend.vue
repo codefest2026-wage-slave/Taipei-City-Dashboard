@@ -73,8 +73,8 @@
 	flex-shrink: 0;
 }
 .s-normal {
-	background: radial-gradient(circle, #66F2FF 0%, #00E5FF 60%, rgba(0, 229, 255, 0) 100%);
-	box-shadow: 0 0 8px #00E5FF, 0 0 14px rgba(0, 229, 255, 0.6);
+	background: radial-gradient(circle, #0288D1 0%, #0288D1 40%, rgba(79, 195, 247, 0.7) 75%, rgba(79, 195, 247, 0) 100%);
+	box-shadow: 0 0 8px rgba(79, 195, 247, 0.7), 0 0 14px rgba(2, 136, 209, 0.5);
 }
 .s-incident {
 	background: radial-gradient(circle, #FF6B85 0%, #FF1744 60%, rgba(255, 23, 68, 0) 100%);
@@ -96,8 +96,8 @@
 	border: 1.5px solid #00E5FF;
 }
 .ring-outer.ring-cyan {
-	border-color: #00E5FF;
-	box-shadow: 0 0 6px rgba(0, 229, 255, 0.7);
+	border-color: #0288D1;
+	box-shadow: 0 0 6px rgba(79, 195, 247, 0.7);
 }
 .ring-outer.ring-red {
 	border-color: #FF1744;
@@ -108,7 +108,7 @@
 	height: 4px;
 	border-radius: 50%;
 }
-.ring-dot.ring-dot-cyan { background: #00E5FF; }
+.ring-dot.ring-dot-cyan { background: #0288D1; }
 .ring-dot.ring-dot-red { background: #FF1744; }
 .truck {
 	width: 18px;

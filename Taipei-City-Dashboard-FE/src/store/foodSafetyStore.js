@@ -463,7 +463,7 @@ export const useFoodSafetyStore = defineStore("foodSafety", {
 		_featureColor(feature) {
 			const p = feature?.properties || {};
 			if (p.recent_alert === "red") return "#FF1744";
-			if (p.recent_alert === "normal") return "#00E5FF";
+			if (p.recent_alert === "normal") return "#0288D1";
 			const hl = p.hazard_level;
 			if (hl === "critical") return "#FF1744";
 			if (hl === "high") return "#FF6D00";
